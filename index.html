@@ -1,0 +1,1606 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#05010d">
+<title>Seleksi Editor — Kyoto Motion | KYT</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<script>
+(function(){
+  try{ var t = localStorage.getItem('kyt_theme')||'dark'; document.documentElement.setAttribute('data-theme',t); }catch(e){}
+})();
+</script>
+<style>
+:root, [data-theme="dark"]{
+  --pink:#ff0066; --purple:#c026ff; --cyan:#00f0ff; --yellow:#fffb00; --lime:#39ff14;
+  --bg:#05010d; --txt:#fff; --muted:#b8a8d8; --line:rgba(255,255,255,.15);
+  --card-1:rgba(18,6,40,.95); --card-2:rgba(8,2,20,.97);
+  --input:rgba(255,255,255,.06); --input-focus:rgba(0,240,255,.12);
+  --opt:rgba(255,255,255,.05); --opt-txt:#e8dcff;
+  --rule:rgba(255,255,255,.05); --rule-txt:#f0e8ff;
+  --bd:rgba(255,255,255,.05); --bd-lbl:#e0d0ff;
+  --ghost:rgba(255,255,255,.06); --ghost-hover:rgba(255,255,255,.14);
+  --placeholder:#8a70b0; --footer:#7a5aa0;
+  --glow-c:rgba(0,240,255,.6); --glow-p:rgba(192,38,255,.6); --glow-pk:rgba(255,0,102,.6);
+  --shadow:rgba(0,0,0,.7);
+  --tagline:#00f0ff;
+  --tagline-glow:0 0 20px #00f0ff,0 0 40px rgba(0,240,255,.6);
+  --blob-op:.55; --stat-bg:rgba(255,255,255,.06);
+}
+[data-theme="light"]{
+  --pink:#ff0066; --purple:#9900ff; --cyan:#0099cc; --yellow:#ffcc00; --lime:#00cc33;
+  --bg:#fff5ff; --txt:#1a0033; --muted:#6b5a8a; --line:rgba(26,0,51,.15);
+  --card-1:rgba(255,255,255,.97); --card-2:rgba(255,248,255,.99);
+  --input:rgba(26,0,51,.05); --input-focus:rgba(0,153,204,.1);
+  --opt:rgba(26,0,51,.04); --opt-txt:#3d2a5c;
+  --rule:rgba(26,0,51,.04); --rule-txt:#3d2a5c;
+  --bd:rgba(26,0,51,.04); --bd-lbl:#4a3568;
+  --ghost:rgba(26,0,51,.06); --ghost-hover:rgba(26,0,51,.12);
+  --placeholder:#9a8ab8; --footer:#9a8ab8;
+  --glow-c:rgba(0,153,204,.3); --glow-p:rgba(153,0,255,.3); --glow-pk:rgba(255,0,102,.3);
+  --shadow:rgba(26,0,51,.2);
+  --tagline:#0099cc; --tagline-glow:0 0 10px rgba(0,153,204,.5);
+  --blob-op:.25; --stat-bg:rgba(26,0,51,.05);
+}
+[data-theme="sunset"]{
+  --pink:#ff2200; --purple:#ff0088; --cyan:#ffaa00; --yellow:#ffee00; --lime:#ff6600;
+  --bg:#1a0200; --txt:#fff0e0; --muted:#d8a088; --line:rgba(255,100,0,.2);
+  --card-1:rgba(50,10,0,.95); --card-2:rgba(25,4,0,.97);
+  --input:rgba(255,150,50,.09); --input-focus:rgba(255,150,50,.16);
+  --opt:rgba(255,150,50,.06); --opt-txt:#ffd8b8;
+  --rule:rgba(255,150,50,.06); --rule-txt:#ffd8b8;
+  --bd:rgba(255,150,50,.06); --bd-lbl:#ffb090;
+  --ghost:rgba(255,150,50,.1); --ghost-hover:rgba(255,150,50,.2);
+  --placeholder:#a05a38; --footer:#a05030;
+  --glow-c:rgba(255,170,0,.6); --glow-p:rgba(255,0,136,.6); --glow-pk:rgba(255,34,0,.6);
+  --shadow:rgba(0,0,0,.75);
+  --tagline:#ffaa00; --tagline-glow:0 0 20px #ffaa00,0 0 40px rgba(255,170,0,.6);
+  --blob-op:.6; --stat-bg:rgba(255,150,50,.09);
+}
+[data-theme="ocean"]{
+  --pink:#00ccff; --purple:#0088ff; --cyan:#00ffff; --yellow:#aaffff; --lime:#00ffaa;
+  --bg:#000a18; --txt:#e0f8ff; --muted:#78a8c8; --line:rgba(0,200,255,.2);
+  --card-1:rgba(0,25,50,.95); --card-2:rgba(0,10,24,.97);
+  --input:rgba(0,200,255,.08); --input-focus:rgba(0,200,255,.16);
+  --opt:rgba(0,200,255,.05); --opt-txt:#c8e8ff;
+  --rule:rgba(0,200,255,.05); --rule-txt:#c8e8ff;
+  --bd:rgba(0,200,255,.05); --bd-lbl:#a0d8f0;
+  --ghost:rgba(0,200,255,.1); --ghost-hover:rgba(0,200,255,.2);
+  --placeholder:#5080a0; --footer:#4080a0;
+  --glow-c:rgba(0,255,255,.6); --glow-p:rgba(0,136,255,.6); --glow-pk:rgba(0,204,255,.6);
+  --shadow:rgba(0,0,0,.75);
+  --tagline:#00ffff; --tagline-glow:0 0 20px #00ffff,0 0 40px rgba(0,255,255,.6);
+  --blob-op:.55; --stat-bg:rgba(0,200,255,.08);
+}
+[data-theme="matrix"]{
+  --pink:#00ff00; --purple:#00cc00; --cyan:#00ff88; --yellow:#ccffcc; --lime:#00ff44;
+  --bg:#000800; --txt:#ccffcc; --muted:#50a050; --line:rgba(0,255,50,.2);
+  --card-1:rgba(0,30,0,.95); --card-2:rgba(0,10,0,.97);
+  --input:rgba(0,255,50,.07); --input-focus:rgba(0,255,50,.15);
+  --opt:rgba(0,255,50,.05); --opt-txt:#b0ffb0;
+  --rule:rgba(0,255,50,.05); --rule-txt:#b0ffb0;
+  --bd:rgba(0,255,50,.05); --bd-lbl:#90dd90;
+  --ghost:rgba(0,255,50,.09); --ghost-hover:rgba(0,255,50,.18);
+  --placeholder:#3a8a3a; --footer:#2a7a2a;
+  --glow-c:rgba(0,255,136,.6); --glow-p:rgba(0,204,0,.6); --glow-pk:rgba(0,255,0,.6);
+  --shadow:rgba(0,0,0,.85);
+  --tagline:#00ff88; --tagline-glow:0 0 20px #00ff88,0 0 40px rgba(0,255,136,.6);
+  --blob-op:.35; --stat-bg:rgba(0,255,50,.07);
+}
+[data-theme="candy"]{
+  --pink:#ff0080; --purple:#dd00ff; --cyan:#0099ff; --yellow:#ffcc00; --lime:#00ff99;
+  --bg:#fff0f8; --txt:#3d0044; --muted:#a06a88; --line:rgba(255,0,128,.2);
+  --card-1:rgba(255,255,255,.97); --card-2:rgba(255,245,252,.99);
+  --input:rgba(255,0,128,.06); --input-focus:rgba(255,0,128,.14);
+  --opt:rgba(255,0,128,.05); --opt-txt:#6a2a4a;
+  --rule:rgba(255,0,128,.05); --rule-txt:#6a2a4a;
+  --bd:rgba(255,0,128,.05); --bd-lbl:#8a3a5a;
+  --ghost:rgba(255,0,128,.08); --ghost-hover:rgba(255,0,128,.16);
+  --placeholder:#c89ab8; --footer:#d07aa8;
+  --glow-c:rgba(0,153,255,.3); --glow-p:rgba(221,0,255,.3); --glow-pk:rgba(255,0,128,.3);
+  --shadow:rgba(255,0,128,.2);
+  --tagline:#ff0080; --tagline-glow:0 0 10px rgba(255,0,128,.5);
+  --blob-op:.35; --stat-bg:rgba(255,0,128,.07);
+}
+[data-theme="violet"]{
+  --pink:#ff00ff; --purple:#9900ff; --cyan:#bb00ff; --yellow:#ffbbff; --lime:#dd00ff;
+  --bg:#0a0018; --txt:#f0e0ff; --muted:#a088c8; --line:rgba(187,0,255,.2);
+  --card-1:rgba(35,8,65,.95); --card-2:rgba(15,2,35,.97);
+  --input:rgba(187,0,255,.08); --input-focus:rgba(187,0,255,.16);
+  --opt:rgba(187,0,255,.05); --opt-txt:#d8c0ff;
+  --rule:rgba(187,0,255,.05); --rule-txt:#d8c0ff;
+  --bd:rgba(187,0,255,.05); --bd-lbl:#c0a0e8;
+  --ghost:rgba(187,0,255,.1); --ghost-hover:rgba(187,0,255,.2);
+  --placeholder:#7a5a9a; --footer:#6a4a8a;
+  --glow-c:rgba(187,0,255,.6); --glow-p:rgba(153,0,255,.6); --glow-pk:rgba(255,0,255,.6);
+  --shadow:rgba(0,0,0,.75);
+  --tagline:#bb00ff; --tagline-glow:0 0 20px #bb00ff,0 0 40px rgba(187,0,255,.6);
+  --blob-op:.6; --stat-bg:rgba(187,0,255,.08);
+}
+[data-theme="gold"]{
+  --pink:#ffaa00; --purple:#ff6600; --cyan:#ffdd00; --yellow:#ffff80; --lime:#ffcc00;
+  --bg:#0a0600; --txt:#fff8e0; --muted:#c8b078; --line:rgba(255,200,0,.2);
+  --card-1:rgba(35,20,0,.95); --card-2:rgba(15,8,0,.97);
+  --input:rgba(255,200,0,.08); --input-focus:rgba(255,200,0,.16);
+  --opt:rgba(255,200,0,.05); --opt-txt:#ffecb8;
+  --rule:rgba(255,200,0,.05); --rule-txt:#ffecb8;
+  --bd:rgba(255,200,0,.05); --bd-lbl:#f0d898;
+  --ghost:rgba(255,200,0,.1); --ghost-hover:rgba(255,200,0,.2);
+  --placeholder:#8a7040; --footer:#8a7038;
+  --glow-c:rgba(255,221,0,.6); --glow-p:rgba(255,102,0,.6); --glow-pk:rgba(255,170,0,.6);
+  --shadow:rgba(0,0,0,.8);
+  --tagline:#ffdd00; --tagline-glow:0 0 20px #ffdd00,0 0 40px rgba(255,221,0,.6);
+  --blob-op:.55; --stat-bg:rgba(255,200,0,.08);
+}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+html:not(.app-ready) body{opacity:0;transition:none!important;}
+html:not(.app-ready) *,html:not(.app-ready) *::before,html:not(.app-ready) *::after{animation-play-state:paused!important;}
+
+body{
+  font-family:'Poppins',system-ui,-apple-system,sans-serif;
+  background:var(--bg);color:var(--txt);
+  min-height:100vh;overflow-x:hidden;
+  padding:24px 16px 60px;
+  display:flex;justify-content:center;align-items:flex-start;
+  position:relative;
+  transition:opacity .35s ease, background .4s, color .4s;
+  opacity:1;-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent;
+}
+body.typing .blob,body.typing .particle,body.typing .floater,
+body.typing .badge,body.typing .title,body.typing .tagline{animation-play-state:paused!important;}
+
+.bg-blobs{position:fixed;inset:0;z-index:-3;overflow:hidden;pointer-events:none;}
+.blob{position:absolute;border-radius:50%;filter:blur(50px);opacity:var(--blob-op);animation:float 24s ease-in-out infinite;transition:background .4s,opacity .4s;will-change:transform;}
+.b1{width:480px;height:480px;background:var(--pink);top:-160px;left:-140px;}
+.b2{width:420px;height:420px;background:var(--purple);bottom:-140px;right:-120px;animation-delay:-8s;}
+.b3{width:360px;height:360px;background:var(--cyan);top:45%;left:60%;animation-delay:-16s;opacity:calc(var(--blob-op)*.7);}
+@keyframes float{0%,100%{transform:translate3d(0,0,0);}50%{transform:translate3d(60px,-50px,0);}}
+.grid-overlay{position:absolute;inset:0;background-image:linear-gradient(var(--glow-p) 1px,transparent 1px),linear-gradient(90deg,var(--glow-c) 1px,transparent 1px);background-size:64px 64px;opacity:.12;mask-image:radial-gradient(circle at 50% 30%,#000 10%,transparent 70%);-webkit-mask-image:radial-gradient(circle at 50% 30%,#000 10%,transparent 70%);}
+.particles{position:fixed;inset:0;z-index:-2;overflow:hidden;pointer-events:none;}
+.particle{position:absolute;border-radius:50%;bottom:-20px;animation:rise linear infinite;opacity:0;will-change:transform,opacity;}
+@keyframes rise{0%{transform:translate3d(0,0,0) scale(1);opacity:0;}10%{opacity:.7;}90%{opacity:.7;}100%{transform:translate3d(var(--drift,20px),-105vh,0) scale(.5);opacity:0;}}
+.floaters{position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden;}
+.floater{position:absolute;font-size:1.4rem;opacity:.18;animation:drift linear infinite;will-change:transform;}
+@keyframes drift{0%,100%{transform:translate3d(0,0,0) rotate(0deg);}50%{transform:translate3d(30px,-40px,0) rotate(180deg);}}
+
+.app{width:100%;max-width:820px;position:relative;z-index:1;}
+.screen{display:none;}
+.screen.active{display:block;animation:fadeUp .3s cubic-bezier(.2,.8,.2,1);}
+@keyframes fadeUp{from{opacity:0;transform:translate3d(0,14px,0);}to{opacity:1;transform:none;}}
+
+.card{position:relative;border-radius:28px;padding:36px 32px;background:linear-gradient(160deg,var(--card-1),var(--card-2)) padding-box,linear-gradient(135deg,var(--pink),var(--purple),var(--cyan),var(--yellow),var(--pink)) border-box;border:2px solid transparent;box-shadow:0 20px 60px var(--shadow),0 0 60px var(--glow-p),0 0 30px var(--glow-c);transform:translateZ(0);contain:layout style;transition:background .4s,box-shadow .4s;}
+.badge{display:inline-block;font-family:'Orbitron',sans-serif;font-size:.68rem;letter-spacing:2.5px;font-weight:700;padding:7px 16px;border-radius:100px;color:#0a0612;background:linear-gradient(90deg,var(--cyan),var(--lime),var(--yellow));box-shadow:0 0 20px var(--glow-c);margin-bottom:22px;}
+.logo-wrap{display:flex;flex-direction:column;align-items:center;margin-bottom:6px;min-height:60px;justify-content:center;}
+.logo-image,.logo-video{max-width:100%;max-height:160px;object-fit:contain;border-radius:16px;margin:0 auto;display:block;box-shadow:0 0 40px var(--glow-p),0 0 20px var(--glow-c);}
+.title{font-family:'Orbitron',sans-serif;font-size:clamp(1.4rem,4.4vw,2.4rem);font-weight:900;line-height:1.25;background:linear-gradient(100deg,var(--pink),var(--purple) 40%,var(--cyan) 75%,var(--yellow));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 0 20px var(--glow-p));word-break:break-word;}
+.tagline{font-family:'Orbitron',sans-serif;font-size:clamp(1.4rem,4.5vw,2.2rem);font-weight:900;letter-spacing:5px;color:var(--tagline);text-shadow:var(--tagline-glow);margin:8px 0 20px;transition:color .4s;}
+.sub{color:var(--muted);font-size:.94rem;line-height:1.7;max-width:520px;margin:0 auto 26px;text-align:center;transition:color .4s;}
+.home{text-align:center;}
+.stats{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-bottom:22px;}
+.stat{flex:1 1 120px;min-width:110px;padding:14px 10px;border-radius:16px;background:var(--stat-bg);border:1px solid var(--line);transition:background .3s,border-color .2s,transform .2s;}
+.stat:hover{transform:translateY(-3px);border-color:var(--cyan);}
+.stat b{display:block;font-family:'Orbitron',sans-serif;font-size:1.2rem;background:linear-gradient(90deg,var(--pink),var(--purple));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
+.stat span{font-size:.7rem;color:var(--muted);letter-spacing:.8px;text-transform:uppercase;}
+.btn{font-family:'Poppins',sans-serif;font-size:.95rem;font-weight:600;border:none;border-radius:14px;padding:14px 28px;cursor:pointer;transition:transform .18s,box-shadow .2s,filter .2s;}
+.btn:active{transform:scale(.97);}
+.btn-primary{color:#0a0612;background:linear-gradient(100deg,var(--cyan),var(--lime) 50%,var(--yellow));box-shadow:0 8px 24px var(--glow-c);font-weight:700;}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 12px 36px var(--glow-c);filter:brightness(1.08);}
+.btn-primary:disabled{opacity:.6;cursor:not-allowed;transform:none;}
+.btn-ghost{background:var(--ghost);color:var(--txt);border:1px solid var(--line);transition:background .2s,border-color .2s,transform .15s,color .3s;}
+.btn-ghost:hover{background:var(--ghost-hover);border-color:var(--purple);transform:translateY(-1px);}
+.btn-row{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:6px;}
+.h2{font-family:'Orbitron',sans-serif;font-size:1.25rem;font-weight:800;margin-bottom:4px;background:linear-gradient(90deg,var(--pink),var(--cyan));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
+.h2-sub{color:var(--muted);font-size:.82rem;margin-bottom:22px;transition:color .3s;}
+.rule-list{list-style:none;display:grid;gap:10px;margin-bottom:26px;}
+.rule-list li{display:flex;gap:12px;align-items:flex-start;padding:13px 15px;border-radius:14px;background:var(--rule);border:1px solid var(--line);border-left:3px solid var(--purple);font-size:.88rem;line-height:1.55;color:var(--rule-txt);transition:background .2s,border-color .2s,transform .18s;}
+.rule-list li:hover{background:var(--opt);border-left-color:var(--cyan);transform:translateX(4px);}
+.rule-list .ic{font-size:1rem;line-height:1.3;}
+.progress-wrap{margin-bottom:22px;}
+.progress-top{display:flex;justify-content:space-between;align-items:center;font-size:.72rem;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;font-weight:600;}
+.progress-top b{color:var(--cyan);}
+.progress{height:7px;border-radius:100px;overflow:hidden;background:rgba(127,127,127,.15);}
+.progress-bar{height:100%;width:25%;border-radius:100px;background:linear-gradient(90deg,var(--pink),var(--purple),var(--cyan),var(--lime));box-shadow:0 0 12px var(--cyan);transition:width .35s ease;}
+.step{display:none;}
+.step.active{display:block;animation:fadeUp .3s ease;}
+.field{margin-bottom:18px;}
+.field label{display:block;font-size:.8rem;font-weight:600;letter-spacing:.5px;margin-bottom:8px;color:var(--bd-lbl);transition:color .3s;}
+.field label .req{color:var(--pink);}
+input[type=text],input[type=number],input[type=tel],input[type=password],textarea,select{width:100%;font-family:'Poppins',sans-serif;font-size:.92rem;color:var(--txt);background:var(--input);border:1.5px solid var(--line);border-radius:12px;padding:12px 14px;outline:none;transition:background .2s,border-color .18s,box-shadow .2s,color .3s;}
+textarea{resize:vertical;min-height:100px;line-height:1.6;}
+input::placeholder,textarea::placeholder{color:var(--placeholder);}
+input:focus,textarea:focus,select:focus{border-color:var(--cyan);background:var(--input-focus);box-shadow:0 0 0 3px rgba(0,240,255,.18);}
+select option{background:var(--card-1);color:var(--txt);}
+.phone-input{display:flex;gap:8px;align-items:stretch;}
+.phone-input select.phone-country{flex:0 0 auto;width:auto;min-width:110px;max-width:150px;padding:12px 8px;font-size:.88rem;cursor:pointer;}
+.phone-input input.phone-number{flex:1 1 auto;min-width:0;}
+.phone-input input.valid,.phone-input input.valid:focus{border-color:var(--lime);box-shadow:0 0 0 3px rgba(57,255,20,.14);}
+.phone-input input.invalid,.phone-input input.invalid:focus{border-color:var(--pink);box-shadow:0 0 0 3px rgba(255,0,102,.14);}
+.hint{font-size:.72rem;color:var(--muted);margin-top:6px;}
+.err{font-size:.76rem;color:var(--pink);margin-top:6px;display:none;font-weight:500;}
+.err.show{display:block;}
+.opt-grid{display:grid;gap:10px;margin-bottom:6px;}
+.opt{display:flex;gap:10px;align-items:center;padding:12px 14px;border-radius:12px;background:var(--opt);border:1.5px solid var(--line);cursor:pointer;transition:background .2s,border-color .18s;font-size:.86rem;line-height:1.5;color:var(--opt-txt);}
+.opt:hover{background:var(--input-focus);border-color:var(--purple);}
+.opt input{display:none;}
+.dot{flex:0 0 18px;height:18px;border-radius:50%;border:2px solid var(--line);display:grid;place-items:center;transition:.18s;}
+.dot::after{content:'';width:8px;height:8px;border-radius:50%;background:var(--cyan);transform:scale(0);transition:.18s;box-shadow:0 0 8px var(--cyan);}
+.opt:has(input:checked){background:linear-gradient(100deg,rgba(255,0,102,.18),rgba(192,38,255,.18));border-color:var(--pink);color:var(--txt);}
+.opt:has(input:checked) .dot{border-color:var(--pink);}
+.opt:has(input:checked) .dot::after{transform:scale(1);background:var(--pink);box-shadow:0 0 8px var(--pink);}
+.q-block{margin-bottom:22px;}
+.q-title{font-size:.9rem;font-weight:600;margin-bottom:10px;color:var(--txt);line-height:1.5;}
+.q-title .num{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:6px;margin-right:8px;background:linear-gradient(135deg,var(--pink),var(--purple));font-size:.72rem;font-weight:700;color:#fff;vertical-align:middle;}
+.nav-row{display:flex;gap:10px;justify-content:space-between;margin-top:26px;flex-wrap:wrap;}
+.nav-row .btn{flex:1 1 auto;}
+.result-head{text-align:center;margin-bottom:22px;}
+.verdict{font-family:'Orbitron',sans-serif;font-size:clamp(1.2rem,4.2vw,1.8rem);font-weight:900;letter-spacing:1.5px;margin-bottom:10px;}
+.verdict.pass{background:linear-gradient(90deg,var(--lime),var(--cyan));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
+.verdict.fail{background:linear-gradient(90deg,var(--pink),#ff8800);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
+.score-ring{width:160px;height:160px;border-radius:50%;margin:0 auto 20px;display:grid;place-items:center;position:relative;background:conic-gradient(var(--c) calc(var(--p) * 1%), rgba(127,127,127,.15) 0);transition:--p 1.2s ease;}
+.score-ring::before{content:'';position:absolute;inset:12px;border-radius:50%;background:radial-gradient(circle at 50% 30%, rgba(20,10,40,.95), rgba(8,2,20,.98));}
+[data-theme="light"] .score-ring::before,[data-theme="candy"] .score-ring::before{background:radial-gradient(circle at 50% 30%, #fff, #f0eaff);}
+.score-in{position:relative;z-index:1;text-align:center;}
+.score-in b{display:block;font-family:'Orbitron',sans-serif;font-size:2.2rem;font-weight:900;line-height:1;background:linear-gradient(135deg,var(--cyan),var(--lime));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
+.score-in span{font-size:.64rem;letter-spacing:2px;color:var(--muted);text-transform:uppercase;}
+.breakdown{display:grid;gap:8px;margin:20px 0 24px;}
+.bd-row{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:11px 14px;border-radius:12px;background:var(--bd);border:1px solid var(--line);font-size:.82rem;}
+.bd-row .lbl{color:var(--bd-lbl);display:flex;align-items:center;gap:8px;}
+.bd-row .val{font-weight:700;font-family:'Orbitron',sans-serif;font-size:.82rem;}
+.val.ok{color:var(--lime);}
+.val.no{color:var(--pink);}
+.note{padding:14px 16px;border-radius:14px;font-size:.84rem;line-height:1.65;background:rgba(0,240,255,.08);border:1px solid rgba(0,240,255,.32);color:var(--bd-lbl);margin-bottom:22px;}
+.note.warn{background:rgba(255,0,102,.1);border-color:rgba(255,0,102,.38);color:#ffc4d2;}
+.note.success{background:rgba(57,255,20,.1);border-color:rgba(57,255,20,.38);color:#c4ffb8;}
+.status-badge{display:inline-block;padding:4px 12px;border-radius:100px;font-size:.66rem;font-weight:700;letter-spacing:.5px;text-transform:uppercase;margin-bottom:6px;}
+.status-badge.pending{background:rgba(255,251,0,.2);color:#ffd700;border:1px solid rgba(255,251,0,.5);}
+.status-badge.approved{background:rgba(57,255,20,.2);color:#39ff14;border:1px solid rgba(57,255,20,.5);}
+.status-badge.rejected{background:rgba(255,0,102,.2);color:var(--pink);border:1px solid rgba(255,0,102,.5);}
+[data-theme="light"] .status-badge.pending,[data-theme="candy"] .status-badge.pending{background:rgba(200,150,0,.2);color:#8a6a00;border-color:rgba(200,150,0,.5);}
+[data-theme="light"] .status-badge.approved,[data-theme="candy"] .status-badge.approved{background:rgba(0,150,50,.18);color:#007a2a;border-color:rgba(0,150,50,.5);}
+[data-theme="light"] .status-badge.rejected,[data-theme="candy"] .status-badge.rejected{background:rgba(200,0,60,.18);color:#a00030;border-color:rgba(200,0,60,.5);}
+.wa-card{padding:22px 20px;border-radius:18px;background:linear-gradient(135deg,rgba(37,211,102,.15),rgba(18,140,126,.15));border:2px solid rgba(37,211,102,.5);text-align:center;box-shadow:0 0 40px rgba(37,211,102,.35);margin-bottom:22px;}
+.wa-card h3{font-family:'Orbitron',sans-serif;font-size:1rem;font-weight:800;color:#25D366;margin-bottom:6px;}
+.wa-card p{font-size:.82rem;color:var(--bd-lbl);margin-bottom:14px;line-height:1.55;}
+.wa-btn{display:inline-flex;align-items:center;gap:8px;padding:13px 26px;border-radius:12px;background:linear-gradient(100deg,#25D366,#128C7E);color:#fff;font-weight:700;font-size:.94rem;text-decoration:none;box-shadow:0 8px 24px rgba(37,211,102,.5);transition:transform .18s,box-shadow .18s;}
+.wa-btn:hover{transform:translateY(-2px);box-shadow:0 12px 34px rgba(37,211,102,.8);}
+.wa-btn svg{width:20px;height:20px;}
+
+.fb-status{position:fixed;top:14px;left:14px;padding:6px 12px;border-radius:100px;font-size:.68rem;font-weight:700;z-index:1000;display:flex;align-items:center;gap:6px;transition:all .3s;background:var(--card-1);border:1px solid var(--line);box-shadow:0 4px 16px rgba(0,0,0,.3);}
+.fb-dot{width:8px;height:8px;border-radius:50%;background:#888;box-shadow:0 0 8px currentColor;}
+.fb-status.online .fb-dot{background:var(--lime);color:var(--lime);animation:pulseDot 1.8s infinite;}
+.fb-status.offline .fb-dot{background:var(--pink);color:var(--pink);}
+.fb-status.syncing .fb-dot{background:#ffd700;color:#ffd700;animation:pulseDot 1s infinite;}
+@keyframes pulseDot{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.5;transform:scale(.8);}}
+
+.admin-tabs{display:flex;gap:6px;margin-bottom:18px;border-bottom:1px solid var(--line);padding-bottom:2px;flex-wrap:wrap;}
+.admin-tab{padding:10px 18px;border:none;background:transparent;color:var(--muted);cursor:pointer;font-family:inherit;font-size:.85rem;font-weight:600;border-bottom:2px solid transparent;margin-bottom:-3px;transition:color .2s,border-color .2s;}
+.admin-tab:hover{color:var(--txt);}
+.admin-tab.active{color:var(--cyan);border-bottom-color:var(--cyan);}
+.admin-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:18px;}
+.admin-stat{padding:12px 8px;border-radius:12px;background:var(--stat-bg);border:1px solid var(--line);text-align:center;}
+.admin-stat b{display:block;font-family:'Orbitron',sans-serif;font-size:1.2rem;margin-bottom:2px;line-height:1;}
+.admin-stat span{font-size:.62rem;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);}
+.admin-stat.total b{color:var(--cyan);}
+.admin-stat.pending b{color:#ffd700;}
+.admin-stat.approved b{color:var(--lime);}
+.admin-stat.rejected b{color:var(--pink);}
+[data-theme="light"] .admin-stat.pending b,[data-theme="candy"] .admin-stat.pending b{color:#a08000;}
+.filter-tabs{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap;}
+.tab{padding:7px 14px;border-radius:100px;border:1px solid var(--line);background:var(--ghost);color:var(--muted);cursor:pointer;font-size:.74rem;font-weight:600;font-family:inherit;transition:background .2s,color .2s;}
+.tab:hover{background:var(--ghost-hover);}
+.tab.active{background:linear-gradient(100deg,var(--cyan),var(--lime));color:#0a0612;border-color:transparent;font-weight:700;}
+.admin-list{display:grid;gap:10px;}
+.reg-card{padding:14px;border-radius:14px;background:var(--bd);border:1px solid var(--line);border-left:3px solid #ffd700;}
+.reg-card.approved{border-left-color:var(--lime);}
+.reg-card.rejected{border-left-color:var(--pink);}
+.reg-head{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:8px;flex-wrap:wrap;}
+.reg-name{font-weight:700;font-size:.9rem;color:var(--txt);word-break:break-word;}
+.reg-id{font-size:.64rem;color:var(--muted);font-family:monospace;margin-top:1px;}
+.reg-body{font-size:.78rem;line-height:1.65;color:var(--bd-lbl);display:grid;gap:3px;margin-bottom:10px;word-break:break-word;}
+.reg-body b{color:var(--txt);}
+.reg-body a{word-break:break-all;color:var(--cyan);}
+.reg-actions{display:flex;gap:6px;flex-wrap:wrap;}
+.reg-actions .btn{padding:7px 14px;font-size:.74rem;border-radius:8px;}
+.btn-approve{background:linear-gradient(100deg,var(--lime),var(--cyan));color:#0a0612;font-weight:700;}
+.btn-reject{background:linear-gradient(100deg,var(--pink),#ff8800);color:#fff;font-weight:700;}
+.logo-settings{display:grid;gap:16px;}
+.logo-preview-box{padding:20px;border-radius:14px;background:var(--bd);border:1px dashed var(--line);min-height:120px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:10px;}
+.logo-preview-box img,.logo-preview-box video{max-width:100%;max-height:140px;border-radius:10px;box-shadow:0 0 20px var(--glow-p);}
+.logo-preview-box .preview-title{font-family:'Orbitron',sans-serif;font-size:1.4rem;font-weight:900;background:linear-gradient(100deg,var(--pink),var(--purple),var(--cyan));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
+.file-input-wrap{padding:16px;border-radius:12px;border:2px dashed var(--line);text-align:center;cursor:pointer;transition:border-color .2s,background .2s;}
+.file-input-wrap:hover{border-color:var(--cyan);background:var(--input-focus);}
+.file-input-wrap input{display:none;}
+.file-input-label{font-size:.85rem;color:var(--muted);cursor:pointer;display:block;}
+.file-input-label b{color:var(--cyan);}
+.file-selected{font-size:.76rem;color:var(--lime);margin-top:6px;}
+
+.theme-fab{position:fixed;top:14px;right:14px;width:46px;height:46px;border-radius:50%;border:2px solid var(--line);background:var(--card-1);cursor:pointer;font-size:1.2rem;z-index:1000;display:grid;place-items:center;box-shadow:0 4px 16px rgba(0,0,0,.4);transition:transform .18s;}
+.theme-fab:hover{transform:scale(1.1) rotate(15deg);}
+.theme-panel{position:fixed;top:70px;right:14px;background:var(--card-1);border:1px solid var(--line);border-radius:14px;padding:14px;z-index:1000;display:none;box-shadow:0 10px 30px rgba(0,0,0,.5);}
+.theme-panel.open{display:block;animation:fadeUp .2s;}
+.theme-panel-title{font-size:.66rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-bottom:10px;font-weight:700;}
+.theme-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
+.swatch{width:34px;height:34px;border-radius:50%;border:2px solid var(--line);background:var(--sw);cursor:pointer;transition:transform .18s,border-color .18s;position:relative;}
+.swatch:hover{transform:scale(1.12);}
+.swatch.active{border-color:var(--cyan);box-shadow:0 0 12px var(--cyan);}
+.swatch.active::after{content:'✓';position:absolute;inset:0;display:grid;place-items:center;color:#fff;font-size:.75rem;font-weight:800;text-shadow:0 1px 2px rgba(0,0,0,.9);}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--card-1);color:var(--txt);padding:12px 22px;border-radius:10px;border:1px solid var(--line);font-size:.85rem;font-weight:600;z-index:2000;opacity:0;pointer-events:none;transition:.25s;box-shadow:0 8px 24px rgba(0,0,0,.5);max-width:90vw;text-align:center;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+.toast.success{border-color:var(--lime);}
+.toast.error{border-color:var(--pink);}
+.confetti{position:fixed;width:8px;height:8px;top:-20px;z-index:99;pointer-events:none;border-radius:2px;animation:fall linear forwards;}
+@keyframes fall{to{transform:translate3d(0,105vh,0) rotate(720deg);opacity:0;}}
+footer{text-align:center;margin-top:22px;font-size:.68rem;letter-spacing:1.2px;color:var(--footer);text-transform:uppercase;transition:color .3s;}
+
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;}}
+@media(max-width:560px){
+  body{padding:14px 12px 46px;}
+  .card{padding:26px 20px;border-radius:22px;}
+  .stat{flex:1 1 100%;}
+  .btn{padding:12px 20px;font-size:.88rem;}
+  .nav-row .btn{flex:1 1 100%;}
+  .tagline{letter-spacing:3px;}
+  .admin-stats{grid-template-columns:repeat(2,1fr);}
+  .theme-fab{top:10px;right:10px;width:42px;height:42px;font-size:1.1rem;}
+  .fb-status{top:10px;left:10px;font-size:.62rem;padding:5px 10px;}
+  .theme-panel{top:58px;right:10px;left:10px;padding:12px;}
+  .swatch{width:32px;height:32px;}
+  .floater{font-size:1.1rem;}
+  .phone-input select.phone-country{min-width:90px;font-size:.82rem;padding:12px 6px;}
+}
+</style>
+<noscript><style>html:not(.app-ready) body{opacity:1!important;}html:not(.app-ready) *{animation-play-state:running!important;}</style></noscript>
+</head>
+<body>
+
+<div class="fb-status syncing" id="fbStatus">
+  <span class="fb-dot"></span>
+  <span id="fbStatusText">Menghubungkan...</span>
+</div>
+
+<button class="theme-fab" id="themeFab" aria-label="Ganti tema">🎨</button>
+<div class="theme-panel" id="themePanel">
+  <div class="theme-panel-title">Pilih Tema</div>
+  <div class="theme-grid" id="themeGrid"></div>
+</div>
+
+<div class="bg-blobs">
+  <span class="blob b1"></span>
+  <span class="blob b2"></span>
+  <span class="blob b3"></span>
+  <div class="grid-overlay"></div>
+</div>
+<div class="particles" id="particles"></div>
+<div class="floaters" id="floaters"></div>
+
+<main class="app">
+
+  <section class="screen active" id="screenHome">
+    <div class="card home">
+      <div class="badge">✦ OPEN RECRUITMENT EDITOR ✦</div>
+      <div class="logo-wrap" id="logoWrap">
+        <h1 class="title">𝙆𝙮𝙤𝙩𝙤 𝙈𝙤𝙩𝙞𝙤𝙣</h1>
+      </div>
+      <div class="tagline">𝐊𝐘𝐓</div>
+      <p class="sub">
+        Sebelum resmi mendaftar sebagai editor, ikuti dulu <b>seleksi awal</b> ini.
+        Kami tidak mencari yang paling jago — kami mencari editor yang
+        <b>kreatif, orisinal, santun, dan bisa diandalkan</b>.
+      </p>
+      <div class="stats">
+        <div class="stat"><b>3</b><span>Langkah</span></div>
+        <div class="stat"><b>70</b><span>Skor Lulus</span></div>
+        <div class="stat"><b>3</b><span>Soal Editor</span></div>
+        <div class="stat"><b>8</b><span>Tema</span></div>
+      </div>
+      <div id="homeStatus"></div>
+      <button class="btn btn-primary" onclick="showScreen('rules')">Mulai Seleksi →</button>
+      <div class="btn-row" style="margin-top:14px">
+        <button class="btn btn-ghost" onclick="showScreen('check')">🔍 Cek Status</button>
+        <button class="btn btn-ghost" onclick="goAdmin()">🔐 Admin Panel</button>
+      </div>
+    </div>
+    <footer>Kyoto Motion © — Editor Selection System</footer>
+  </section>
+
+  <section class="screen" id="screenRules">
+    <div class="card">
+      <h2 class="h2">Syarat & Ketentuan Editor</h2>
+      <p class="h2-sub">Baca dulu sebelum lanjut. Ini bukan formalitas.</p>
+      <ul class="rule-list">
+        <li><span class="ic">🎬</span><span>Mampu melakukan <b>editing video dasar</b>: cut, transition, text, dan sinkronisasi musik.</span></li>
+        <li><span class="ic">🎞️</span><span>Hasil editan wajib <b>karya sendiri / orisinal</b>, bukan hasil jiplak atau repost tanpa izin.</span></li>
+        <li><span class="ic">📱</span><span>Wajib <b>upload editan ke TikTok</b> dan mencantumkan link yang bisa diakses publik.</span></li>
+        <li><span class="ic">🕒</span><span>Aktif di TikTok dan <b>responsif</b> saat dihubungi leader/admin.</span></li>
+        <li><span class="ic">🤝</span><span>Wajib <b>sopan</b> ke member, leader, dan editor senior. Tanpa toxic & SARA.</span></li>
+        <li><span class="ic">🔁</span><span>Siap menerima <b>revisi dan arahan</b> dari editor senior/leader.</span></li>
+        <li><span class="ic">🚫</span><span>Tidak menyebarkan konten negatif, clickbait palsu, atau konten yang melanggar aturan.</span></li>
+        <li><span class="ic">🎂</span><span><b>Usia bebas</b> — tidak ada batasan umur, yang penting bertanggung jawab.</span></li>
+      </ul>
+      <div class="note">💡 Seleksi ini <b>tidak memaksa</b> kamu jago editing. Yang dinilai adalah sikap, komitmen, orisinalitas karya, dan cara kamu menjawab.</div>
+      <div class="nav-row">
+        <button class="btn btn-ghost" onclick="showScreen('home')">← Kembali</button>
+        <button class="btn btn-primary" onclick="startForm()">Saya Setuju, Lanjut →</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="screen" id="screenForm">
+    <div class="card">
+      <div class="progress-wrap">
+        <div class="progress-top">
+          <span id="stepLabel">Langkah 1 dari 3</span>
+          <span><b id="stepName">Data Diri</b></span>
+        </div>
+        <div class="progress"><div class="progress-bar" id="progressBar"></div></div>
+      </div>
+
+      <div class="step active">
+        <h2 class="h2">Data Diri</h2>
+        <p class="h2-sub">Isi data dengan benar. Link editan akan kami cek.</p>
+        <div class="field">
+          <label>Nama / Nickname <span class="req">*</span></label>
+          <input type="text" id="inpNama" placeholder="Contoh: Ryu" maxlength="24">
+          <div class="err" id="errNama">Nama wajib diisi (min. 3 karakter).</div>
+        </div>
+        <div class="field">
+          <label>Username TikTok <span class="req">*</span></label>
+          <input type="text" id="inpTiktok" placeholder="Contoh: @kyt_ryu" maxlength="30">
+          <div class="err" id="errTiktok">Username TikTok wajib diisi.</div>
+        </div>
+        <div class="field">
+          <label>Link Editan yang Di-upload di TikTok <span class="req">*</span></label>
+          <input type="text" id="inpLink" placeholder="Contoh: https://vt.tiktok.com/xxxx" maxlength="200">
+          <div class="hint">Tempel link video editanmu yang bisa diakses publik.</div>
+          <div class="err" id="errLink">Link wajib diisi dan harus berupa link TikTok.</div>
+        </div>
+        <div class="field">
+          <label>Umur <span class="req">*</span></label>
+          <input type="number" id="inpUmur" placeholder="Contoh: 15" min="1" max="100">
+          <div class="hint">Usia bebas, tidak ada batasan umur.</div>
+          <div class="err" id="errUmur">Umur wajib diisi (1 – 100).</div>
+        </div>
+        <div class="field">
+          <label>Nomor Telepon Aktif <span class="req">*</span></label>
+          <div class="phone-input">
+            <select class="phone-country" id="inpDialCode">
+              <option value="62" data-min="9" data-max="12" data-start="8">🇮🇩 +62</option>
+              <option value="60" data-min="9" data-max="10" data-start="1">🇲🇾 +60</option>
+              <option value="65" data-min="8" data-max="8" data-start="8,9">🇸🇬 +65</option>
+              <option value="63" data-min="10" data-max="10" data-start="9">🇵🇭 +63</option>
+              <option value="66" data-min="9" data-max="9" data-start="6,8,9">🇹🇭 +66</option>
+              <option value="84" data-min="9" data-max="10" data-start="3,5,7,8,9">🇻🇳 +84</option>
+              <option value="673" data-min="7" data-max="7" data-start="7,8">🇧🇳 +673</option>
+              <option value="91" data-min="10" data-max="10" data-start="6,7,8,9">🇮🇳 +91</option>
+              <option value="1" data-min="10" data-max="10">🇺🇸 +1</option>
+              <option value="44" data-min="10" data-max="10" data-start="7">🇬🇧 +44</option>
+              <option value="81" data-min="10" data-max="10" data-start="7,8,9">🇯🇵 +81</option>
+              <option value="82" data-min="9" data-max="10" data-start="1">🇰🇷 +82</option>
+              <option value="86" data-min="11" data-max="11" data-start="1">🇨🇳 +86</option>
+              <option value="61" data-min="9" data-max="9" data-start="4">🇦🇺 +61</option>
+              <option value="64" data-min="8" data-max="10" data-start="2">🇳🇿 +64</option>
+            </select>
+            <input type="tel" class="phone-number" id="inpTelp" placeholder="81234567890" maxlength="16" inputmode="numeric">
+          </div>
+          <div class="hint">Pilih negara, lalu masukkan nomor tanpa awalan 0.</div>
+          <div class="err" id="errTelp">Nomor telepon tidak valid untuk negara yang dipilih.</div>
+        </div>
+        <div class="nav-row">
+          <button class="btn btn-ghost" onclick="showScreen('rules')">← Batal</button>
+          <button class="btn btn-primary" onclick="nextStep()">Lanjut →</button>
+        </div>
+      </div>
+
+      <div class="step">
+        <h2 class="h2">Alasan Masuk</h2>
+        <p class="h2-sub">Jawab dengan jujur. Bebas, tulis apa pun yang kamu mau.</p>
+        <div class="field">
+          <label>Alasan masuk marga 𝙆𝙮𝙤𝙩𝙤 𝙈𝙤𝙩𝙞𝙤𝙣 | 𝐊𝐘𝐓 <span class="req">*</span></label>
+          <textarea id="inpAlasan" placeholder="Tulis alasanmu di sini (bebas, tanpa batas minimal)..."></textarea>
+          <div class="hint"><span id="charCount">0</span> karakter</div>
+          <div class="err" id="errAlasan">Alasan wajib diisi.</div>
+        </div>
+        <div class="nav-row">
+          <button class="btn btn-ghost" onclick="prevStep()">← Kembali</button>
+          <button class="btn btn-primary" onclick="nextStep()">Lanjut →</button>
+        </div>
+      </div>
+
+      <div class="step">
+        <h2 class="h2">Tes Editor</h2>
+        <p class="h2-sub">3 soal dari kami. Jawab sesuai hati nurani.</p>
+        <div class="q-block">
+          <div class="q-title"><span class="num">1</span>Sebelum mulai editing, hal pertama yang sebaiknya kamu lakukan?</div>
+          <div class="opt-grid">
+            <label class="opt"><input type="radio" name="q1" value="a"><span class="dot"></span><span>Langsung potong video tanpa rencana</span></label>
+            <label class="opt"><input type="radio" name="q1" value="b"><span class="dot"></span><span>Menyusun konsep / alur cerita terlebih dahulu</span></label>
+            <label class="opt"><input type="radio" name="q1" value="c"><span class="dot"></span><span>Memberi semua efek yang tersedia</span></label>
+            <label class="opt"><input type="radio" name="q1" value="d"><span class="dot"></span><span>Mengikuti tren tanpa memahami isi</span></label>
+          </div>
+        </div>
+        <div class="q-block">
+          <div class="q-title"><span class="num">2</span>Leader/editor senior meminta revisi hasil editanmu. Sikap terbaik?</div>
+          <div class="opt-grid">
+            <label class="opt"><input type="radio" name="q2" value="a"><span class="dot"></span><span>Menerima, memahami catatan, lalu memperbaiki</span></label>
+            <label class="opt"><input type="radio" name="q2" value="b"><span class="dot"></span><span>Menolak karena merasa sudah paling bagus</span></label>
+            <label class="opt"><input type="radio" name="q2" value="c"><span class="dot"></span><span>Marah dan menghapus hasil editan</span></label>
+            <label class="opt"><input type="radio" name="q2" value="d"><span class="dot"></span><span>Diamkan permintaan revisi</span></label>
+          </div>
+        </div>
+        <div class="q-block">
+          <div class="q-title"><span class="num">3</span>Link editan yang kamu cantumkan saat seleksi sebaiknya...</div>
+          <div class="opt-grid">
+            <label class="opt"><input type="radio" name="q3" value="a"><span class="dot"></span><span>Link video milik orang lain yang viral</span></label>
+            <label class="opt"><input type="radio" name="q3" value="b"><span class="dot"></span><span>Link akun privat yang tidak bisa diakses</span></label>
+            <label class="opt"><input type="radio" name="q3" value="c"><span class="dot"></span><span>Link video editanmu sendiri di TikTok yang bisa diakses publik</span></label>
+            <label class="opt"><input type="radio" name="q3" value="d"><span class="dot"></span><span>Tidak perlu link, cukup bilang sudah pernah edit</span></label>
+          </div>
+        </div>
+        <div class="err" id="errQuiz" style="margin-bottom:8px;">Semua soal wajib dijawab.</div>
+        <div class="nav-row">
+          <button class="btn btn-ghost" onclick="prevStep()">← Kembali</button>
+          <button class="btn btn-primary" id="btnSubmit" onclick="submitForm()">Kirim Pendaftaran ✓</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="screen" id="screenResult">
+    <div class="card">
+      <div class="result-head">
+        <div class="verdict" id="verdict">MENUNGGU ACC</div>
+        <div class="score-ring" id="scoreRing">
+          <div class="score-in"><b id="scoreNum">0</b><span>Skor</span></div>
+        </div>
+        <div id="resultStatus" style="margin-bottom:8px"></div>
+        <p class="sub" id="verdictSub" style="margin-bottom:0;"></p>
+      </div>
+      <div class="breakdown" id="breakdown"></div>
+      <div class="note" id="noteBox"></div>
+      <div class="btn-row">
+        <button class="btn btn-ghost" onclick="resetAll()">↻ Ulangi Seleksi</button>
+        <button class="btn btn-primary" id="btnCopy" onclick="copyResult()">Salin Hasil</button>
+      </div>
+    </div>
+    <footer>Kyoto Motion © — Editor Selection System</footer>
+  </section>
+
+  <section class="screen" id="screenCheck">
+    <div class="card">
+      <h2 class="h2">🔍 Cek Status Pendaftaran</h2>
+      <p class="h2-sub">Masukkan nama dan nomor telepon yang kamu daftarkan.</p>
+      <div class="field">
+        <label>Nama <span class="req">*</span></label>
+        <input type="text" id="checkNama" placeholder="Nama yang didaftarkan">
+      </div>
+      <div class="field">
+        <label>Nomor Telepon <span class="req">*</span></label>
+        <div class="phone-input">
+          <select class="phone-country" id="checkDialCode">
+            <option value="62" data-min="9" data-max="12" data-start="8">🇮🇩 +62</option>
+            <option value="60" data-min="9" data-max="10" data-start="1">🇲🇾 +60</option>
+            <option value="65" data-min="8" data-max="8" data-start="8,9">🇸🇬 +65</option>
+            <option value="63" data-min="10" data-max="10" data-start="9">🇵🇭 +63</option>
+            <option value="66" data-min="9" data-max="9" data-start="6,8,9">🇹🇭 +66</option>
+            <option value="84" data-min="9" data-max="10" data-start="3,5,7,8,9">🇻🇳 +84</option>
+            <option value="673" data-min="7" data-max="7" data-start="7,8">🇧🇳 +673</option>
+            <option value="91" data-min="10" data-max="10" data-start="6,7,8,9">🇮🇳 +91</option>
+            <option value="1" data-min="10" data-max="10">🇺🇸 +1</option>
+            <option value="44" data-min="10" data-max="10" data-start="7">🇬🇧 +44</option>
+            <option value="81" data-min="10" data-max="10" data-start="7,8,9">🇯🇵 +81</option>
+            <option value="82" data-min="9" data-max="10" data-start="1">🇰🇷 +82</option>
+            <option value="86" data-min="11" data-max="11" data-start="1">🇨🇳 +86</option>
+            <option value="61" data-min="9" data-max="9" data-start="4">🇦🇺 +61</option>
+            <option value="64" data-min="8" data-max="10" data-start="2">🇳🇿 +64</option>
+          </select>
+          <input type="tel" class="phone-number" id="checkTelp" placeholder="81234567890" maxlength="16" inputmode="numeric">
+        </div>
+      </div>
+      <div class="err" id="errCheck">Data tidak ditemukan. Pastikan nama dan nomor telepon sesuai.</div>
+      <div class="nav-row">
+        <button class="btn btn-ghost" onclick="showScreen('home')">← Kembali</button>
+        <button class="btn btn-primary" id="btnCheck" onclick="doCheckStatus()">Cek Status →</button>
+      </div>
+      <div id="checkResult" style="margin-top:18px"></div>
+    </div>
+  </section>
+
+  <section class="screen" id="screenAdminLogin">
+    <div class="card">
+      <h2 class="h2">🔐 Admin Panel</h2>
+      <p class="h2-sub">Hanya untuk admin KYT. Masukkan kredensial.</p>
+      <div class="field">
+        <label>Username <span class="req">*</span></label>
+        <input type="text" id="adminUser" placeholder="Username admin" autocomplete="off">
+      </div>
+      <div class="field">
+        <label>Password <span class="req">*</span></label>
+        <input type="password" id="adminPass" placeholder="Password" autocomplete="off">
+      </div>
+      <div class="err" id="errAdmin">Username atau password salah.</div>
+      <div class="nav-row">
+        <button class="btn btn-ghost" onclick="showScreen('home')">← Kembali</button>
+        <button class="btn btn-primary" onclick="doAdminLogin()">Masuk →</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="screen" id="screenAdmin">
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:16px">
+        <div>
+          <h2 class="h2" style="margin-bottom:0">📋 Dashboard Admin</h2>
+          <p class="h2-sub" style="margin-bottom:0">Kelola pendaftaran & tampilan KYT.</p>
+        </div>
+        <button class="btn btn-ghost" onclick="adminLogout()" style="padding:9px 18px;font-size:.8rem">🚪 Logout</button>
+      </div>
+
+      <div class="admin-tabs">
+        <button class="admin-tab active" data-tab="regs" onclick="switchAdminTab('regs')">📋 Pendaftar</button>
+        <button class="admin-tab" data-tab="logo" onclick="switchAdminTab('logo')">🎨 Logo Aplikasi</button>
+      </div>
+
+      <div id="tabRegs">
+        <div class="admin-stats" id="adminStats"></div>
+        <div class="filter-tabs" id="filterTabs">
+          <button class="tab active" data-filter="all">Semua</button>
+          <button class="tab" data-filter="pending">Menunggu</button>
+          <button class="tab" data-filter="approved">Disetujui</button>
+          <button class="tab" data-filter="rejected">Ditolak</button>
+        </div>
+        <div id="adminList" class="admin-list"></div>
+      </div>
+
+      <div id="tabLogo" style="display:none">
+        <h3 style="font-family:'Orbitron',sans-serif;font-size:1rem;color:var(--cyan);margin-bottom:6px">🎨 Ganti Logo Aplikasi</h3>
+        <p style="font-size:.82rem;color:var(--muted);margin-bottom:18px;line-height:1.6">
+          Ganti tulisan <b>"Kyoto Motion"</b> di halaman utama dengan gambar atau video sesuka hati.
+        </p>
+        <div class="logo-settings">
+          <div class="field">
+            <label>Tipe Logo</label>
+            <select id="logoType" onchange="onLogoTypeChange()">
+              <option value="text">📝 Teks Default (Kyoto Motion)</option>
+              <option value="image">🖼️ Gambar (JPG/PNG/GIF)</option>
+              <option value="video">🎬 Video (MP4/WebM)</option>
+            </select>
+          </div>
+          <div id="logoUploadArea" style="display:none">
+            <div class="field">
+              <label>Upload File (opsional)</label>
+              <div class="file-input-wrap" onclick="document.getElementById('logoFile').click()">
+                <input type="file" id="logoFile" accept="image/*,video/*" onchange="onLogoFileChange()">
+                <div class="file-input-label" id="logoFileLabel">Klik untuk pilih file</div>
+                <div class="file-selected" id="logoFileSelected"></div>
+              </div>
+              <div class="hint">Gambar maks ~500KB (auto-compress), video file maks 2MB. Untuk video besar gunakan URL.</div>
+            </div>
+            <div class="field">
+              <label>Atau URL (gambar/video)</label>
+              <input type="text" id="logoUrl" placeholder="https://contoh.com/logo.png atau https://contoh.com/video.mp4">
+            </div>
+          </div>
+          <div class="field">
+            <label>Preview</label>
+            <div class="logo-preview-box" id="logoPreview">
+              <div class="preview-title">𝙆𝙮𝙤𝙩𝙤 𝙈𝙤𝙩𝙞𝙤𝙣</div>
+            </div>
+          </div>
+          <div class="btn-row" style="justify-content:flex-start;margin-top:0">
+            <button class="btn btn-primary" onclick="saveLogo()">💾 Simpan Logo</button>
+            <button class="btn btn-ghost" onclick="resetLogo()">↻ Reset ke Default</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <footer>Kyoto Motion © — Admin Panel</footer>
+  </section>
+
+</main>
+
+<script type="module">
+/* =====================================================
+   FIREBASE SDK v13.4.0
+====================================================== */
+import { initializeApp } from "https://www.gstatic.com/firebasejs/13.4.0/firebase-app.js";
+import {
+  getFirestore, collection, addDoc, doc, updateDoc, getDoc, getDocs,
+  query, where, orderBy, onSnapshot, serverTimestamp, limit
+} from "https://www.gstatic.com/firebasejs/13.4.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDWs-uyY5KWNWN7-KbXWZdap50DSd8yjsE",
+  authDomain: "seleksi-5fe29.firebaseapp.com",
+  projectId: "seleksi-5fe29",
+  storageBucket: "seleksi-5fe29.firebasestorage.app",
+  messagingSenderId: "397030408631",
+  appId: "1:397030408631:web:0266c5948f4d3716e5a832"
+};
+
+const fbApp = initializeApp(firebaseConfig);
+const db = getFirestore(fbApp);
+const REGS = 'registrations';
+
+/* =====================================================
+   STATUS INDIKATOR
+====================================================== */
+const fbStatusEl = document.getElementById('fbStatus');
+const fbStatusText = document.getElementById('fbStatusText');
+function setFbStatus(state, text){
+  fbStatusEl.className = 'fb-status ' + state;
+  fbStatusText.textContent = text;
+}
+setFbStatus('online', 'Terhubung');
+
+/* =====================================================
+   KONFIGURASI
+====================================================== */
+const ADMIN_USER = 'RullzPreset';
+const ADMIN_PASS = 'jenab123';
+const WA_LINK = 'https://chat.whatsapp.com/KArRQZPAv3h8p53BQyxg2f?s=cl&p=a&iam=2';
+const STORE = { THEME:'kyt_theme', LAST_ID:'kyt_last_id', LOGO:'kyt_logo' };
+const SESSION_KEY = 'kyt_admin_session';
+const CORRECT = { q1:'b', q2:'a', q3:'c' };
+const PASS_SCORE = 70;
+
+/* =====================================================
+   THEME
+====================================================== */
+const THEMES = [
+  {id:'dark',sw:'linear-gradient(135deg,#05010d,#00f0ff)'},
+  {id:'light',sw:'linear-gradient(135deg,#fff5ff,#ff0066)'},
+  {id:'sunset',sw:'linear-gradient(135deg,#1a0200,#ff2200)'},
+  {id:'ocean',sw:'linear-gradient(135deg,#000a18,#00ffff)'},
+  {id:'matrix',sw:'linear-gradient(135deg,#000800,#00ff00)'},
+  {id:'candy',sw:'linear-gradient(135deg,#fff0f8,#ff0080)'},
+  {id:'violet',sw:'linear-gradient(135deg,#0a0018,#bb00ff)'},
+  {id:'gold',sw:'linear-gradient(135deg,#0a0600,#ffdd00)'}
+];
+function initThemeSwatches(){
+  const g = document.getElementById('themeGrid');
+  const cur = localStorage.getItem(STORE.THEME)||'dark';
+  g.innerHTML = THEMES.map(t =>
+    `<button class="swatch ${t.id===cur?'active':''}" data-theme="${t.id}" style="--sw:${t.sw}" onclick="applyTheme('${t.id}')"></button>`
+  ).join('');
+}
+window.applyTheme = function(id){
+  document.documentElement.setAttribute('data-theme', id);
+  try{ localStorage.setItem(STORE.THEME, id); }catch(e){}
+  document.querySelectorAll('.swatch').forEach(s => s.classList.toggle('active', s.dataset.theme === id));
+  rebuildParticles(); rebuildFloaters();
+};
+document.getElementById('themeFab').addEventListener('click', e => {
+  e.stopPropagation();
+  document.getElementById('themePanel').classList.toggle('open');
+});
+document.addEventListener('click', e => {
+  const p = document.getElementById('themePanel'), f = document.getElementById('themeFab');
+  if(p.classList.contains('open') && !p.contains(e.target) && !f.contains(e.target)) p.classList.remove('open');
+});
+
+/* =====================================================
+   BACKGROUND
+====================================================== */
+const THEME_COLORS = {
+  dark:['#ff0066','#c026ff','#00f0ff','#39ff14','#fffb00'],
+  light:['#ff0066','#9900ff','#0099cc','#00cc33','#ffcc00'],
+  sunset:['#ff2200','#ff0088','#ffaa00','#ffee00','#ff6600'],
+  ocean:['#00ccff','#0088ff','#00ffff','#00ffaa','#aaffff'],
+  matrix:['#00ff00','#00cc00','#00ff88','#00ff44','#ccffcc'],
+  candy:['#ff0080','#dd00ff','#0099ff','#00ff99','#ffcc00'],
+  violet:['#ff00ff','#9900ff','#bb00ff','#dd00ff','#ffbbff'],
+  gold:['#ffaa00','#ff6600','#ffdd00','#ffcc00','#ffff80']
+};
+function getColors(){
+  const t = document.documentElement.getAttribute('data-theme')||'dark';
+  return THEME_COLORS[t]||THEME_COLORS.dark;
+}
+function rebuildParticles(){
+  const wrap = document.getElementById('particles'); wrap.innerHTML = '';
+  const colors = getColors();
+  const count = window.innerWidth < 560 ? 6 : 12;
+  const frag = document.createDocumentFragment();
+  for(let i=0;i<count;i++){
+    const p = document.createElement('div'); p.className = 'particle';
+    const size = 3+Math.random()*5;
+    p.style.width = size+'px'; p.style.height = size+'px';
+    p.style.left = Math.random()*100+'vw';
+    const c = colors[Math.floor(Math.random()*colors.length)];
+    p.style.background = c; p.style.boxShadow = `0 0 8px ${c}`;
+    p.style.animationDuration = (14+Math.random()*12)+'s';
+    p.style.animationDelay = (Math.random()*14)+'s';
+    p.style.setProperty('--drift',(Math.random()*80-40)+'px');
+    frag.appendChild(p);
+  }
+  wrap.appendChild(frag);
+}
+const FLOATER_EMOJIS = ['✂️','🎬','✨','🎨','📱','💫','🎥','💜'];
+function rebuildFloaters(){
+  const wrap = document.getElementById('floaters'); wrap.innerHTML = '';
+  const count = window.innerWidth < 560 ? 3 : 6;
+  const frag = document.createDocumentFragment();
+  for(let i=0;i<count;i++){
+    const f = document.createElement('div'); f.className = 'floater';
+    f.textContent = FLOATER_EMOJIS[Math.floor(Math.random()*FLOATER_EMOJIS.length)];
+    f.style.left = Math.random()*100+'vw';
+    f.style.top = Math.random()*100+'vh';
+    f.style.animationDuration = (22+Math.random()*16)+'s';
+    f.style.animationDelay = (Math.random()*10)+'s';
+    frag.appendChild(f);
+  }
+  wrap.appendChild(frag);
+}
+document.addEventListener('visibilitychange', () => {
+  document.querySelectorAll('.blob,.particle,.floater').forEach(el => el.style.animationPlayState = document.hidden ? 'paused' : '');
+});
+document.addEventListener('focusin', e => {
+  if(e.target.matches('input[type="text"],input[type="tel"],input[type="number"],input[type="password"],textarea')) document.body.classList.add('typing');
+});
+document.addEventListener('focusout', e => {
+  if(e.target.matches('input[type="text"],input[type="tel"],input[type="number"],input[type="password"],textarea')) document.body.classList.remove('typing');
+});
+
+/* =====================================================
+   PHONE VALIDATION
+====================================================== */
+function parsePhone(dialCode, number, selectId){
+  const opt = document.querySelector(`#${selectId} option[value="${dialCode}"]`);
+  if(!opt) return null;
+  const min = parseInt(opt.dataset.min || 6);
+  const max = parseInt(opt.dataset.max || 15);
+  const startAttr = opt.dataset.start || '';
+  const starts = startAttr ? startAttr.split(',').map(s=>s.trim()).filter(Boolean) : [];
+  let digits = String(number).replace(/\D/g, '');
+  while(digits.startsWith('0')) digits = digits.slice(1);
+  if(digits.length < min || digits.length > max) return null;
+  if(starts.length > 0 && !starts.some(s => digits.startsWith(s))) return null;
+  return { dialCode, localDigits: digits, full: '+'+dialCode+digits };
+}
+function attachPhoneLive(inputId, selectId){
+  const inp = document.getElementById(inputId);
+  const sel = document.getElementById(selectId);
+  if(!inp || !sel) return;
+  let pending = false;
+  const run = () => {
+    if(pending) return; pending = true;
+    requestAnimationFrame(() => {
+      pending = false;
+      const v = inp.value.trim();
+      if(!v){ inp.classList.remove('valid','invalid'); return; }
+      const ok = parsePhone(sel.value, v, selectId);
+      inp.classList.toggle('valid', !!ok);
+      inp.classList.toggle('invalid', !ok);
+    });
+  };
+  inp.addEventListener('input', run);
+  sel.addEventListener('change', run);
+}
+
+/* =====================================================
+   UTILITIES
+====================================================== */
+function esc(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function formatDate(ts){
+  if(!ts) return '-';
+  try{
+    const d = ts.toDate ? ts.toDate() : new Date(ts);
+    return d.toLocaleString('id-ID',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'});
+  }catch(e){ return '-'; }
+}
+function statusLabel(s){
+  return s === 'pending' ? '⏳ Menunggu' : s === 'approved' ? '✅ Disetujui' : '❌ Ditolak';
+}
+function showToast(msg, type){
+  const t = document.createElement('div');
+  t.className = 'toast ' + (type||'');
+  t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(()=>t.classList.add('show'), 20);
+  setTimeout(()=>{ t.classList.remove('show'); setTimeout(()=>t.remove(), 300); }, 2800);
+}
+function waIcon(){
+  return `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>`;
+}
+function waBlock(){
+  return `<div class="wa-card">
+    <h3>🎉 Selamat! Kamu Resmi Diterima</h3>
+    <p>Klik tombol di bawah untuk langsung masuk ke grup WhatsApp resmi <b>𝙆𝙮𝙤𝙩𝙤 𝙈𝙤𝙩𝙞𝙤𝙣 | 𝐊𝐘𝐓</b>.</p>
+    <a class="wa-btn" href="${WA_LINK}" target="_blank" rel="noopener">${waIcon()} Masuk Grup WhatsApp</a>
+  </div>`;
+}
+
+/* =====================================================
+   LOGO (localStorage)
+====================================================== */
+let logoConfig = { type:'text', value:'' };
+function loadLogoConfig(){
+  try{
+    const s = localStorage.getItem(STORE.LOGO);
+    if(s){ const c = JSON.parse(s); if(c && c.type) logoConfig = c; }
+  }catch(e){}
+}
+window.renderLogo = function(){
+  const wrap = document.getElementById('logoWrap');
+  if(!wrap) return;
+  const cfg = logoConfig;
+  if(cfg.type === 'text' || !cfg.value){
+    wrap.innerHTML = `<h1 class="title">𝙆𝙮𝙤𝙩𝙤 𝙈𝙤𝙩𝙞𝙤𝙣</h1>`;
+  } else if(cfg.type === 'image'){
+    wrap.innerHTML = `<img src="${esc(cfg.value)}" alt="Kyoto Motion" class="logo-image" onerror="this.outerHTML='<h1 class=\\'title\\'>𝙆𝙮𝙤𝙩𝙤 𝙈𝙤𝙩𝙞𝙤𝙣</h1>'">`;
+  } else if(cfg.type === 'video'){
+    wrap.innerHTML = `<video src="${esc(cfg.value)}" autoplay muted loop playsinline class="logo-video" onerror="this.outerHTML='<h1 class=\\'title\\'>𝙆𝙮𝙤𝙩𝙤 𝙈𝙤𝙩𝙞𝙤𝙣</h1>'"></video>`;
+  }
+};
+function compressImage(file, maxDim=900, quality=.82){
+  return new Promise((res, rej) => {
+    const r = new FileReader();
+    r.onload = e => {
+      const img = new Image();
+      img.onload = () => {
+        let w = img.width, h = img.height;
+        if(Math.max(w,h) > maxDim){
+          if(w > h){ h = (maxDim/w)*h; w = maxDim; }
+          else { w = (maxDim/h)*w; h = maxDim; }
+        }
+        const c = document.createElement('canvas');
+        c.width = w; c.height = h;
+        c.getContext('2d').drawImage(img, 0, 0, w, h);
+        res(c.toDataURL('image/jpeg', quality));
+      };
+      img.onerror = rej; img.src = e.target.result;
+    };
+    r.onerror = rej; r.readAsDataURL(file);
+  });
+}
+window.onLogoTypeChange = function(){
+  const type = document.getElementById('logoType').value;
+  const area = document.getElementById('logoUploadArea');
+  const fileInput = document.getElementById('logoFile');
+  if(type === 'text'){
+    area.style.display = 'none';
+    document.getElementById('logoPreview').innerHTML = `<div class="preview-title">𝙆𝙮𝙤𝙩𝙤 𝙈𝙤𝙩𝙞𝙤𝙣</div>`;
+  } else {
+    area.style.display = 'block';
+    fileInput.accept = type === 'image' ? 'image/*' : 'video/*';
+    fileInput.value = '';
+    document.getElementById('logoFileSelected').textContent = '';
+    document.getElementById('logoFileLabel').innerHTML = `Klik untuk pilih <b>${type === 'image' ? 'gambar' : 'video'}</b>`;
+    document.getElementById('logoUrl').value = '';
+    document.getElementById('logoPreview').innerHTML = `<div style="color:var(--muted);font-size:.8rem">Preview akan muncul di sini</div>`;
+  }
+};
+window.onLogoFileChange = function(){
+  const file = document.getElementById('logoFile').files[0];
+  const sel = document.getElementById('logoFileSelected');
+  const preview = document.getElementById('logoPreview');
+  if(!file){ sel.textContent = ''; return; }
+  const sizeMB = (file.size/1024/1024).toFixed(2);
+  sel.textContent = `📎 ${file.name} (${sizeMB} MB)`;
+  const type = document.getElementById('logoType').value;
+  if(type === 'image'){
+    if(file.size > 5*1024*1024){ showToast('Gambar >5MB. Pilih yang lebih kecil.', 'error'); return; }
+    preview.innerHTML = `<img src="${URL.createObjectURL(file)}" alt="preview">`;
+  } else if(type === 'video'){
+    if(file.size > 2*1024*1024){
+      showToast('Video >2MB. Gunakan URL video.', 'error');
+      preview.innerHTML = `<div style="color:var(--muted);font-size:.8rem">File terlalu besar — gunakan URL</div>`;
+      return;
+    }
+    preview.innerHTML = `<video src="${URL.createObjectURL(file)}" autoplay muted loop playsinline></video>`;
+  }
+};
+window.saveLogo = function(){
+  const type = document.getElementById('logoType').value;
+  const file = document.getElementById('logoFile').files[0];
+  const url = document.getElementById('logoUrl').value.trim();
+  if(type === 'text'){ logoConfig = { type:'text', value:'' }; return persistLogo(); }
+  if(type === 'image'){
+    if(file){
+      compressImage(file).then(dataUrl => {
+        if(dataUrl.length > 2*1024*1024){ showToast('Gambar setelah dikompres masih >2MB.', 'error'); return; }
+        logoConfig = { type:'image', value:dataUrl }; persistLogo();
+      }).catch(()=>showToast('Gagal memproses gambar.', 'error'));
+    } else if(url){ logoConfig = { type:'image', value:url }; persistLogo(); }
+    else showToast('Pilih file gambar atau masukkan URL.', 'error');
+  } else if(type === 'video'){
+    if(file){
+      if(file.size > 2*1024*1024){ showToast('Video file >2MB. Gunakan URL video.', 'error'); return; }
+      const r = new FileReader();
+      r.onload = e => { logoConfig = { type:'video', value:e.target.result }; persistLogo(); };
+      r.onerror = () => showToast('Gagal membaca video.', 'error');
+      r.readAsDataURL(file);
+    } else if(url){ logoConfig = { type:'video', value:url }; persistLogo(); }
+    else showToast('Pilih file video atau masukkan URL.', 'error');
+  }
+};
+function persistLogo(){
+  try{
+    localStorage.setItem(STORE.LOGO, JSON.stringify(logoConfig));
+    renderLogo(); renderLogoPreviewInAdmin();
+    showToast('✅ Logo berhasil diperbarui!', 'success');
+  }catch(e){ showToast('❌ Gagal menyimpan (storage penuh).', 'error'); }
+}
+window.resetLogo = function(){
+  logoConfig = { type:'text', value:'' };
+  try{ localStorage.removeItem(STORE.LOGO); }catch(e){}
+  renderLogo(); renderLogoPreviewInAdmin();
+  showToast('↻ Logo dikembalikan ke default.', 'success');
+};
+function renderLogoPreviewInAdmin(){
+  const preview = document.getElementById('logoPreview');
+  if(!preview) return;
+  const cfg = logoConfig;
+  if(cfg.type === 'text' || !cfg.value){
+    preview.innerHTML = `<div class="preview-title">𝙆𝙮𝙤𝙩𝙤 𝙈𝙤𝙩𝙞𝙤𝙣</div>`;
+    document.getElementById('logoType').value = 'text';
+    document.getElementById('logoUploadArea').style.display = 'none';
+  } else if(cfg.type === 'image'){
+    preview.innerHTML = `<img src="${esc(cfg.value)}" alt="preview">`;
+    document.getElementById('logoType').value = 'image';
+    document.getElementById('logoUploadArea').style.display = 'block';
+    document.getElementById('logoFile').accept = 'image/*';
+  } else if(cfg.type === 'video'){
+    preview.innerHTML = `<video src="${esc(cfg.value)}" autoplay muted loop playsinline></video>`;
+    document.getElementById('logoType').value = 'video';
+    document.getElementById('logoUploadArea').style.display = 'block';
+    document.getElementById('logoFile').accept = 'video/*';
+  }
+}
+
+/* =====================================================
+   NAVIGASI
+====================================================== */
+const screens = {
+  home:document.getElementById('screenHome'),
+  rules:document.getElementById('screenRules'),
+  form:document.getElementById('screenForm'),
+  result:document.getElementById('screenResult'),
+  check:document.getElementById('screenCheck'),
+  adminLogin:document.getElementById('screenAdminLogin'),
+  admin:document.getElementById('screenAdmin')
+};
+window.showScreen = function(name){
+  Object.values(screens).forEach(s => s.classList.remove('active'));
+  screens[name].classList.add('active');
+  window.scrollTo({top:0, behavior:'smooth'});
+};
+
+/* =====================================================
+   FORM STATE
+====================================================== */
+const state = { nama:'', tiktok:'', link:'', umur:0, telp:'', telpFull:'', dialCode:'', alasan:'', q1:null, q2:null, q3:null, score:0, passed:false, detail:[], regId:null };
+const steps = Array.from(document.querySelectorAll('.step'));
+const STEP_NAMES = ['Data Diri','Alasan Masuk','Tes Editor'];
+let step = 0;
+
+function renderStep(){
+  steps.forEach((s,i) => s.classList.toggle('active', i === step));
+  document.getElementById('progressBar').style.width = ((step+1)/steps.length*100)+'%';
+  document.getElementById('stepLabel').textContent = `Langkah ${step+1} dari ${steps.length}`;
+  document.getElementById('stepName').textContent = STEP_NAMES[step];
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+window.startForm = function(){ step = 0; renderStep(); showScreen('form'); };
+window.nextStep = function(){ if(validateStep(step) && step < steps.length-1){ step++; renderStep(); } };
+window.prevStep = function(){ if(step > 0){ step--; renderStep(); } else showScreen('rules'); };
+function setErr(id, show){ const el = document.getElementById(id); if(el) el.classList.toggle('show', show); }
+
+function validateStep(i){
+  let ok = true;
+  if(i === 0){
+    const nama = document.getElementById('inpNama').value.trim();
+    const tiktok = document.getElementById('inpTiktok').value.trim();
+    const link = document.getElementById('inpLink').value.trim();
+    const umur = parseInt(document.getElementById('inpUmur').value, 10);
+    const dialCode = document.getElementById('inpDialCode').value;
+    const telpRaw = document.getElementById('inpTelp').value.trim();
+
+    const namaBad = nama.length < 3;
+    const tiktokBad = tiktok.length < 2;
+    const linkBad = !/tiktok\.com/i.test(link);
+    const umurBad = isNaN(umur) || umur < 1 || umur > 100;
+    const phoneParsed = parsePhone(dialCode, telpRaw, 'inpDialCode');
+    const telpBad = !phoneParsed;
+
+    setErr('errNama', namaBad); setErr('errTiktok', tiktokBad);
+    setErr('errLink', linkBad); setErr('errUmur', umurBad); setErr('errTelp', telpBad);
+
+    if(namaBad || tiktokBad || linkBad || umurBad || telpBad) ok = false;
+    else {
+      state.nama = nama; state.tiktok = tiktok; state.link = link;
+      state.umur = umur; state.dialCode = dialCode;
+      state.telp = phoneParsed.full; state.telpFull = phoneParsed.full;
+    }
+  }
+  if(i === 1){
+    const alasan = document.getElementById('inpAlasan').value.trim();
+    const alasanBad = alasan.length === 0;
+    setErr('errAlasan', alasanBad);
+    if(alasanBad) ok = false; else state.alasan = alasan;
+  }
+  return ok;
+}
+
+let charPending = false;
+document.getElementById('inpAlasan').addEventListener('input', e => {
+  if(charPending) return; charPending = true;
+  const val = e.target.value;
+  requestAnimationFrame(() => {
+    charPending = false;
+    document.getElementById('charCount').textContent = val.length;
+  });
+});
+
+/* =====================================================
+   SUBMIT KE FIRESTORE
+====================================================== */
+window.submitForm = async function(){
+  const q1 = document.querySelector('input[name="q1"]:checked');
+  const q2 = document.querySelector('input[name="q2"]:checked');
+  const q3 = document.querySelector('input[name="q3"]:checked');
+  if(!q1 || !q2 || !q3){ setErr('errQuiz', true); return; }
+  setErr('errQuiz', false);
+  state.q1 = q1.value; state.q2 = q2.value; state.q3 = q3.value;
+
+  let score = 0;
+  const detail = [];
+  const linkOK = /tiktok\.com/i.test(state.link); if(linkOK) score += 10;
+  detail.push({label:'Link editan TikTok valid', pts: linkOK?10:0, max:10});
+
+  const telpFinalOK = !!state.telpFull;
+  if(telpFinalOK) score += 15;
+  detail.push({label:'Nomor telepon valid', pts: telpFinalOK?15:0, max:15});
+
+  const alasanLen = state.alasan.length;
+  let alasanPts = 0;
+  if(alasanLen >= 30) alasanPts = 15;
+  else if(alasanLen >= 10) alasanPts = 10;
+  else if(alasanLen >= 1) alasanPts = 5;
+  score += alasanPts;
+  detail.push({label:'Alasan masuk marga diisi', pts: alasanPts, max:15});
+
+  let quizBenar = 0;
+  ['q1','q2','q3'].forEach(k => { if(state[k] === CORRECT[k]) quizBenar++; });
+  const quizPts = quizBenar * 20;
+  score += quizPts;
+  detail.push({label:`Tes editor (${quizBenar}/3 benar)`, pts: quizPts, max:60});
+
+  state.score = score;
+  state.passed = score >= PASS_SCORE;
+  state.detail = detail;
+
+  const btn = document.getElementById('btnSubmit');
+  btn.disabled = true;
+  btn.textContent = '⏳ Mengirim ke server...';
+
+  try{
+    setFbStatus('syncing', 'Mengirim...');
+    const docRef = await addDoc(collection(db, REGS), {
+      nama: state.nama,
+      tiktok: state.tiktok,
+      link: state.link,
+      umur: state.umur,
+      telp: state.telpFull,
+      dialCode: state.dialCode,
+      alasan: state.alasan,
+      q1: state.q1, q2: state.q2, q3: state.q3,
+      score: state.score,
+      passed: state.passed,
+      status: 'pending',
+      createdAt: serverTimestamp(),
+      reviewedAt: null
+    });
+    state.regId = docRef.id;
+    try{ localStorage.setItem(STORE.LAST_ID, docRef.id); }catch(e){}
+    setFbStatus('online', 'Terhubung');
+    renderResult();
+    showScreen('result');
+    showToast('📨 Pendaftaran terkirim ke server! Menunggu ACC admin.', 'success');
+    renderHomeStatus();
+  }catch(err){
+    console.error('Firebase error:', err);
+    setFbStatus('offline', 'Gagal kirim');
+    showToast('❌ Gagal mengirim. Periksa koneksi internet & coba lagi.', 'error');
+  }finally{
+    btn.disabled = false;
+    btn.textContent = 'Kirim Pendaftaran ✓';
+  }
+};
+
+function renderResult(){
+  const s = state.score;
+  const ring = document.getElementById('scoreRing');
+  const verdict = document.getElementById('verdict');
+  const sub = document.getElementById('verdictSub');
+  const noteBox = document.getElementById('noteBox');
+  const breakdown = document.getElementById('breakdown');
+  const resultStatus = document.getElementById('resultStatus');
+
+  ring.style.setProperty('--c', state.passed ? '#39ff14' : '#ff0066');
+  ring.style.setProperty('--p', 0);
+  const numEl = document.getElementById('scoreNum');
+  let cur = 0;
+  const timer = setInterval(() => {
+    cur += Math.max(1, Math.ceil((s-cur)/12));
+    if(cur >= s){ cur = s; clearInterval(timer); }
+    numEl.textContent = cur;
+  }, 26);
+  requestAnimationFrame(() => setTimeout(() => ring.style.setProperty('--p', s), 60));
+
+  verdict.textContent = state.passed ? 'MEMENUHI SYARAT SKOR' : 'SKOR BELUM CUKUP';
+  verdict.className = 'verdict ' + (state.passed ? 'pass' : 'fail');
+  resultStatus.innerHTML = `<span class="status-badge pending">⏳ Menunggu ACC Admin</span><div style="font-size:.7rem;color:var(--muted);margin-top:4px">ID: ${esc(state.regId)}</div>`;
+  sub.textContent = `Terima kasih, ${state.nama}. Pendaftaranmu sudah masuk ke server KYT.`;
+
+  breakdown.innerHTML = state.detail.map(d => {
+    const ok = d.pts === d.max;
+    return `<div class="bd-row"><span class="lbl">${ok?'✅':'⚠️'} ${d.label}</span><span class="val ${ok?'ok':'no'}">${d.pts}/${d.max}</span></div>`;
+  }).join('');
+
+  if(state.passed){
+    noteBox.className = 'note success';
+    noteBox.innerHTML = `🎉 <b>Skor kamu memenuhi syarat minimal.</b> Pendaftaranmu sekarang <b>menunggu persetujuan admin</b>. Setelah disetujui, kamu akan langsung mendapat akses ke <b>grup WhatsApp resmi KYT</b>.`;
+  } else {
+    noteBox.className = 'note warn';
+    noteBox.innerHTML = `⚠️ <b>Skor kamu di bawah 70.</b> Pendaftaran tetap masuk ke admin, tetapi peluang disetujui lebih kecil. Kamu bisa <b>ulangi seleksi</b> untuk memperbaiki jawaban.`;
+  }
+}
+
+window.copyResult = function(){
+  const txt =
+`━━━ PENDAFTARAN EDITOR KYOTO MOTION ━━━
+ID            : ${state.regId || '-'}
+Nama          : ${state.nama}
+Username TikTok: ${state.tiktok}
+Link Editan   : ${state.link}
+Umur          : ${state.umur}
+No. Telepon   : ${state.telpFull}
+Skor          : ${state.score}/100
+Status        : ⏳ Menunggu ACC Admin
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`;
+  const btn = document.getElementById('btnCopy');
+  const done = () => { btn.textContent = '✓ Tersalin!'; setTimeout(() => btn.textContent = 'Salin Hasil', 1800); };
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(txt).then(done).catch(fallback);
+  } else fallback();
+  function fallback(){
+    const ta = document.createElement('textarea');
+    ta.value = txt; ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select();
+    try{ document.execCommand('copy'); done(); }catch(e){}
+    ta.remove();
+  }
+};
+
+/* =====================================================
+   HOME STATUS — dari Firestore
+====================================================== */
+async function renderHomeStatus(){
+  const el = document.getElementById('homeStatus');
+  let lastId = '';
+  try{ lastId = localStorage.getItem(STORE.LAST_ID) || ''; }catch(e){}
+  if(!lastId){ el.innerHTML = ''; return; }
+  try{
+    const docSnap = await getDoc(doc(db, REGS, lastId));
+    if(!docSnap.exists()){ el.innerHTML = ''; return; }
+    const reg = { id: docSnap.id, ...docSnap.data() };
+    let extra = '';
+    if(reg.status === 'approved'){
+      extra = `<div class="wa-card" style="margin-top:12px;text-align:left">
+        <h3>🎉 Pendaftaranmu Disetujui!</h3>
+        <p>Kamu resmi menjadi bagian dari 𝙆𝙮𝙤𝙩𝙤 𝙈𝙤𝙩𝙞𝙤𝙣 | 𝐊𝐘𝐓. Klik untuk masuk grup WhatsApp.</p>
+        <a class="wa-btn" href="${WA_LINK}" target="_blank" rel="noopener">${waIcon()} Masuk Grup WhatsApp</a>
+      </div>`;
+    }
+    el.innerHTML = `<div class="reg-card ${reg.status}" style="text-align:left;margin-bottom:16px">
+      <div class="reg-head">
+        <div><div class="reg-name">Pendaftaran Terakhir: ${esc(reg.nama)}</div><div class="reg-id">Skor ${reg.score}/100</div></div>
+        <span class="status-badge ${reg.status}">${statusLabel(reg.status)}</span>
+      </div>
+    </div>${extra}`;
+  }catch(err){
+    console.warn('Home status error:', err);
+    el.innerHTML = '';
+  }
+}
+
+/* =====================================================
+   CEK STATUS — query Firestore
+====================================================== */
+window.doCheckStatus = async function(){
+  const nama = document.getElementById('checkNama').value.trim().toLowerCase();
+  const dialCode = document.getElementById('checkDialCode').value;
+  const telpRaw = document.getElementById('checkTelp').value.trim();
+  const errEl = document.getElementById('errCheck');
+  const resultEl = document.getElementById('checkResult');
+  const btn = document.getElementById('btnCheck');
+
+  const parsed = parsePhone(dialCode, telpRaw, 'checkDialCode');
+  if(!nama || !parsed){
+    errEl.textContent = 'Isi nama dan nomor telepon dengan benar.';
+    errEl.classList.add('show');
+    resultEl.innerHTML = '';
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = '⏳ Mencari...';
+  errEl.classList.remove('show');
+  resultEl.innerHTML = '<div style="text-align:center;padding:20px;color:var(--muted);font-size:.85rem">🔍 Mencari di server...</div>';
+
+  try{
+    setFbStatus('syncing', 'Mencari...');
+    const fullTelp = parsed.full;
+    const snap = await getDocs(query(
+      collection(db, REGS),
+      where('telp', '==', fullTelp),
+      limit(20)
+    ));
+
+    setFbStatus('online', 'Terhubung');
+
+    const matches = snap.docs
+      .map(d => ({ id: d.id, ...d.data() }))
+      .filter(r => (r.nama || '').toLowerCase() === nama);
+
+    if(matches.length === 0){
+      errEl.textContent = 'Data tidak ditemukan. Pastikan nama dan nomor telepon sesuai.';
+      errEl.classList.add('show');
+      resultEl.innerHTML = '';
+      return;
+    }
+
+    const reg = matches[0];
+    let pesan, extraWA = '';
+    if(reg.status === 'approved'){
+      pesan = '🎉 Selamat! Pendaftaranmu telah <b>disetujui admin</b>. Kamu resmi menjadi bagian dari 𝙆𝙮𝙤𝙩𝙤 𝙈𝙤𝙩𝙞𝙤𝙣 | 𝐊𝐘𝐓.';
+      extraWA = waBlock();
+      setTimeout(launchConfetti, 300);
+    } else if(reg.status === 'rejected'){
+      pesan = '😔 Maaf, pendaftaranmu <b>belum disetujui admin</b>. Silakan perbaiki jawaban dan coba lagi.';
+    } else {
+      pesan = '⏳ Pendaftaranmu masih <b>menunggu persetujuan admin</b>. Admin akan menghubungimu via nomor telepon/TikTok.';
+    }
+
+    resultEl.innerHTML = `<div class="reg-card ${reg.status}">
+      <div class="reg-head">
+        <div><div class="reg-name">${esc(reg.nama)}</div><div class="reg-id">${esc(reg.id).slice(0,12)}...</div></div>
+        <span class="status-badge ${reg.status}">${statusLabel(reg.status)}</span>
+      </div>
+      <div class="reg-body">
+        <div>📊 Skor: <b>${reg.score}/100</b> ${reg.passed?'✅':'⚠️'}</div>
+        <div>📅 Didaftarkan: ${formatDate(reg.createdAt)}</div>
+        ${reg.reviewedAt ? `<div>📝 Direview: ${formatDate(reg.reviewedAt)}</div>` : ''}
+        <div style="margin-top:8px;padding:10px;border-radius:10px;background:var(--stat-bg);line-height:1.6">${pesan}</div>
+      </div>
+    </div>${extraWA}`;
+  }catch(err){
+    console.error('Check status error:', err);
+    setFbStatus('offline', 'Gagal cari');
+    errEl.textContent = 'Gagal mencari. Periksa koneksi internet & coba lagi.';
+    errEl.classList.add('show');
+    resultEl.innerHTML = '';
+  }finally{
+    btn.disabled = false;
+    btn.textContent = 'Cek Status →';
+  }
+};
+
+/* =====================================================
+   ADMIN AUTH
+====================================================== */
+window.doAdminLogin = function(){
+  const u = document.getElementById('adminUser').value.trim();
+  const p = document.getElementById('adminPass').value;
+  if(u === ADMIN_USER && p === ADMIN_PASS){
+    sessionStorage.setItem(SESSION_KEY, '1');
+    document.getElementById('errAdmin').classList.remove('show');
+    document.getElementById('adminPass').value = '';
+    openAdmin();
+    showToast('🔓 Login admin berhasil.', 'success');
+  } else {
+    document.getElementById('errAdmin').classList.add('show');
+  }
+};
+window.adminLogout = function(){
+  sessionStorage.removeItem(SESSION_KEY);
+  stopAdminListener();
+  showToast('Berhasil logout dari admin.', 'success');
+  showScreen('home');
+};
+window.goAdmin = function(){
+  if(sessionStorage.getItem(SESSION_KEY) === '1') openAdmin();
+  else showScreen('adminLogin');
+};
+function openAdmin(){
+  showScreen('admin');
+  switchAdminTab('regs');
+  startAdminListener();
+  renderLogoPreviewInAdmin();
+}
+window.switchAdminTab = function(name){
+  document.querySelectorAll('.admin-tab').forEach(t => t.classList.toggle('active', t.dataset.tab === name));
+  document.getElementById('tabRegs').style.display = name === 'regs' ? 'block' : 'none';
+  document.getElementById('tabLogo').style.display = name === 'logo' ? 'block' : 'none';
+};
+
+/* =====================================================
+   ADMIN LISTENER REAL-TIME
+====================================================== */
+let adminUnsub = null;
+let adminFilter = 'all';
+let allRegsCache = [];
+
+function startAdminListener(){
+  stopAdminListener();
+  setFbStatus('syncing', 'Memuat data...');
+  const q = query(collection(db, REGS), orderBy('createdAt', 'desc'));
+  adminUnsub = onSnapshot(q, snap => {
+    allRegsCache = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    setFbStatus('online', 'Real-time aktif');
+    renderAdmin();
+  }, err => {
+    console.error('Admin listener error:', err);
+    setFbStatus('offline', 'Listener error');
+  });
+}
+function stopAdminListener(){
+  if(adminUnsub){ adminUnsub(); adminUnsub = null; }
+}
+
+function renderAdmin(){
+  const regs = allRegsCache;
+  const stats = {
+    total: regs.length,
+    pending: regs.filter(r => r.status === 'pending').length,
+    approved: regs.filter(r => r.status === 'approved').length,
+    rejected: regs.filter(r => r.status === 'rejected').length
+  };
+  document.getElementById('adminStats').innerHTML = `
+    <div class="admin-stat total"><b>${stats.total}</b><span>Total</span></div>
+    <div class="admin-stat pending"><b>${stats.pending}</b><span>Menunggu</span></div>
+    <div class="admin-stat approved"><b>${stats.approved}</b><span>Disetujui</span></div>
+    <div class="admin-stat rejected"><b>${stats.rejected}</b><span>Ditolak</span></div>
+  `;
+  const filtered = adminFilter === 'all' ? regs : regs.filter(r => r.status === adminFilter);
+  const list = document.getElementById('adminList');
+  if(filtered.length === 0){
+    list.innerHTML = `<div style="text-align:center;padding:30px 20px;color:var(--muted);font-size:.84rem">Belum ada pendaftaran${adminFilter !== 'all' ? ' dengan status ini' : ''}.</div>`;
+    return;
+  }
+  list.innerHTML = filtered.map(r => {
+    let approvedLink = '';
+    if(r.status === 'approved'){
+      approvedLink = `<div style="margin-top:8px;padding:8px 10px;border-radius:8px;background:rgba(37,211,102,.12);border:1px solid rgba(37,211,102,.4);font-size:.72rem;line-height:1.5;color:#25D366">✅ Link grup WhatsApp aktif di halaman user.</div>`;
+    }
+    return `<div class="reg-card ${r.status}">
+      <div class="reg-head">
+        <div><div class="reg-name">${esc(r.nama)}</div><div class="reg-id">${esc(r.id).slice(0,12)}...</div></div>
+        <span class="status-badge ${r.status}">${statusLabel(r.status)}</span>
+      </div>
+      <div class="reg-body">
+        <div>📱 TikTok: <b>${esc(r.tiktok)}</b></div>
+        <div>🔗 Link: <a href="${esc(r.link)}" target="_blank" rel="noopener">${esc(r.link)}</a></div>
+        <div>🎂 Umur: <b>${r.umur}</b> · ☎️ Telp: <b>${esc(r.telp)}</b></div>
+        <div>💬 Alasan: ${esc(r.alasan)}</div>
+        <div>📊 Skor: <b>${r.score}/100</b> ${r.passed?'✅':'⚠️'}</div>
+        <div style="font-size:.68rem;color:var(--muted);margin-top:3px">Didaftarkan: ${formatDate(r.createdAt)}</div>
+      </div>
+      ${r.status === 'pending' ? `<div class="reg-actions">
+        <button class="btn btn-approve" onclick="reviewReg('${r.id}','approved')">✅ Setujui</button>
+        <button class="btn btn-reject" onclick="reviewReg('${r.id}','rejected')">❌ Tolak</button>
+      </div>` : `<div style="font-size:.7rem;color:var(--muted)">${r.status === 'approved' ? '✅ Disetujui' : '❌ Ditolak'} pada ${formatDate(r.reviewedAt)}</div>${approvedLink}`}
+    </div>`;
+  }).join('');
+}
+
+window.reviewReg = async function(id, status){
+  try{
+    setFbStatus('syncing', 'Menyimpan...');
+    await updateDoc(doc(db, REGS, id), {
+      status,
+      reviewedAt: serverTimestamp()
+    });
+    setFbStatus('online', 'Real-time aktif');
+    if(status === 'approved'){
+      showToast('✅ Disetujui! Link WhatsApp sudah aktif untuk user.', 'success');
+      launchConfetti();
+    } else {
+      showToast('❌ Pendaftaran ditolak.', 'error');
+    }
+  }catch(err){
+    console.error('Review error:', err);
+    setFbStatus('offline', 'Gagal update');
+    showToast('❌ Gagal memperbarui. Coba lagi.', 'error');
+  }
+};
+
+document.getElementById('filterTabs').addEventListener('click', e => {
+  const tab = e.target.closest('.tab');
+  if(!tab) return;
+  adminFilter = tab.dataset.filter;
+  document.querySelectorAll('#filterTabs .tab').forEach(t => t.classList.toggle('active', t === tab));
+  renderAdmin();
+});
+
+/* =====================================================
+   RESET
+====================================================== */
+window.resetAll = function(){
+  Object.assign(state, { nama:'', tiktok:'', link:'', umur:0, telp:'', telpFull:'', dialCode:'', alasan:'', q1:null, q2:null, q3:null, score:0, passed:false, detail:[], regId:null });
+  document.getElementById('inpNama').value = '';
+  document.getElementById('inpTiktok').value = '';
+  document.getElementById('inpLink').value = '';
+  document.getElementById('inpUmur').value = '';
+  document.getElementById('inpTelp').value = '';
+  document.getElementById('inpTelp').classList.remove('valid','invalid');
+  document.getElementById('inpAlasan').value = '';
+  document.getElementById('charCount').textContent = '0';
+  document.querySelectorAll('input[type=radio]').forEach(r => r.checked = false);
+  document.querySelectorAll('.err').forEach(e => e.classList.remove('show'));
+  step = 0;
+  renderStep();
+  renderHomeStatus();
+  showScreen('home');
+};
+
+/* =====================================================
+   CONFETTI
+====================================================== */
+function launchConfetti(){
+  const colors = getColors();
+  const frag = document.createDocumentFragment();
+  for(let i = 0; i < 70; i++){
+    const c = document.createElement('div');
+    c.className = 'confetti';
+    c.style.left = Math.random()*100+'vw';
+    c.style.background = colors[Math.floor(Math.random()*colors.length)];
+    c.style.animationDuration = (2+Math.random()*2)+'s';
+    c.style.animationDelay = (Math.random()*.6)+'s';
+    c.style.borderRadius = Math.random() > .5 ? '50%' : '2px';
+    frag.appendChild(c);
+    setTimeout(() => c.remove(), 5000);
+  }
+  document.body.appendChild(frag);
+}
+
+/* =====================================================
+   INIT
+====================================================== */
+let resizeTimer = null;
+window.addEventListener('resize', () => {
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(() => { rebuildParticles(); rebuildFloaters(); }, 400);
+});
+
+initThemeSwatches();
+loadLogoConfig();
+rebuildParticles();
+rebuildFloaters();
+renderLogo();
+renderHomeStatus();
+attachPhoneLive('inpTelp', 'inpDialCode');
+attachPhoneLive('checkTelp', 'checkDialCode');
+
+let revealed = false;
+function revealApp(){
+  if(revealed) return;
+  revealed = true;
+  document.documentElement.classList.add('app-ready');
+}
+if(document.fonts && document.fonts.ready){
+  document.fonts.ready.then(() => {
+    requestAnimationFrame(() => requestAnimationFrame(revealApp));
+  }).catch(revealApp);
+} else {
+  window.addEventListener('load', () => requestAnimationFrame(() => requestAnimationFrame(revealApp)));
+}
+setTimeout(revealApp, 2000);
+</script>
+</body>
+</html>

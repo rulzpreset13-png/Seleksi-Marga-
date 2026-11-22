@@ -1,0 +1,7 @@
+echo "# Seleksi-Marga-" >> README.md
+git init
+git add README.md
+git commit -m "first commit"
+git branch -M main
+git remote add origin https://github.com/rulzpreset13-png/Seleksi-Marga-.git
+git push -u origin main

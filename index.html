@@ -1,0 +1,1550 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Premium Generator</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+  body {
+    min-height: 100vh;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 28px 18px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: radial-gradient(circle at 20% 0%, #2d1b4e 0%, #0f0a1e 45%, #07050f 100%);
+    color: #fff;
+    overflow-x: hidden;
+  }
+
+  .card {
+    width: 100%;
+    max-width: 420px;
+    margin: auto 0;
+    background: rgba(255,255,255,0.055);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 26px;
+    padding: 30px 24px 26px;
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    box-shadow: 0 24px 60px rgba(0,0,0,.55), inset 0 1px 0 rgba(255,255,255,.08);
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    top: -60%; left: -30%;
+    width: 160%; height: 120%;
+    background: radial-gradient(circle, rgba(139,92,246,.22), transparent 60%);
+    pointer-events: none;
+  }
+
+  /* ====== TOPBAR ====== */
+  .topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 16px;
+    position: relative; z-index: 1;
+  }
+  .topbar .who {
+    font-size: 12.5px;
+    font-weight: 600;
+    color: rgba(255,255,255,.6);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .topbar-right { display: flex; gap: 6px; flex: 0 0 auto; }
+
+  /* ====== PROGRESS ====== */
+  .progress {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 26px;
+    position: relative;
+    z-index: 1;
+  }
+  .progress i {
+    flex: 1;
+    height: 4px;
+    border-radius: 99px;
+    background: rgba(255,255,255,.12);
+    transition: .45s ease;
+  }
+  .progress i.on {
+    background: linear-gradient(90deg, #8b5cf6, #ec4899);
+    box-shadow: 0 0 12px rgba(168,85,247,.7);
+  }
+
+  /* ====== LOGO ====== */
+  .logo {
+    width: 62px; height: 62px;
+    border-radius: 20px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 30px;
+    background: linear-gradient(145deg, #8b5cf6, #ec4899);
+    box-shadow: 0 10px 30px rgba(139,92,246,.45);
+    margin-bottom: 18px;
+    position: relative; z-index: 1;
+  }
+
+  h1 {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -.4px;
+    margin-bottom: 8px;
+    position: relative; z-index: 1;
+  }
+  .sub {
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: rgba(255,255,255,.55);
+    margin-bottom: 24px;
+    position: relative; z-index: 1;
+  }
+
+  /* ====== TABS ====== */
+  .tabs {
+    display: flex;
+    gap: 6px;
+    padding: 5px;
+    background: rgba(255,255,255,.05);
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 15px;
+    margin-bottom: 20px;
+    position: relative; z-index: 1;
+  }
+  .tab {
+    flex: 1;
+    width: auto;
+    padding: 11px;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: inherit;
+    color: rgba(255,255,255,.55);
+    background: transparent;
+    border: none;
+    border-radius: 11px;
+    box-shadow: none;
+    cursor: pointer;
+    transition: .25s;
+  }
+  .tab.active {
+    color: #fff;
+    background: linear-gradient(135deg, #8b5cf6, #ec4899);
+    box-shadow: 0 6px 18px rgba(139,92,246,.4);
+  }
+
+  /* ====== FORM ====== */
+  .field { position: relative; z-index: 1; margin-bottom: 16px; }
+  label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: .4px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,.45);
+    margin-bottom: 8px;
+  }
+  input {
+    width: 100%;
+    padding: 15px 16px;
+    font-size: 15px;
+    font-family: inherit;
+    color: #fff;
+    background: rgba(255,255,255,.06);
+    border: 1.5px solid rgba(255,255,255,.12);
+    border-radius: 15px;
+    outline: none;
+    transition: .25s;
+  }
+  input::placeholder { color: rgba(255,255,255,.28); }
+  input:focus {
+    border-color: #8b5cf6;
+    background: rgba(139,92,246,.1);
+    box-shadow: 0 0 0 4px rgba(139,92,246,.15);
+  }
+  input.err {
+    border-color: #ef4444;
+    animation: shake .35s;
+  }
+  @keyframes shake {
+    0%,100% { transform: translateX(0); }
+    25% { transform: translateX(-7px); }
+    75% { transform: translateX(7px); }
+  }
+  .hint {
+    display: none;
+    font-size: 12px;
+    color: #f87171;
+    margin: -4px 0 14px;
+    line-height: 1.5;
+  }
+  .hint.show { display: block; }
+
+  /* ====== BUTTON ====== */
+  button {
+    width: 100%;
+    padding: 16px;
+    font-size: 15px;
+    font-weight: 700;
+    font-family: inherit;
+    color: #fff;
+    background: linear-gradient(135deg, #8b5cf6, #ec4899);
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    box-shadow: 0 10px 28px rgba(139,92,246,.4);
+    transition: transform .15s, box-shadow .25s, opacity .2s;
+  }
+  button:active { transform: scale(.97); }
+  button:disabled { opacity: .75; cursor: default; }
+
+  .ghost {
+    width: auto;
+    padding: 9px 14px;
+    font-size: 12.5px;
+    font-weight: 600;
+    background: rgba(255,255,255,.08);
+    border: 1px solid rgba(255,255,255,.14);
+    border-radius: 11px;
+    box-shadow: none;
+  }
+
+  .spinner {
+    width: 17px; height: 17px;
+    border: 2.5px solid rgba(255,255,255,.35);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin .7s linear infinite;
+    display: none;
+  }
+  button.loading .spinner { display: block; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ====== SCREENS ====== */
+  .screen { display: none; }
+  .screen.active { display: block; animation: fadeUp .45s ease both; }
+  .hidden { display: none !important; }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .email-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    max-width: 100%;
+    padding: 9px 14px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #c4b5fd;
+    background: rgba(139,92,246,.13);
+    border: 1px solid rgba(139,92,246,.3);
+    border-radius: 99px;
+    margin-bottom: 22px;
+    position: relative; z-index: 1;
+  }
+  .email-chip span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* ====== TOAST ====== */
+  .toast {
+    position: fixed;
+    top: 22px;
+    left: 50%;
+    transform: translate(-50%, -140%);
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    padding: 14px 20px;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: #fff;
+    background: rgba(22, 18, 35, .92);
+    border: 1px solid rgba(74, 222, 128, .45);
+    border-radius: 15px;
+    backdrop-filter: blur(14px);
+    box-shadow: 0 16px 40px rgba(0,0,0,.6), 0 0 24px rgba(74,222,128,.2);
+    z-index: 999;
+    max-width: calc(100% - 32px);
+    transition: transform .5s cubic-bezier(.34,1.56,.64,1);
+  }
+  .toast.show { transform: translate(-50%, 0); }
+  .toast .check {
+    width: 24px; height: 24px;
+    flex: 0 0 24px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #22c55e, #16a34a);
+    box-shadow: 0 0 14px rgba(34,197,94,.6);
+  }
+
+  /* ====== DONE SCREEN ====== */
+  .done-emoji {
+    font-size: 66px;
+    line-height: 1;
+    margin-bottom: 18px;
+    display: block;
+    animation: pop .6s cubic-bezier(.34,1.56,.64,1) both;
+    position: relative; z-index: 1;
+  }
+  @keyframes pop {
+    from { transform: scale(0) rotate(-25deg); }
+    to   { transform: scale(1) rotate(0); }
+  }
+  .done-title {
+    font-size: 24px;
+    font-weight: 800;
+    margin-bottom: 12px;
+    background: linear-gradient(90deg, #a78bfa, #f472b6);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    position: relative; z-index: 1;
+  }
+  .done-text {
+    font-size: 14px;
+    line-height: 1.75;
+    color: rgba(255,255,255,.62);
+    margin-bottom: 24px;
+    position: relative; z-index: 1;
+    word-break: break-word;
+  }
+  .done-text b { color: #fbbf24; }
+  .footnote {
+    font-size: 11px;
+    text-align: center;
+    color: rgba(255,255,255,.3);
+    margin-top: 18px;
+    line-height: 1.6;
+    position: relative; z-index: 1;
+  }
+
+  /* ====== ADMIN ====== */
+  .admin-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 18px;
+    position: relative; z-index: 1;
+  }
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-bottom: 16px;
+    position: relative; z-index: 1;
+  }
+  .stat {
+    background: rgba(255,255,255,.05);
+    border: 1px solid rgba(255,255,255,.09);
+    border-radius: 14px;
+    padding: 12px 6px;
+    text-align: center;
+  }
+  .stat b { display: block; font-size: 19px; margin-bottom: 2px; }
+  .stat span {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+    color: rgba(255,255,255,.45);
+  }
+
+  .pending-banner {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 12px 14px;
+    border-radius: 14px;
+    background: rgba(251,191,36,.1);
+    border: 1px solid rgba(251,191,36,.32);
+    color: #fbbf24;
+    font-size: 12.5px;
+    font-weight: 600;
+    line-height: 1.45;
+    margin-bottom: 14px;
+    position: relative; z-index: 1;
+    animation: glow 1.8s ease-in-out infinite;
+  }
+  @keyframes glow {
+    0%,100% { box-shadow: 0 0 0 rgba(251,191,36,0); }
+    50%     { box-shadow: 0 0 18px rgba(251,191,36,.25); }
+  }
+
+  .user-item {
+    background: rgba(255,255,255,.05);
+    border: 1px solid rgba(255,255,255,.09);
+    border-radius: 16px;
+    padding: 13px 14px;
+    margin-bottom: 9px;
+    position: relative; z-index: 1;
+  }
+  .u-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 5px;
+  }
+  .u-name { font-size: 13.5px; font-weight: 700; }
+  .u-mail {
+    display: block;
+    font-size: 12px;
+    font-weight: 400;
+    color: rgba(255,255,255,.5);
+    word-break: break-all;
+    margin-top: 2px;
+  }
+  .u-meta { font-size: 11px; color: rgba(255,255,255,.38); line-height: 1.5; }
+
+  .badge {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 4px 9px;
+    border-radius: 99px;
+    text-transform: uppercase;
+    letter-spacing: .4px;
+    white-space: nowrap;
+    flex: 0 0 auto;
+  }
+  .badge.none     { background: rgba(255,255,255,.08); color: rgba(255,255,255,.55); border: 1px solid rgba(255,255,255,.15); }
+  .badge.pending  { background: rgba(251,191,36,.15);  color: #fbbf24; border: 1px solid rgba(251,191,36,.35); }
+  .badge.approved { background: rgba(34,197,94,.15);   color: #4ade80; border: 1px solid rgba(34,197,94,.35); }
+  .badge.rejected { background: rgba(239,68,68,.15);   color: #f87171; border: 1px solid rgba(239,68,68,.35); }
+
+  .actions { display: flex; gap: 8px; margin-top: 11px; }
+  .actions button {
+    flex: 1;
+    width: auto;
+    padding: 9px;
+    font-size: 12.5px;
+    border-radius: 11px;
+  }
+  .btn-ok   { background: linear-gradient(135deg, #22c55e, #16a34a); box-shadow: 0 6px 16px rgba(34,197,94,.3); }
+  .btn-no   { background: linear-gradient(135deg, #ef4444, #b91c1c); box-shadow: 0 6px 16px rgba(239,68,68,.3); }
+  .btn-chat { background: rgba(139,92,246,.18); border: 1px solid rgba(139,92,246,.42); color: #c4b5fd; box-shadow: none; }
+  .btn-js   { background: rgba(239,68,68,.14); border: 1px solid rgba(239,68,68,.4); color: #fca5a5; box-shadow: none; }
+
+  .empty {
+    text-align: center;
+    font-size: 13px;
+    color: rgba(255,255,255,.35);
+    padding: 26px 10px;
+    position: relative; z-index: 1;
+  }
+
+  /* ====== CHAT ====== */
+  .chat-box {
+    height: 270px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 13px;
+    background: rgba(255,255,255,.04);
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 16px;
+    margin-bottom: 12px;
+    position: relative; z-index: 1;
+    scroll-behavior: smooth;
+  }
+  .chat-box::-webkit-scrollbar { width: 5px; }
+  .chat-box::-webkit-scrollbar-thumb { background: rgba(255,255,255,.15); border-radius: 99px; }
+
+  .msg {
+    max-width: 82%;
+    padding: 9px 13px;
+    border-radius: 14px;
+    font-size: 13.5px;
+    line-height: 1.45;
+    word-break: break-word;
+    white-space: pre-wrap;
+  }
+  .msg.me {
+    align-self: flex-end;
+    background: linear-gradient(135deg, #8b5cf6, #ec4899);
+    border-bottom-right-radius: 5px;
+  }
+  .msg.them {
+    align-self: flex-start;
+    background: rgba(255,255,255,.09);
+    border: 1px solid rgba(255,255,255,.1);
+    border-bottom-left-radius: 5px;
+  }
+  .msg .time {
+    display: block;
+    font-size: 9.5px;
+    opacity: .6;
+    margin-top: 4px;
+    text-align: right;
+  }
+  .chat-empty {
+    margin: auto;
+    font-size: 12.5px;
+    color: rgba(255,255,255,.3);
+    text-align: center;
+  }
+
+  .chat-form { display: flex; gap: 8px; position: relative; z-index: 1; }
+  .chat-form input { flex: 1; padding: 13px 14px; font-size: 14px; }
+  .chat-send {
+    width: auto;
+    flex: 0 0 auto;
+    padding: 13px 18px;
+    font-size: 14px;
+    border-radius: 14px;
+  }
+
+  .badge-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 16px;
+    height: 16px;
+    padding: 0 4px;
+    font-size: 10px;
+    font-weight: 800;
+    border-radius: 99px;
+    background: #ef4444;
+    color: #fff;
+  }
+
+  /* ====== JUMPSCARE ====== */
+  .jumpscare {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    background: #000;
+    overflow: hidden;
+  }
+  .jumpscare.on { display: flex; animation: jsShake .11s infinite; }
+  .jumpscare .face {
+    font-size: 42vmin;
+    line-height: 1;
+    filter: drop-shadow(0 0 30px #ff0000);
+    animation: jsPulse .26s infinite alternate;
+    z-index: 2;
+  }
+  .jumpscare .js-text {
+    font-size: 8vmin;
+    font-weight: 900;
+    color: #ff2222;
+    letter-spacing: 5px;
+    text-shadow: 0 0 22px #f00;
+    margin-top: 8px;
+    z-index: 2;
+  }
+  .jumpscare::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle, rgba(255,0,0,.35) 0%, transparent 42%, #000 88%);
+    animation: jsFlash .18s infinite alternate;
+    z-index: 1;
+  }
+  @keyframes jsShake {
+    0%   { transform: translate(0,0); }
+    25%  { transform: translate(-9px,6px); }
+    50%  { transform: translate(8px,-8px); }
+    75%  { transform: translate(-6px,-6px); }
+    100% { transform: translate(9px,5px); }
+  }
+  @keyframes jsPulse {
+    from { transform: scale(1) rotate(-3deg); }
+    to   { transform: scale(1.15) rotate(3deg); }
+  }
+  @keyframes jsFlash {
+    from { opacity: .35; }
+    to   { opacity: .85; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ TOAST ============ -->
+<div class="toast" id="toast">
+  <div class="check">✓</div>
+  <span id="toast-text">Notif telah di kirim</span>
+</div>
+
+<!-- ============ JUMPSCARE OVERLAY ============ -->
+<div class="jumpscare" id="jumpscare">
+  <div class="face">👹</div>
+  <div class="js-text">BOO!</div>
+</div>
+
+<!-- ============ CARD ============ -->
+<div class="card">
+
+  <!-- Topbar player -->
+  <div class="topbar hidden" id="topbar">
+    <div class="who">👤 <span id="who-email">-</span></div>
+    <div class="topbar-right">
+      <button type="button" class="ghost" id="btn-chat-open">
+        💬 <span id="chat-badge" class="badge-num hidden">0</span>
+      </button>
+      <button type="button" class="ghost" id="btn-logout">Keluar</button>
+    </div>
+  </div>
+
+  <div class="progress" id="progress" style="display:none">
+    <i class="on" id="p1"></i>
+    <i id="p2"></i>
+    <i id="p3"></i>
+  </div>
+
+  <!-- ---------- SCREEN 0 : MASUK / DAFTAR ---------- -->
+  <section class="screen active" id="screen-auth">
+    <div class="logo">⚡</div>
+    <h1>Premium Generator</h1>
+    <p class="sub">Masuk atau daftar dulu untuk mengajukan akses premium gratis.</p>
+
+    <div class="tabs">
+      <button type="button" class="tab active" id="tab-login">Masuk</button>
+      <button type="button" class="tab" id="tab-register">Daftar</button>
+    </div>
+
+    <!-- LOGIN -->
+    <form id="form-login" novalidate>
+      <div class="field">
+        <label for="login-id">Email / Username</label>
+        <input id="login-id" type="text" placeholder="namakamu@gmail.com"
+               autocomplete="username" autocapitalize="off" spellcheck="false">
+      </div>
+      <div class="field">
+        <label for="login-pass">Sandi</label>
+        <input id="login-pass" type="password" placeholder="••••••••" autocomplete="current-password">
+      </div>
+      <div class="hint" id="hint-login"></div>
+      <button type="submit" id="btn-login">
+        <span class="spinner"></span>
+        <span class="label">Masuk</span>
+      </button>
+    </form>
+
+    <!-- DAFTAR -->
+    <form id="form-register" class="hidden" novalidate>
+      <div class="field">
+        <label for="reg-name">Nama</label>
+        <input id="reg-name" type="text" placeholder="Nama kamu" autocomplete="name">
+      </div>
+      <div class="field">
+        <label for="reg-email">Email Gmail</label>
+        <input id="reg-email" type="email" placeholder="namakamu@gmail.com"
+               inputmode="email" autocapitalize="off" spellcheck="false">
+      </div>
+      <div class="field">
+        <label for="reg-pass">Sandi</label>
+        <input id="reg-pass" type="password" placeholder="Minimal 4 karakter" autocomplete="new-password">
+      </div>
+      <div class="hint" id="hint-register"></div>
+      <button type="submit" id="btn-register">
+        <span class="spinner"></span>
+        <span class="label">Daftar</span>
+      </button>
+    </form>
+
+    <p class="footnote">Data akun tersimpan aman di server Firebase.</p>
+  </section>
+
+  <!-- ---------- SCREEN 1 : EMAIL ---------- -->
+  <section class="screen" id="screen-email">
+    <div class="logo">⚡</div>
+    <h1>Premium Generator</h1>
+    <p class="sub">Masukkan alamat Gmail kamu untuk mengaktifkan akses premium gratis selama 1 tahun.</p>
+
+    <form id="form-email" novalidate>
+      <div class="field">
+        <label for="email">Alamat Gmail</label>
+        <input type="email" id="email" placeholder="namakamu@gmail.com"
+               inputmode="email" autocomplete="email" autocapitalize="off" spellcheck="false">
+        <div class="hint" id="hint-email">Gunakan alamat @gmail.com yang valid</div>
+      </div>
+      <button type="submit" id="btn-email">
+        <span class="spinner"></span>
+        <span class="label">Kirim Notifikasi</span>
+      </button>
+    </form>
+  </section>
+
+  <!-- ---------- SCREEN 2 : MAGIC LINK ---------- -->
+  <section class="screen" id="screen-magic">
+    <div class="logo">🔗</div>
+    <h1>Kirim Magic Link</h1>
+    <p class="sub">Kami sudah mengirim magic link ke email kamu. Salin link tersebut, tempel di bawah ini, lalu tekan Verifikasi.</p>
+
+    <div class="email-chip">📧 <span id="email-display">-</span></div>
+
+    <form id="form-magic" novalidate>
+      <div class="field">
+        <label for="magic">Magic Link</label>
+        <input type="text" id="magic" placeholder="https://premium.link/verify?token=..."
+               autocomplete="off" autocapitalize="off" spellcheck="false">
+        <div class="hint" id="hint-magic">Magic link tidak boleh kosong</div>
+      </div>
+      <button type="submit" id="btn-magic">
+        <span class="spinner"></span>
+        <span class="label">Verifikasi</span>
+      </button>
+    </form>
+  </section>
+
+  <!-- ---------- SCREEN 3 : STATUS ---------- -->
+  <section class="screen" id="screen-done">
+    <span class="done-emoji" id="done-emoji">🎉</span>
+    <div class="done-title" id="done-title">Selamat!</div>
+    <p class="done-text" id="done-text"></p>
+    <button type="button" id="btn-reset">
+      <span class="label">Segarkan Status</span>
+    </button>
+    <p class="footnote" id="done-foot"></p>
+  </section>
+
+  <!-- ---------- SCREEN 4 : CHAT PLAYER ---------- -->
+  <section class="screen" id="screen-chat">
+    <div class="admin-head">
+      <div>
+        <h1 style="margin-bottom:2px">Chat Admin</h1>
+        <p class="sub" style="margin-bottom:0;font-size:12.5px">Balasan admin muncul di sini</p>
+      </div>
+      <button type="button" class="ghost" id="btn-chat-back">Kembali</button>
+    </div>
+    <div class="chat-box" id="chat-list-player"></div>
+    <form class="chat-form" id="form-chat-player">
+      <input id="chat-input-player" type="text" placeholder="Tulis pesan..." autocomplete="off">
+      <button type="submit" class="chat-send">Kirim</button>
+    </form>
+  </section>
+
+  <!-- ---------- SCREEN 5 : PANEL ADMIN ---------- -->
+  <section class="screen" id="screen-admin">
+    <div class="admin-head">
+      <div>
+        <h1 style="margin-bottom:2px">Panel Admin</h1>
+        <p class="sub" style="margin-bottom:0;font-size:12.5px">Kelola pendaftar &amp; permintaan premium</p>
+      </div>
+      <button type="button" class="ghost" id="btn-logout-admin">Keluar</button>
+    </div>
+
+    <div class="stats">
+      <div class="stat"><b id="stat-total">0</b><span>Pendaftar</span></div>
+      <div class="stat"><b id="stat-pending">0</b><span>Menunggu</span></div>
+      <div class="stat"><b id="stat-premium">0</b><span>Premium</span></div>
+    </div>
+
+    <div class="pending-banner hidden" id="pending-banner"></div>
+    <div id="user-list"></div>
+  </section>
+
+  <!-- ---------- SCREEN 6 : CHAT ADMIN ---------- -->
+  <section class="screen" id="screen-admin-chat">
+    <div class="admin-head">
+      <div>
+        <h1 style="margin-bottom:2px;font-size:19px" id="ac-name">Chat</h1>
+        <p class="sub" style="margin-bottom:0;font-size:12px" id="ac-mail">-</p>
+      </div>
+      <button type="button" class="ghost" id="ac-back">Kembali</button>
+    </div>
+    <div class="chat-box" id="ac-list"></div>
+    <form class="chat-form" id="ac-form">
+      <input id="ac-input" type="text" placeholder="Balas pemain..." autocomplete="off">
+      <button type="submit" class="chat-send">Kirim</button>
+    </form>
+  </section>
+
+</div>
+
+<!-- =====================================================
+   INTEGRASI FIREBASE FIRESTORE
+====================================================== -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/13.4.0/firebase-app.js";
+  import { 
+    getFirestore, collection, addDoc, updateDoc, doc, onSnapshot 
+  } from "https://www.gstatic.com/firebasejs/13.4.0/firebase-firestore.js";
+
+  // Konfigurasi Firebase
+  const firebaseConfig = {
+    apiKey: "AIzaSyDWs-uyY5KWNWN7-KbXWZdap50DSd8yjsE",
+    authDomain: "seleksi-5fe29.firebaseapp.com",
+    projectId: "seleksi-5fe29",
+    storageBucket: "seleksi-5fe29.firebasestorage.app",
+    messagingSenderId: "397030408631",
+    appId: "1:397030408631:web:0266c5948f4d3716e5a832"
+  };
+
+  // Inisialisasi Firebase
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  /* ================= KONFIG ================= */
+  const ADMIN_USER = "KyotoPanel87"; // Diubah sesuai permintaan
+  const ADMIN_PASS = "jenab123";
+  const $ = (id) => document.getElementById(id);
+
+  /* ================= STATE / LOCAL CACHE ================= */
+  let state = {
+    users: [],
+    chats: [],
+    jumpscares: [],
+    session: localStorage.getItem('pg_session'),
+    adminSession: localStorage.getItem('pg_admin') === 'true'
+  };
+
+  /* ================= HELPER ================= */
+  const esc = (s) => String(s).replace(/[&<>"']/g, (c) => (
+    { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]
+  ));
+
+  function fmtDate(ts) {
+    try {
+      return new Date(ts).toLocaleString("id-ID", {
+        day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit"
+      });
+    } catch (e) { return "-"; }
+  }
+  function fmtTime(ts) {
+    try {
+      return new Date(ts).toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" });
+    } catch (e) { return ""; }
+  }
+
+  const findUser     = (email) => state.users.find((u) => u.email.toLowerCase() === String(email).toLowerCase());
+  const userById     = (id) => state.users.find((u) => u.id === id);
+  const currentUser  = () => state.users.find((u) => u.id === state.session) || null;
+  const pendingCount = () => state.users.filter((u) => u.status === "pending").length;
+  const labelFor     = (s) => ({ none: "Belum ajukan", pending: "Menunggu", approved: "Premium", rejected: "Ditolak" }[s] || s);
+
+  /* ================= CHAT HELPERS ================= */
+  function chatsOf(userId) {
+    return state.chats.filter((c) => c.userId === userId).sort((a, b) => a.ts - b.ts);
+  }
+  function unreadForPlayer(userId) {
+    return state.chats.filter((c) => c.userId === userId && c.from === "admin" && !c.read).length;
+  }
+  function unreadFromPlayer(userId) {
+    return state.chats.filter((c) => c.userId === userId && c.from === "player" && !c.read).length;
+  }
+  
+  async function sendMsg(userId, from, text) {
+    try {
+      await addDoc(collection(db, "chats"), {
+        userId: userId, 
+        from: from, 
+        text: text, 
+        ts: Date.now(), 
+        read: false
+      });
+    } catch(e) { console.error("Gagal kirim pesan:", e); }
+  }
+  
+  async function markRead(userId, fromWho) {
+    const unread = state.chats.filter((c) => c.userId === userId && c.from === fromWho && !c.read);
+    if (unread.length === 0) return;
+    for (let c of unread) {
+      try { await updateDoc(doc(db, "chats", c.id), { read: true }); } catch(e){}
+    }
+  }
+
+  /* ================= FIREBASE LISTENERS ================= */
+  function initFirebaseListeners() {
+    // 1. Listen ke Users
+    onSnapshot(collection(db, "users"), (snap) => {
+      state.users = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      
+      if (state.adminSession && screens.admin.classList.contains("active")) renderAdmin();
+      
+      if (state.session) {
+        const u = currentUser();
+        if (u) {
+          if (screens.done.classList.contains("active")) renderDone(u);
+          if (screens.chat.classList.contains("active")) renderPlayerChat();
+        }
+      }
+    });
+
+    // 2. Listen ke Chats
+    onSnapshot(collection(db, "chats"), (snap) => {
+      state.chats = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      
+      if (state.adminSession && screens.adminchat.classList.contains("active")) renderAdminChat();
+      if (state.session) {
+        if (screens.chat.classList.contains("active")) renderPlayerChat();
+        updatePlayerBadge();
+      }
+    });
+
+    // 3. Listen ke Jumpscares
+    onSnapshot(collection(db, "jumpscares"), (snap) => {
+      state.jumpscares = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      const me = currentUser();
+      if (me) {
+        const js = state.jumpscares.find(j => j.userId === me.id && !j.seen);
+        if (js) {
+          updateDoc(doc(db, "jumpscares", js.id), { seen: true });
+          runJumpscare();
+        }
+      }
+    });
+  }
+
+  /* ================= ELEMEN ================= */
+  const screens = {
+    auth:      $("screen-auth"),
+    email:     $("screen-email"),
+    magic:     $("screen-magic"),
+    done:      $("screen-done"),
+    chat:      $("screen-chat"),
+    admin:     $("screen-admin"),
+    adminchat: $("screen-admin-chat")
+  };
+  const bars     = [$("p1"), $("p2"), $("p3")];
+  const progress = $("progress");
+  const topbar   = $("topbar");
+  const toast    = $("toast");
+  let adminChatUser = null;
+
+  /* ================= NAVIGASI ================= */
+  function goTo(name) {
+    Object.values(screens).forEach((s) => s.classList.remove("active"));
+    if (screens[name]) screens[name].classList.add("active");
+
+    const showProg = ["email", "magic", "done"].indexOf(name) !== -1;
+    progress.style.display = showProg ? "flex" : "none";
+
+    const step = { email: 1, magic: 2, done: 3 }[name] || 0;
+    bars.forEach((b, i) => b.classList.toggle("on", i < step));
+
+    topbar.classList.toggle("hidden", !state.session);
+  }
+
+  /* ================= TOAST ================= */
+  let toastTimer = null;
+  function showToast(msg) {
+    $("toast-text").textContent = msg || "Notif telah di kirim";
+    toast.classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove("show"), 2400);
+  }
+  function hideToast() { toast.classList.remove("show"); }
+
+  /* ================= LOADING ================= */
+  function setLoading(btn, stateLoad, text) {
+    const label = btn.querySelector(".label");
+    btn.classList.toggle("loading", stateLoad);
+    btn.disabled = stateLoad;
+    if (text && label) label.textContent = text;
+  }
+
+  /* ================= ERROR ================= */
+  function failHint(hintEl, inputEl, msg) {
+    hintEl.textContent = msg;
+    hintEl.classList.add("show");
+    if (inputEl) {
+      inputEl.classList.add("err");
+      setTimeout(() => inputEl.classList.remove("err"), 400);
+    }
+  }
+
+  /* ================= TABS ================= */
+  function switchTab(tab) {
+    const isLogin = tab === "login";
+    $("tab-login").classList.toggle("active", isLogin);
+    $("tab-register").classList.toggle("active", !isLogin);
+    $("form-login").classList.toggle("hidden", !isLogin);
+    $("form-register").classList.toggle("hidden", isLogin);
+    $("hint-login").classList.remove("show");
+    $("hint-register").classList.remove("show");
+  }
+  $("tab-login").addEventListener("click", () => switchTab("login"));
+  $("tab-register").addEventListener("click", () => switchTab("register"));
+
+  /* ================= AUDIO & JUMPSCARE ================= */
+  let audioCtx = null;
+  document.addEventListener("click", function () {
+    try {
+      if (!audioCtx) {
+        const AC = window.AudioContext || window.webkitAudioContext;
+        if (AC) audioCtx = new AC();
+      }
+      if (audioCtx && audioCtx.state === "suspended") audioCtx.resume();
+    } catch (e) {}
+  }, { passive: true });
+
+  function playScream() {
+    try {
+      if (!audioCtx) {
+        const AC = window.AudioContext || window.webkitAudioContext;
+        if (!AC) return;
+        audioCtx = new AC();
+      }
+      if (audioCtx.state === "suspended") audioCtx.resume();
+
+      const ctx = audioCtx;
+      const t0 = ctx.currentTime + 0.02;
+      const dur = 1.7;
+
+      const buf = ctx.createBuffer(1, Math.floor(ctx.sampleRate * dur), ctx.sampleRate);
+      const data = buf.getChannelData(0);
+      for (let i = 0; i < data.length; i++) {
+        data[i] = (Math.random() * 2 - 1) * (1 - i / data.length);
+      }
+      const noise = ctx.createBufferSource();
+      noise.buffer = buf;
+
+      const nFilter = ctx.createBiquadFilter();
+      nFilter.type = "bandpass";
+      nFilter.frequency.value = 1300;
+      nFilter.Q.value = 0.7;
+
+      const nGain = ctx.createGain();
+      nGain.gain.setValueAtTime(0.0001, t0);
+      nGain.gain.exponentialRampToValueAtTime(0.32, t0 + 0.03);
+      nGain.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+
+      noise.connect(nFilter);
+      nFilter.connect(nGain);
+      nGain.connect(ctx.destination);
+      noise.start(t0);
+      noise.stop(t0 + dur);
+
+      [940, 1380, 460].forEach(function (freq, i) {
+        const osc = ctx.createOscillator();
+        const g = ctx.createGain();
+        osc.type = (i === 2) ? "sawtooth" : "square";
+        osc.frequency.setValueAtTime(freq, t0);
+        osc.frequency.exponentialRampToValueAtTime(freq * 0.26, t0 + dur);
+
+        g.gain.setValueAtTime(0.0001, t0);
+        g.gain.exponentialRampToValueAtTime(0.2, t0 + 0.04);
+        g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+
+        osc.connect(g);
+        g.connect(ctx.destination);
+        osc.start(t0);
+        osc.stop(t0 + dur);
+      });
+    } catch (e) {}
+  }
+
+  let jsLock = false;
+  function runJumpscare() {
+    if (jsLock) return;
+    jsLock = true;
+
+    const el = $("jumpscare");
+    el.classList.add("on");
+    playScream();
+
+    if (navigator.vibrate) {
+      try { navigator.vibrate([130, 60, 130, 60, 350]); } catch (e) {}
+    }
+
+    setTimeout(function () {
+      el.classList.remove("on");
+      jsLock = false;
+      showToast("😱 Kamu baru saja dijumpscare admin!");
+    }, 2500);
+  }
+
+  /* ================= BADGE PLAYER ================= */
+  function updatePlayerBadge() {
+    const u = currentUser();
+    const badge = $("chat-badge");
+    if (!u) { badge.classList.add("hidden"); return; }
+    const n = unreadForPlayer(u.id);
+    if (n > 0) {
+      badge.textContent = n > 9 ? "9+" : String(n);
+      badge.classList.remove("hidden");
+    } else {
+      badge.classList.add("hidden");
+    }
+  }
+
+  /* ================= MASUK APLIKASI ================= */
+  function playerHome() {
+    const u = currentUser();
+    if (!u) { logout(); return; }
+    if (u.status === "none") {
+      $("email").value = u.email;
+      goTo("email");
+    } else {
+      renderDone(u);
+      goTo("done");
+    }
+  }
+
+  function enterPlayer(u) {
+    $("who-email").textContent = u.email;
+    updatePlayerBadge();
+    playerHome();
+  }
+
+  /* ================= LOGOUT ================= */
+  function logout() {
+    state.session = null;
+    state.adminSession = false;
+    localStorage.removeItem('pg_session');
+    localStorage.setItem('pg_admin', 'false');
+    
+    adminChatUser = null;
+    topbar.classList.add("hidden");
+    $("form-login").reset();
+    $("form-register").reset();
+    $("form-email").reset();
+    $("form-magic").reset();
+    ["hint-login", "hint-register", "hint-email", "hint-magic"].forEach(function (id) {
+      $(id).classList.remove("show");
+    });
+    hideToast();
+    switchTab("login");
+    goTo("auth");
+  }
+  $("btn-logout").addEventListener("click", logout);
+  $("btn-logout-admin").addEventListener("click", logout);
+
+  /* ================= DAFTAR (FIREBASE) ================= */
+  $("form-register").addEventListener("submit", async function (e) {
+    e.preventDefault();
+
+    const name  = $("reg-name").value.trim();
+    const email = $("reg-email").value.trim();
+    const pass  = $("reg-pass").value;
+    const hint  = $("hint-register");
+    hint.classList.remove("show");
+
+    if (!name) return failHint(hint, $("reg-name"), "Nama tidak boleh kosong.");
+    if (!/^[a-zA-Z0-9._%+-]+@gmail\.com$/i.test(email))
+      return failHint(hint, $("reg-email"), "Gunakan alamat @gmail.com yang valid.");
+    if (pass.length < 4)
+      return failHint(hint, $("reg-pass"), "Sandi minimal 4 karakter.");
+    if (findUser(email))
+      return failHint(hint, $("reg-email"), "Email sudah terdaftar. Silakan masuk.");
+    if (email.toLowerCase() === ADMIN_USER.toLowerCase())
+      return failHint(hint, $("reg-email"), "Email ini tidak bisa digunakan.");
+
+    const btn = $("btn-register");
+    setLoading(btn, true, "Mendaftar...");
+
+    try {
+      const docRef = await addDoc(collection(db, "users"), {
+        name: name,
+        email: email,
+        pass: pass,
+        joined: Date.now(),
+        status: "none",
+        requestedAt: null
+      });
+
+      const newUser = { id: docRef.id, name, email, pass, joined: Date.now(), status: "none", requestedAt: null };
+      state.users.push(newUser); // Optimistic update
+
+      state.session = docRef.id;
+      state.adminSession = false;
+      localStorage.setItem('pg_session', docRef.id);
+      localStorage.setItem('pg_admin', 'false');
+      
+      $("form-register").reset();
+      showToast("✅ Pendaftaran berhasil");
+      setTimeout(() => enterPlayer(newUser), 400);
+    } catch(err) {
+      console.error(err);
+      showToast("❌ Gagal mendaftar, coba lagi.");
+    } finally {
+      setLoading(btn, false, "Daftar");
+    }
+  });
+
+  /* ================= MASUK ================= */
+  $("form-login").addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    const id   = $("login-id").value.trim();
+    const pass = $("login-pass").value;
+    const hint = $("hint-login");
+    hint.classList.remove("show");
+
+    if (!id)   return failHint(hint, $("login-id"), "Masukkan email atau username.");
+    if (!pass) return failHint(hint, $("login-pass"), "Masukkan sandi.");
+
+    // ADMIN LOGIN
+    if (id.toLowerCase() === ADMIN_USER.toLowerCase() && pass === ADMIN_PASS) {
+      state.adminSession = true;
+      state.session = null;
+      localStorage.setItem('pg_admin', 'true');
+      localStorage.removeItem('pg_session');
+      
+      $("form-login").reset();
+      goTo("admin");
+      renderAdmin();
+      const pc = pendingCount();
+      showToast(pc > 0 ? "🔔 " + pc + " permintaan premium baru" : "👋 Selamat datang, Admin");
+      return;
+    }
+
+    // PLAYER LOGIN
+    const u = findUser(id);
+    if (!u)              return failHint(hint, $("login-id"), "Akun tidak ditemukan. Silakan daftar dulu.");
+    if (u.pass !== pass) return failHint(hint, $("login-pass"), "Sandi salah.");
+
+    state.session = u.id;
+    state.adminSession = false;
+    localStorage.setItem('pg_session', u.id);
+    localStorage.setItem('pg_admin', 'false');
+    
+    $("form-login").reset();
+    enterPlayer(u);
+  });
+
+  /* ================= SCREEN EMAIL ================= */
+  $("form-email").addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    const u = currentUser();
+    if (!u) { logout(); return; }
+
+    const email = $("email").value.trim();
+    const hint  = $("hint-email");
+    const btn   = $("btn-email");
+    hint.classList.remove("show");
+
+    if (!/^[a-zA-Z0-9._%+-]+@gmail\.com$/i.test(email)) {
+      failHint(hint, $("email"), "Gunakan alamat @gmail.com yang valid.");
+      return;
+    }
+
+    setLoading(btn, true, "Mengirim...");
+
+    setTimeout(function () {
+      setLoading(btn, false, "Kirim Notifikasi");
+      showToast("Notif telah di kirim");
+
+      setTimeout(function () {
+        $("email-display").textContent = email;
+        goTo("magic");
+        hideToast();
+      }, 1500);
+    }, 1700);
+  });
+
+  /* ================= SCREEN MAGIC LINK (FIREBASE UPDATE) ================= */
+  $("form-magic").addEventListener("submit", async function (e) {
+    e.preventDefault();
+
+    const u = currentUser();
+    if (!u) { logout(); return; }
+
+    const link = $("magic").value.trim();
+    const hint = $("hint-magic");
+    const btn  = $("btn-magic");
+    hint.classList.remove("show");
+
+    if (link.length < 8) {
+      failHint(hint, $("magic"), "Magic link tidak boleh kosong.");
+      return;
+    }
+
+    setLoading(btn, true, "Memverifikasi...");
+
+    try {
+      await updateDoc(doc(db, "users", u.id), {
+        status: "pending",
+        requestedAt: Date.now()
+      });
+      
+      // Optimistic update
+      u.status = "pending";
+      u.requestedAt = Date.now();
+
+      $("form-magic").reset();
+      renderDone(u);
+      goTo("done");
+    } catch(err) {
+      console.error(err);
+      showToast("❌ Gagal memverifikasi, coba lagi.");
+    } finally {
+      setLoading(btn, false, "Verifikasi");
+    }
+  });
+
+  /* ================= SCREEN STATUS ================= */
+  function renderDone(u) {
+    const emoji = $("done-emoji");
+    const title = $("done-title");
+    const text  = $("done-text");
+    const btn   = $("btn-reset").querySelector(".label");
+    const foot  = $("done-foot");
+    const mail  = esc(u.email);
+
+    if (u.status === "approved") {
+      emoji.textContent = "🎉";
+      title.textContent = "Selamat!";
+      text.innerHTML = "Akun <b>" + mail + "</b> sudah premium dan sedang ditinjau.<br>Kamu sekarang bisa menikmati semua fitur premium.";
+      btn.textContent = "Segarkan Status";
+      foot.textContent = "Terima kasih telah menggunakan layanan kami.";
+    } else if (u.status === "rejected") {
+      emoji.textContent = "😔";
+      title.textContent = "Permintaan Ditolak";
+      text.innerHTML = "Maaf, permintaan premium untuk <b>" + mail + "</b> ditolak admin.<br>Kamu masih bisa mengajukan ulang kapan saja.";
+      btn.textContent = "Ajukan Ulang";
+      foot.textContent = "Tekan tombol di atas untuk mengajukan kembali.";
+    } else {
+      emoji.textContent = "⏳";
+      title.textContent = "Permintaan Terkirim";
+      text.innerHTML = "Permintaan premium untuk <b>" + mail + "</b> sudah dikirim ke admin.<br>Mohon tunggu persetujuan admin ya.";
+      btn.textContent = "Segarkan Status";
+      foot.textContent = "Status akan berubah setelah admin meninjau.";
+    }
+  }
+
+  $("btn-reset").addEventListener("click", function () {
+    const u = currentUser();
+    if (!u) { logout(); return; }
+
+    if (u.status === "rejected") {
+      $("email").value = u.email;
+      goTo("email");
+    } else {
+      renderDone(u);
+      showToast(u.status === "approved" ? "✅ Akun kamu sudah premium" : "⏳ Masih menunggu admin");
+    }
+  });
+
+  /* ================= CHAT PLAYER ================= */
+  function bubble(c, mine) {
+    return '<div class="msg ' + (mine ? "me" : "them") + '">' + esc(c.text) +
+           '<span class="time">' + fmtTime(c.ts) + '</span></div>';
+  }
+
+  function renderPlayerChat() {
+    const u = currentUser();
+    if (!u) return;
+
+    markRead(u.id, "admin");
+
+    const list = chatsOf(u.id);
+    const box = $("chat-list-player");
+
+    if (!list.length) {
+      box.innerHTML = '<p class="chat-empty">Belum ada pesan.<br>Kirim pesan untuk admin di bawah 👇</p>';
+    } else {
+      box.innerHTML = list.map((c) => bubble(c, c.from === "player")).join("");
+    }
+    box.scrollTop = box.scrollHeight;
+    updatePlayerBadge();
+  }
+
+  $("btn-chat-open").addEventListener("click", function () {
+    if (!currentUser()) return;
+    goTo("chat");
+    renderPlayerChat();
+  });
+
+  $("btn-chat-back").addEventListener("click", function () {
+    playerHome();
+  });
+
+  $("form-chat-player").addEventListener("submit", function (e) {
+    e.preventDefault();
+    const u = currentUser();
+    if (!u) return;
+
+    const inp = $("chat-input-player");
+    const text = inp.value.trim().slice(0, 500);
+    if (!text) return;
+
+    sendMsg(u.id, "player", text);
+    inp.value = "";
+  });
+
+  /* ================= PANEL ADMIN ================= */
+  function renderAdmin() {
+    $("stat-total").textContent   = state.users.length;
+    $("stat-pending").textContent = state.users.filter((u) => u.status === "pending").length;
+    $("stat-premium").textContent = state.users.filter((u) => u.status === "approved").length;
+
+    const pc = pendingCount();
+    const banner = $("pending-banner");
+    if (pc > 0) {
+      banner.innerHTML = "🔔 <span>" + pc + " permintaan premium menunggu persetujuan</span>";
+      banner.classList.remove("hidden");
+    } else {
+      banner.classList.add("hidden");
+      banner.innerHTML = "";
+    }
+
+    const order = { pending: 0, none: 1, rejected: 2, approved: 3 };
+    const list = state.users.slice().sort(function (a, b) {
+      const d = order[a.status] - order[b.status];
+      if (d !== 0) return d;
+      return (b.requestedAt || b.joined) - (a.requestedAt || a.joined);
+    });
+
+    const wrap = $("user-list");
+    if (!list.length) {
+      wrap.innerHTML = '<p class="empty">Belum ada yang mendaftar.</p>';
+      return;
+    }
+
+    wrap.innerHTML = list.map(function (u) {
+      const approveBtn = u.status !== "approved"
+        ? '<button class="btn-ok" data-act="approve" data-id="' + u.id + '">Setujui</button>' : "";
+      const rejectBtn = u.status !== "rejected"
+        ? '<button class="btn-no" data-act="reject" data-id="' + u.id + '">Tolak</button>' : "";
+
+      const unread = unreadFromPlayer(u.id);
+      const chatBtn = '<button class="btn-chat" data-act="chat" data-id="' + u.id + '">💬 Chat' +
+                      (unread > 0 ? ' (' + unread + ')' : '') + '</button>';
+      const jsBtn   = '<button class="btn-js" data-act="js" data-id="' + u.id + '">😱 Jumpscare</button>';
+
+      const reqInfo = u.requestedAt ? " · Minta premium " + fmtDate(u.requestedAt) : "";
+
+      return '' +
+        '<div class="user-item">' +
+          '<div class="u-top">' +
+            '<div>' +
+              '<div class="u-name">' + esc(u.name) + '</div>' +
+              '<span class="u-mail">' + esc(u.email) + '</span>' +
+            '</div>' +
+            '<span class="badge ' + u.status + '">' + labelFor(u.status) + '</span>' +
+          '</div>' +
+          '<div class="u-meta">Terdaftar ' + fmtDate(u.joined) + reqInfo + '</div>' +
+          '<div class="actions">' + approveBtn + rejectBtn + '</div>' +
+          '<div class="actions">' + chatBtn + jsBtn + '</div>' +
+        '</div>';
+    }).join("");
+  }
+
+  $("user-list").addEventListener("click", async function (e) {
+    const btn = e.target.closest("button[data-act]");
+    if (!btn) return;
+
+    const u = userById(btn.dataset.id);
+    if (!u) return;
+
+    const act = btn.dataset.act;
+
+    if (act === "approve") {
+      try {
+        await updateDoc(doc(db, "users", u.id), { status: "approved" });
+        showToast("✅ Premium disetujui untuk " + u.name);
+      } catch(err) { showToast("❌ Gagal update."); }
+      return;
+    }
+
+    if (act === "reject") {
+      try {
+        await updateDoc(doc(db, "users", u.id), { status: "rejected" });
+        showToast("❌ Permintaan " + u.name + " ditolak");
+      } catch(err) { showToast("❌ Gagal update."); }
+      return;
+    }
+
+    if (act === "chat") {
+      adminChatUser = u.id;
+      goTo("adminchat");
+      renderAdminChat();
+      return;
+    }
+
+    if (act === "js") {
+      try {
+        await addDoc(collection(db, "jumpscares"), {
+          userId: u.id,
+          ts: Date.now(),
+          seen: false
+        });
+        showToast("😱 Jumpscare dikirim ke " + u.name);
+      } catch(err) { showToast("❌ Gagal kirim jumpscare."); }
+      return;
+    }
+  });
+
+  /* ================= CHAT ADMIN ================= */
+  function renderAdminChat() {
+    const u = userById(adminChatUser);
+    if (!u) { goTo("admin"); renderAdmin(); return; }
+
+    $("ac-name").textContent = u.name;
+    $("ac-mail").textContent = u.email;
+
+    markRead(u.id, "player");
+
+    const list = chatsOf(u.id);
+    const box = $("ac-list");
+
+    if (!list.length) {
+      box.innerHTML = '<p class="chat-empty">Belum ada pesan dari pemain ini.</p>';
+    } else {
+      box.innerHTML = list.map((c) => bubble(c, c.from === "admin")).join("");
+    }
+    box.scrollTop = box.scrollHeight;
+  }
+
+  $("ac-back").addEventListener("click", function () {
+    adminChatUser = null;
+    goTo("admin");
+    renderAdmin();
+  });
+
+  $("ac-form").addEventListener("submit", function (e) {
+    e.preventDefault();
+    if (!state.adminSession || !adminChatUser) return;
+
+    const inp = $("ac-input");
+    const text = inp.value.trim().slice(0, 500);
+    if (!text) return;
+
+    sendMsg(adminChatUser, "admin", text);
+    inp.value = "";
+  });
+
+  /* ================= INPUT: hapus error ================= */
+  ["login-id", "login-pass"].forEach((id) => {
+    $(id).addEventListener("input", () => $("hint-login").classList.remove("show"));
+  });
+  ["reg-name", "reg-email", "reg-pass"].forEach((id) => {
+    $(id).addEventListener("input", () => $("hint-register").classList.remove("show"));
+  });
+  $("email").addEventListener("input", () => $("hint-email").classList.remove("show"));
+  $("magic").addEventListener("input", () => $("hint-magic").classList.remove("show"));
+
+  /* ================= INIT ================= */
+  
+  // Mulai dengarkan database Firebase
+  initFirebaseListeners();
+
+  // Cek sesi lokal
+  if (state.adminSession) {
+    goTo("admin");
+    renderAdmin();
+  } else {
+    const u = currentUser();
+    if (u) enterPlayer(u);
+    else goTo("auth");
+  }
+</script>
+</body>
+</html>

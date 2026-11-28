@@ -1,0 +1,2344 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>UCHIHA CRASHER</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Poppins:wght@400;500;600;700&family=Scheherazade+New:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #1447e6;
+    --dark: #0a1128;
+    --success: #00d26a;
+    --danger: #ff0033;
+    --bg-body: #eef2f7;
+    --bg-card: #ffffff;
+    --text-main: #1e293b;
+    --text-muted: #64748b;
+  }
+  
+  [data-theme="dark"] {
+    --bg-body: #0f111a;
+    --bg-card: #1a1d2d;
+    --text-main: #ffffff;
+    --text-muted: #9aa0b5;
+    --dark: #ffffff;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; user-select: none; }
+  body { background-color: var(--bg-body); height: 100vh; overflow: hidden; position: relative; color: var(--text-main); transition: background 0.3s; }
+  
+  .screen { display: none; width: 100%; height: 100%; position: absolute; top: 0; left: 0; overflow-y: auto; padding-bottom: 115px; z-index: 10; background: var(--bg-body); }
+  .screen.active { display: block; animation: fadeIn 0.3s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* INTRO */
+  #intro-screen { position: fixed; inset: 0; background: #000; justify-content: center; align-items: center; z-index: 9999; padding-bottom: 0; overflow: hidden; display: none; }
+  #intro-screen.active { display: flex !important; }
+  #intro-video { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; }
+  .btn-skip { position: absolute; bottom: 40px; right: 20px; z-index: 10; background: rgba(0,0,0,0.6); border: 2px solid white; color: white; padding: 12px 25px; border-radius: 30px; font-weight: bold; backdrop-filter: blur(5px); cursor: pointer; font-family: 'Orbitron'; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+
+  /* LOGIN */
+  #login-screen { display: flex; flex-direction: column; justify-content: center; align-items: center; background-size: cover; background-position: center; }
+  #login-screen::before { content: ''; position: absolute; inset: 0; background: rgba(10, 17, 40, 0.85); z-index: -1; }
+  .login-card { background: var(--bg-card); width: 90%; max-width: 380px; border-radius: 20px; padding: 30px 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); text-align: center; }
+  .login-card h2 { color: var(--text-main); font-size: 22px; margin-bottom: 5px; font-family: 'Orbitron', sans-serif; }
+  .login-card p { color: var(--text-muted); font-size: 13px; margin-bottom: 25px; }
+  .input-group { background: var(--bg-body); border-radius: 10px; display: flex; align-items: center; padding: 15px; margin-bottom: 15px; border: 1px solid #e1e8f0; }
+  .input-group i { color: #6b7c93; margin-right: 15px; }
+  .input-group input { border: none; background: transparent; outline: none; font-size: 15px; width: 100%; color: var(--text-main); user-select: text; }
+  .btn-primary { background: var(--primary); color: white; width: 100%; padding: 16px; border: none; border-radius: 12px; font-size: 15px; font-weight: bold; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 10px; font-family: 'Orbitron'; box-shadow: 0 5px 0 #0a257a; transition: transform 0.1s; }
+  .btn-primary:active { transform: translateY(2px); }
+  .btn-primary:disabled { opacity: 0.7; cursor: not-allowed; }
+  .btn-outline { background: transparent; color: var(--primary); border: 2px solid var(--primary); width: 100%; padding: 14px; border-radius: 10px; font-weight: 700; margin-top: 15px; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 10px; font-family: 'Orbitron'; }
+
+  /* TELEGRAM BUTTON */
+  .btn-telegram { background: #229ED9; color: white; width: 100%; padding: 14px; border-radius: 12px; font-weight: 700; margin-top: 12px; display: flex; justify-content: center; align-items: center; gap: 10px; font-family: 'Orbitron'; text-decoration: none; box-shadow: 0 4px 0 #1b7fae; }
+
+  /* HEADERS */
+  .top-header { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; background: var(--bg-card); border-bottom: 2px solid var(--primary); position: sticky; top: 0; z-index: 50; }
+  .clock-box { border: 2px solid var(--primary); padding: 8px 15px; border-radius: 15px; display: flex; align-items: center; gap: 5px; font-family: 'Orbitron'; font-weight: 700; color: var(--primary); font-size: 16px; }
+  .theme-toggle { font-size: 20px; color: var(--primary); cursor: pointer; }
+
+  /* HOME */
+  .home-content { padding: 20px; }
+  
+  /* AUDIO WAVEFORM WIDGET */
+  .music-player-widget { background: var(--bg-card); border: 3px solid var(--primary); border-radius: 20px; padding: 12px 16px; margin-bottom: 18px; box-shadow: 0 5px 0 var(--primary); display: flex; align-items: center; justify-content: space-between; }
+  .waveform-container { display: flex; align-items: center; gap: 4px; height: 32px; flex: 1; margin-right: 12px; overflow: hidden; }
+  .wave-bar { width: 5px; background: var(--primary); border-radius: 4px; animation: soundWave 1.2s infinite ease-in-out; }
+  .wave-bar:nth-child(1) { height: 35%; animation-delay: 0.1s; }
+  .wave-bar:nth-child(2) { height: 75%; animation-delay: 0.3s; }
+  .wave-bar:nth-child(3) { height: 50%; animation-delay: 0.2s; }
+  .wave-bar:nth-child(4) { height: 95%; animation-delay: 0.5s; }
+  .wave-bar:nth-child(5) { height: 40%; animation-delay: 0.2s; }
+  .wave-bar:nth-child(6) { height: 85%; animation-delay: 0.4s; }
+  .wave-bar:nth-child(7) { height: 60%; animation-delay: 0.1s; }
+  .wave-bar:nth-child(8) { height: 100%; animation-delay: 0.6s; }
+  .wave-bar:nth-child(9) { height: 45%; animation-delay: 0.3s; }
+  .wave-bar:nth-child(10) { height: 70%; animation-delay: 0.2s; }
+  .wave-bar:nth-child(11) { height: 30%; animation-delay: 0.4s; }
+  .wave-bar:nth-child(12) { height: 80%; animation-delay: 0.1s; }
+  @keyframes soundWave { 0%, 100% { transform: scaleY(0.4); opacity: 0.5; } 50% { transform: scaleY(1); opacity: 1; } }
+  .music-control-btn { width: 38px; height: 38px; border-radius: 50%; background: var(--primary); color: white; border: none; display: flex; justify-content: center; align-items: center; cursor: pointer; font-size: 15px; flex-shrink: 0; box-shadow: 0 3px 0 #0a257a; }
+
+  /* BANNER FOTO BERANDA */
+  .home-banner-card { position: relative; width: 100%; height: 210px; border-radius: 22px; border: 3px solid var(--primary); box-shadow: 0 5px 0 var(--primary); overflow: hidden; margin-bottom: 22px; background-size: cover; background-position: center; }
+  .home-banner-card::before { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(10,17,40,0.1) 30%, rgba(10,17,40,0.85) 90%); }
+  .home-banner-content { position: absolute; bottom: 15px; left: 18px; right: 18px; color: white; z-index: 2; display: flex; flex-direction: column; gap: 3px; }
+  .home-banner-title { font-family: 'Orbitron'; font-size: 24px; font-weight: 900; letter-spacing: 1px; text-shadow: 0 2px 5px rgba(0,0,0,0.6); }
+  .home-banner-copyright { font-size: 11px; opacity: 0.85; font-family: 'Poppins', sans-serif; letter-spacing: 0.5px; }
+
+  .app-title { font-family: 'Orbitron'; font-size: 26px; text-align: center; font-weight: 900; color: var(--text-main); margin-bottom: 5px; }
+  .app-subtitle { text-align: center; font-size: 11px; color: var(--primary); font-weight: 700; letter-spacing: 2px; margin-bottom: 20px; }
+  
+  /* MENU 3 KE BAWAH DI BERANDA */
+  .home-menu-stack { display: flex; flex-direction: column; gap: 12px; margin-bottom: 22px; }
+  .home-stack-btn { background: var(--bg-card); border: 3px solid var(--primary); padding: 15px 20px; border-radius: 16px; display: flex; align-items: center; justify-content: space-between; font-weight: 700; font-size: 14px; color: var(--text-main); box-shadow: 0 4px 0 var(--primary); cursor: pointer; font-family: 'Orbitron'; transition: transform 0.1s; }
+  .home-stack-btn:active { transform: translateY(2px); }
+  .home-stack-btn i.fa-chevron-right { color: var(--primary); font-size: 13px; }
+
+  .btn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 22px; }
+  .menu-btn { background: var(--bg-card); border: 3px solid var(--primary); padding: 15px; border-radius: 15px; display: flex; align-items: center; justify-content: center; gap: 10px; font-weight: 700; font-size: 14px; color: var(--text-main); box-shadow: 0 4px 0 var(--primary); cursor: pointer; }
+  
+  /* JADWAL SHOLAT WIDGET */
+  .prayer-widget { background: var(--bg-card); border: 3px solid var(--primary); border-radius: 22px; padding: 16px; margin-bottom: 20px; box-shadow: 0 5px 0 var(--primary); }
+  .prayer-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+  .prayer-loc { display: flex; align-items: center; gap: 10px; }
+  .prayer-icon { width: 42px; height: 42px; background: var(--primary); color: white; border-radius: 12px; display: flex; justify-content: center; align-items: center; font-size: 20px; }
+  .prayer-loc h4 { font-family: 'Orbitron'; font-size: 14px; color: var(--text-main); }
+  .prayer-loc p { font-size: 12px; color: var(--text-muted); }
+  .btn-city { background: var(--primary); color: white; border: none; padding: 8px 15px; border-radius: 20px; font-size: 11px; font-weight: bold; font-family: 'Orbitron'; cursor: pointer; }
+  .prayer-next { background: var(--bg-body); border: 1.5px solid var(--primary); padding: 10px 14px; border-radius: 14px; font-size: 12px; font-weight: 700; display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; color: var(--text-main); }
+  .prayer-next span { color: var(--primary); }
+  .prayer-cards { display: flex; overflow-x: auto; gap: 10px; padding-bottom: 5px; }
+  .prayer-card { min-width: 92px; padding: 15px 10px; border-radius: 14px; text-align: center; color: white; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+  .prayer-card i { font-size: 18px; margin-bottom: 5px; }
+  .prayer-card p { font-size: 10px; opacity: 0.9; margin-bottom: 5px; font-weight: 600; }
+  .prayer-card h3 { font-size: 16px; font-family: 'Orbitron'; }
+  .bg-subuh { background: linear-gradient(135deg, #1447e6, #0a1128); }
+  .bg-dzuhur { background: linear-gradient(135deg, #f59e0b, #d97706); }
+  .bg-ashar { background: linear-gradient(135deg, #ef4444, #b91c1c); }
+  .bg-maghrib { background: linear-gradient(135deg, #8b5cf6, #5b21b6); }
+  .bg-isya { background: linear-gradient(135deg, #1e293b, #0f172a); }
+
+  /* HADITH OF THE DAY WIDGET */
+  .hadith-widget { background: var(--bg-card); border: 3px solid var(--primary); border-radius: 22px; padding: 18px; margin-bottom: 20px; box-shadow: 0 5px 0 var(--primary); cursor: pointer; transition: transform 0.15s; }
+  .hadith-widget:active { transform: scale(0.99); }
+  .hadith-top { display: flex; align-items: center; gap: 12px; margin-bottom: 15px; }
+  .hadith-icon-circle { width: 44px; height: 44px; border-radius: 50%; background: var(--primary); color: white; display: flex; justify-content: center; align-items: center; font-size: 18px; flex-shrink: 0; }
+  .hadith-title-wrap h4 { font-family: 'Orbitron'; font-size: 14px; color: var(--text-main); letter-spacing: 0.5px; margin-bottom: 2px; }
+  .hadith-title-wrap span { font-size: 12px; color: var(--text-muted); font-weight: 500; }
+  .hadith-arabic-box { border: 1.5px solid #94a3b8; border-radius: 14px; padding: 20px 16px; background: var(--bg-body); margin-bottom: 12px; text-align: center; }
+  .hadith-arabic-text { font-family: 'Scheherazade New', serif; font-size: 24px; font-weight: 700; line-height: 2.1; color: var(--text-main); direction: rtl; letter-spacing: 0; }
+  .hadith-meaning-box { border: 1.5px solid #94a3b8; border-radius: 14px; padding: 14px 16px; background: var(--bg-body); font-size: 13px; font-style: italic; color: var(--text-main); line-height: 1.6; margin-bottom: 14px; }
+  .hadith-footer { display: flex; justify-content: space-between; align-items: center; }
+  .hadith-badge { display: inline-flex; align-items: center; gap: 7px; padding: 7px 14px; border: 1.5px solid #94a3b8; border-radius: 10px; font-size: 12px; font-weight: 700; color: var(--primary); background: var(--bg-body); }
+
+  /* MENU BUG WA */
+  .bug-page-container { padding: 16px 20px 25px; }
+  .bug-banner { width: 100%; height: 85px; border-radius: 18px; background: url('https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=1000&auto=format&fit=crop') center/cover; border: 3px solid var(--primary); box-shadow: 0 5px 0 var(--primary); margin-bottom: 18px; }
+  .bug-section-card { background: var(--bg-card); border: 3px solid var(--primary); border-radius: 22px; padding: 16px; box-shadow: 0 5px 0 var(--primary); margin-bottom: 18px; }
+  .bug-sec-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+  .bug-sec-title { display: flex; align-items: center; gap: 10px; }
+  .bug-sec-icon { width: 38px; height: 38px; border-radius: 11px; background: var(--primary); color: white; display: flex; justify-content: center; align-items: center; font-size: 16px; }
+  .bug-sec-title h3 { font-family: 'Orbitron'; font-size: 14px; font-weight: 800; color: var(--text-main); letter-spacing: 0.5px; }
+  .bug-counter-badge { background: var(--primary); color: white; font-family: 'Orbitron'; font-size: 12px; font-weight: 700; padding: 6px 12px; border-radius: 10px; }
+  
+  .bug-carousel { display: flex; gap: 12px; overflow-x: auto; padding-bottom: 6px; margin-bottom: 14px; scroll-snap-type: x mandatory; }
+  .bug-carousel::-webkit-scrollbar { height: 4px; }
+  .bug-carousel::-webkit-scrollbar-thumb { background: rgba(20, 71, 230, 0.3); border-radius: 4px; }
+  .bug-option-card { min-width: 195px; flex-shrink: 0; scroll-snap-align: start; border: 2px solid #cbd5e1; border-radius: 16px; padding: 16px; background: var(--bg-body); cursor: pointer; transition: all 0.2s; display: flex; flex-direction: column; justify-content: space-between; height: 145px; }
+  .bug-option-card.selected { border: 2.5px solid var(--primary); background: var(--bg-card); box-shadow: 0 4px 12px rgba(20, 71, 230, 0.15); }
+  .bug-card-circle { width: 42px; height: 42px; border-radius: 50%; border: 2px solid var(--primary); background: rgba(20, 71, 230, 0.08); color: var(--primary); display: flex; justify-content: center; align-items: center; font-size: 16px; margin-bottom: 16px; }
+  .bug-card-title { font-family: 'Orbitron'; font-size: 13px; font-weight: 800; color: var(--text-main); margin-bottom: 8px; }
+  .bug-card-tag { display: inline-block; padding: 4px 10px; border: 1.5px solid #94a3b8; border-radius: 8px; font-size: 11px; font-weight: 600; color: var(--text-muted); background: var(--bg-card); width: fit-content; }
+  .bug-option-card.selected .bug-card-tag { border-color: var(--primary); color: var(--primary); }
+
+  .bug-target-box { background: #141722; border: 2.5px solid var(--primary); border-radius: 14px; padding: 14px 16px; display: flex; align-items: center; gap: 12px; box-shadow: 0 4px 0 var(--primary); }
+  .bug-target-box i { color: #3b82f6; font-size: 18px; }
+  .bug-target-box input { background: transparent; border: none; outline: none; color: #ffffff; font-size: 14px; font-family: 'Orbitron'; width: 100%; letter-spacing: 1px; user-select: text; }
+  .bug-target-box input::placeholder { color: #64748b; }
+
+  .sender-header-right { display: flex; align-items: center; gap: 8px; }
+  .btn-refresh-sender { width: 36px; height: 36px; border-radius: 10px; border: 2px solid var(--primary); background: var(--bg-card); color: var(--primary); display: flex; justify-content: center; align-items: center; cursor: pointer; font-size: 14px; }
+  .badge-online { background: #dc2626; color: white; font-size: 11px; font-weight: 700; padding: 7px 12px; border-radius: 10px; }
+  .sender-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .sender-card { border-radius: 16px; padding: 18px 12px; text-align: center; position: relative; cursor: pointer; border: 2.5px solid #cbd5e1; background: var(--bg-body); color: var(--text-main); transition: all 0.2s; }
+  .sender-card.active-sender { background: #16a34a; border-color: #15803d; color: white; box-shadow: 0 4px 0 #14532d; }
+  .sender-card i.main-ico { font-size: 20px; margin-bottom: 8px; display: block; }
+  .sender-card h4 { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+  .sender-card p { font-size: 11px; opacity: 0.9; font-weight: 600; }
+  .sender-status-badge { position: absolute; top: 10px; right: 10px; width: 22px; height: 22px; border-radius: 50%; background: #f59e0b; color: white; font-size: 11px; display: flex; justify-content: center; align-items: center; }
+  .sender-lock-icon { position: absolute; top: 10px; right: 12px; color: #ef4444; font-size: 14px; }
+
+  /* BUG COUNTDOWN & DELIVERY STATUS BOX */
+  .bug-status-panel { display: none; background: var(--bg-card); border: 3px solid var(--primary); border-radius: 18px; padding: 18px; margin-top: 16px; text-align: center; box-shadow: 0 5px 0 var(--primary); }
+  .bug-status-panel.active { display: block; animation: fadeIn 0.25s ease; }
+  .bug-count-number { font-family: 'Orbitron'; font-size: 36px; font-weight: 900; color: var(--primary); margin: 8px 0; }
+  .bug-progress-track { width: 100%; height: 10px; background: var(--bg-body); border-radius: 10px; overflow: hidden; border: 1.5px solid var(--primary); margin: 10px 0 12px; }
+  .bug-progress-fill { height: 100%; width: 0%; background: var(--primary); transition: width 0.3s ease; }
+  .bug-status-msg { font-size: 13px; font-weight: 700; color: var(--text-main); line-height: 1.5; }
+
+  /* BUG GRUP */
+  .group-container { padding: 20px; }
+  .group-card { background: var(--bg-card); border: 3px solid var(--primary); border-radius: 22px; padding: 22px 18px; box-shadow: 0 5px 0 var(--primary); margin-bottom: 20px; }
+  .group-input { width: 100%; padding: 16px 15px; font-size: 15px; border: 2.5px solid var(--primary); border-radius: 12px; background: var(--bg-body); color: var(--text-main); margin-bottom: 16px; outline: none; user-select: text; }
+  .group-status-alert { display: none; padding: 12px 15px; background: #dcfce7; border: 2px solid #16a34a; border-radius: 12px; color: #15803d; font-weight: 700; font-size: 13px; margin-bottom: 16px; text-align: center; }
+  .group-menu-wrap { display: none; margin-top: 15px; }
+  .group-menu-wrap.active { display: block; animation: fadeIn 0.3s ease; }
+  .group-menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px; margin-bottom: 18px; }
+  .group-menu-item { background: var(--bg-body); border: 2.5px solid #cbd5e1; border-radius: 14px; padding: 14px 10px; text-align: center; cursor: pointer; transition: all 0.2s; color: var(--text-main); }
+  .group-menu-item.selected { border-color: var(--primary); background: var(--bg-card); box-shadow: 0 4px 10px rgba(20,71,230,0.15); }
+  .group-menu-item h4 { font-family: 'Orbitron'; font-size: 12px; font-weight: 700; margin-bottom: 4px; }
+  .group-menu-item p { font-size: 10px; opacity: 0.8; }
+  .vip-badge-tag { background: #f59e0b; color: white; font-size: 9px; font-family: 'Orbitron'; font-weight: bold; padding: 2px 6px; border-radius: 6px; margin-left: 4px; }
+
+  /* OWNER PROFILE CARD DI INFO SCREEN */
+  .owner-profile-card { background: var(--bg-card); border: 3px solid var(--primary); border-radius: 22px; padding: 22px 18px; margin-bottom: 22px; text-align: center; box-shadow: 0 5px 0 var(--primary); position: relative; }
+  .owner-badge-top { display: inline-flex; align-items: center; gap: 6px; background: var(--primary); color: white; font-family: 'Orbitron'; font-size: 10px; font-weight: 700; padding: 5px 14px; border-radius: 20px; margin-bottom: 14px; letter-spacing: 1px; }
+  .owner-avatar-wrap { width: 96px; height: 96px; border-radius: 50%; margin: 0 auto 12px; border: 3.5px solid var(--primary); padding: 3px; background: var(--bg-body); box-shadow: 0 6px 15px rgba(20, 71, 230, 0.25); }
+  .owner-avatar-wrap img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
+  .owner-name-display { font-family: 'Orbitron'; font-size: 18px; font-weight: 900; color: var(--text-main); margin-bottom: 4px; display: flex; align-items: center; justify-content: center; gap: 6px; }
+  .owner-role-sub { font-size: 12px; font-weight: 600; color: var(--text-muted); }
+
+  /* TOOLS */
+  .tools-container { padding: 20px; }
+  .rat-panel { background: linear-gradient(135deg, #1447e6, #0a1128); border-radius: 20px; padding: 20px; color: white; margin-bottom: 20px; position: relative; overflow: hidden; cursor: pointer; }
+  .rat-panel h3 { font-family: 'Orbitron'; font-size: 20px; margin-bottom: 5px; }
+  .rat-panel p { font-size: 12px; opacity: 0.8; }
+  .tools-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
+  .tool-item { background: var(--bg-card); border: 3px solid var(--primary); border-radius: 15px; padding: 15px 5px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; box-shadow: 0 4px 0 var(--primary); cursor: pointer; }
+  .tool-icon { width: 50px; height: 50px; border-radius: 50%; background: #e0e7ff; color: var(--primary); display: flex; justify-content: center; align-items: center; font-size: 20px; margin-bottom: 10px; }
+  .tool-icon.ig-style { background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); color: white; }
+  .tool-icon.yt-style { background: #ff0000; color: white; }
+  .tool-icon.tt-style { background: #000000; color: white; }
+  .tool-name { font-size: 11px; font-weight: 700; color: var(--text-main); line-height: 1.2; }
+
+  /* TOOL WORKSPACE */
+  #tool-workspace-screen { padding-bottom: 115px; }
+  .workspace-header { display: flex; align-items: center; gap: 15px; padding: 20px; background: var(--bg-card); border-bottom: 2px solid var(--primary); }
+  .btn-back { background: none; border: none; font-size: 20px; color: var(--primary); cursor: pointer; }
+  .workspace-header h2 { font-family: 'Orbitron'; font-size: 18px; color: var(--text-main); }
+  .workspace-content { padding: 20px; }
+  .tool-badge-platform { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 700; color: white; margin-bottom: 14px; }
+  .input-tool { width: 100%; padding: 16px 15px; border-radius: 12px; border: 2.5px solid var(--primary); background: var(--bg-card); color: var(--text-main); margin-bottom: 15px; font-size: 15px; user-select: text; outline: none; }
+  .tool-options-wrap { display: none; gap: 10px; margin-bottom: 15px; }
+  .tool-options-wrap.active { display: flex; }
+  .tool-opt-btn { flex: 1; padding: 10px; border-radius: 10px; border: 2px solid var(--primary); background: var(--bg-card); color: var(--text-main); font-size: 12px; font-weight: 700; cursor: pointer; text-align: center; }
+  .tool-opt-btn.selected { background: var(--primary); color: white; }
+  .btn-process { background: var(--primary); color: white; width: 100%; padding: 16px; border-radius: 12px; border: none; font-weight: bold; font-size: 15px; font-family: 'Orbitron'; cursor: pointer; }
+  .result-box { background: var(--bg-card); border: 2.5px solid var(--primary); padding: 18px; border-radius: 16px; margin-top: 20px; text-align: center; display: none; box-shadow: 0 5px 0 var(--primary); }
+  .result-box.active { display: block; }
+  .result-video-player { width: 100%; max-height: 360px; border-radius: 12px; background: #000; margin-bottom: 12px; display: none; }
+  .result-box img { width: 100%; border-radius: 12px; margin-bottom: 12px; display: none; }
+  .loading-spinner { display: none; text-align: center; margin-top: 20px; color: var(--primary); font-weight: bold; }
+  .loading-spinner i { font-size: 30px; margin-bottom: 10px; }
+
+  /* REAL MINI GAMES STYLES */
+  .game-container { display: none; background: var(--bg-card); border: 3px solid var(--primary); border-radius: 20px; padding: 18px; margin-top: 15px; box-shadow: 0 5px 0 var(--primary); text-align: center; }
+  .game-container.active { display: block; animation: fadeIn 0.3s ease; }
+  .game-box-inner { background: var(--bg-body); border: 2px solid #cbd5e1; border-radius: 14px; padding: 16px; margin: 12px 0; }
+  
+  /* Chess Board */
+  .chess-board { display: grid; grid-template-columns: repeat(8, 1fr); width: 280px; height: 280px; margin: 10px auto; border: 3px solid var(--primary); border-radius: 8px; overflow: hidden; }
+  .chess-cell { display: flex; justify-content: center; align-items: center; font-size: 20px; cursor: pointer; font-weight: bold; }
+  .chess-light { background: #f0d9b5; color: #000; }
+  .chess-dark { background: #b58863; color: #fff; }
+  .chess-cell.selected { background: #7b61ff !important; }
+
+  /* UNO Game */
+  .uno-card-display { display: flex; justify-content: center; gap: 10px; margin: 15px 0; flex-wrap: wrap; }
+  .uno-card { width: 60px; height: 85px; border-radius: 8px; display: flex; flex-direction: column; justify-content: space-between; padding: 6px; font-weight: bold; font-family: 'Orbitron'; font-size: 14px; cursor: pointer; box-shadow: 0 3px 6px rgba(0,0,0,0.2); border: 2px solid #fff; }
+  .uno-red { background: #ef4444; color: white; }
+  .uno-blue { background: #1447e6; color: white; }
+  .uno-green { background: #16a34a; color: white; }
+  .uno-yellow { background: #f59e0b; color: white; }
+
+  /* Memory Match Game */
+  .memory-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; max-width: 280px; margin: 10px auto; }
+  .memory-tile { height: 55px; background: var(--primary); color: white; border-radius: 8px; display: flex; justify-content: center; align-items: center; font-size: 20px; cursor: pointer; font-family: 'Orbitron'; font-weight: bold; }
+  .memory-tile.revealed { background: var(--bg-card); color: var(--text-main); border: 2px solid var(--primary); }
+
+  /* ADMIN BUG LOGS DASHBOARD */
+  .admin-log-card { background: var(--bg-card); border-radius: 14px; padding: 14px; margin-bottom: 12px; border-left: 4px solid var(--danger); box-shadow: 0 3px 8px rgba(0,0,0,0.08); font-size: 13px; }
+  .admin-log-card h4 { font-family: 'Orbitron'; font-size: 13px; color: var(--text-main); margin-bottom: 4px; display: flex; justify-content: space-between; }
+  .admin-log-card p { font-size: 12px; color: var(--text-muted); font-family: monospace; margin-bottom: 8px; }
+
+  /* BOTTOM NAV & ADMIN & CHAT */
+  .bottom-nav { position: fixed; bottom: 18px; left: 18px; right: 18px; background: var(--bg-card); height: 70px; border-radius: 35px; border: 3px solid var(--primary); display: flex; justify-content: space-around; align-items: center; z-index: 99; box-shadow: 0 8px 20px rgba(0,0,0,0.2); }
+  .nav-item { display: flex; flex-direction: column; align-items: center; color: var(--text-muted); font-size: 10px; font-weight: 700; text-decoration: none; width: 60px; }
+  .nav-item i { font-size: 20px; margin-bottom: 5px; }
+  .nav-item.active { color: var(--primary); }
+  .nav-float { position: absolute; top: -25px; left: 50%; transform: translateX(-50%); width: 65px; height: 65px; background: var(--primary); border-radius: 50%; display: flex; flex-direction: column; justify-content: center; align-items: center; color: white; border: 4px solid var(--bg-card); box-shadow: 0 5px 15px rgba(20,71,230,0.4); cursor: pointer; }
+  .nav-float i { font-size: 24px; }
+
+  .admin-header { background: #0a1128; color: white; padding: 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid var(--danger); }
+  .admin-content { padding: 20px; }
+  .admin-card { background: var(--bg-card); border-radius: 15px; padding: 15px; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); border-left: 4px solid var(--primary); }
+  .admin-card-info h4 { font-size: 14px; color: var(--text-main); margin-bottom: 4px; }
+  .admin-card-info p { font-size: 12px; color: var(--text-muted); font-family: monospace; margin-bottom: 10px; }
+  .admin-btns { display: flex; gap: 10px; }
+  .btn-admin { padding: 8px 12px; border-radius: 8px; font-size: 11px; font-weight: bold; border: none; color: white; cursor: pointer; }
+  .btn-ban { background: var(--danger); }
+  .btn-time { background: #f59e0b; }
+  .btn-scare { background: #8b5cf6; }
+  .settings-card { background: var(--bg-card); padding: 16px; border-radius: 15px; margin-bottom: 20px; border: 2px dashed var(--primary); }
+  .admin-input-field { width: 100%; padding: 10px 12px; border-radius: 8px; border: 1.5px solid var(--primary); background: var(--bg-body); color: var(--text-main); font-size: 13px; margin-top: 6px; margin-bottom: 8px; outline: none; user-select: text; }
+  .file-input { display: none; }
+  .btn-upload { background: var(--primary); color: white; padding: 10px; border-radius: 8px; display: block; text-align: center; font-size: 12px; font-weight: 600; margin-top: 8px; cursor: pointer; border: none; width: 100%; }
+
+  .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 200; justify-content: center; align-items: center; padding: 20px; backdrop-filter: blur(5px); }
+  .modal.active { display: flex; }
+  .modal-content { background: var(--bg-card); border-radius: 22px; padding: 22px; width: 100%; max-width: 370px; text-align: center; border: 3px solid var(--primary); max-height: 85vh; overflow-y: auto; }
+  .price-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 15px; border: 2px solid var(--primary); border-radius: 10px; margin-bottom: 10px; font-size: 14px; font-weight: 700; color: var(--text-main); background: var(--bg-body); cursor: pointer; }
+  
+  .chat-btn { position: fixed; bottom: 100px; right: 20px; background: var(--success); color: white; width: 50px; height: 50px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 24px; box-shadow: 0 4px 15px rgba(0,210,106,0.4); z-index: 100; cursor: pointer; }
+  .chat-box { position: fixed; bottom: 160px; right: 20px; width: 300px; height: 350px; background: var(--bg-card); border-radius: 15px; border: 2px solid var(--primary); display: none; flex-direction: column; z-index: 101; overflow: hidden; }
+  .chat-box.active { display: flex; }
+  .chat-header { background: var(--primary); color: white; padding: 10px 15px; font-weight: bold; font-size: 14px; display: flex; justify-content: space-between; }
+  .chat-messages { flex: 1; padding: 10px; overflow-y: auto; font-size: 12px; display: flex; flex-direction: column; gap: 8px; background: var(--bg-body); }
+  .msg { padding: 8px 12px; border-radius: 10px; max-width: 80%; word-wrap: break-word; }
+  .msg.admin { background: var(--primary); color: white; align-self: flex-start; }
+  .msg.player { background: var(--bg-card); border: 1px solid #ddd; color: var(--text-main); align-self: flex-end; }
+  .chat-input { display: flex; border-top: 1px solid #ddd; }
+  .chat-input input { flex: 1; border: none; padding: 10px; outline: none; font-size: 12px; background: var(--bg-card); color: var(--text-main); user-select: text; }
+  .chat-input button { background: var(--primary); color: white; border: none; padding: 0 15px; font-weight: bold; }
+</style>
+</head>
+<body data-theme="light">
+
+  <!-- BACKGROUND AUDIO -->
+  <audio id="global-bg-audio" loop></audio>
+
+  <!-- INTRO -->
+  <div id="intro-screen" class="screen active" style="padding-bottom: 0;">
+    <video id="intro-video" autoplay muted playsinline src="https://www.w3schools.com/html/mov_bbb.mp4"></video>
+    <button class="btn-skip" onclick="skipIntro()">LEWATI <i class="fa-solid fa-forward"></i></button>
+  </div>
+
+  <!-- LOGIN -->
+  <div id="login-screen" class="screen">
+    <div style="margin-top: 40px;">
+      <h1 style="color: white; font-family: 'Orbitron'; text-align: center; font-size: 28px; letter-spacing: 2px; text-shadow: 0 0 10px rgba(0,0,0,0.8);">UCHIHA CRASHER</h1>
+    </div>
+    <div class="login-card">
+      <h2>Selamat datang</h2>
+      <p>Masukkan akun premium Anda</p>
+      <div class="input-group">
+        <i class="fa-solid fa-user"></i>
+        <input type="text" id="login-user" placeholder="Username">
+      </div>
+      <div class="input-group">
+        <i class="fa-solid fa-lock"></i>
+        <input type="password" id="login-pass" placeholder="Password">
+      </div>
+      <button class="btn-primary" onclick="doLogin()">MASUK <i class="fa-solid fa-arrow-right"></i></button>
+      <button class="btn-outline" onclick="openModal('price-modal')"><i class="fa-solid fa-cart-shopping"></i> BELI AKUN</button>
+      <a href="#" style="display:block; margin-top:15px; font-size:12px; color:var(--primary); font-weight:bold;" onclick="openModal('register-modal')">Belum punya akun? Daftar</a>
+    </div>
+  </div>
+
+  <!-- ADMIN -->
+  <div id="admin-screen" class="screen">
+    <div class="admin-header">
+      <h1><i class="fa-solid fa-shield-halved"></i> ADMIN PANEL</h1>
+      <button class="btn-admin btn-ban" onclick="logout()">LOGOUT</button>
+    </div>
+    <div class="admin-content">
+      
+      <!-- LOG PENGIRIMAN BUG (REALTIME FIREBASE) -->
+      <div class="settings-card" style="border-color: var(--danger);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+          <h3 style="font-size: 14px; color: var(--danger); font-family: 'Orbitron';"><i class="fa-solid fa-bell"></i> Antrean Bug Player (Live Cloud)</h3>
+          <button class="btn-admin btn-ban" onclick="clearAllBugLogs()" style="padding: 5px 10px; font-size: 10px;">Hapus Semua Log</button>
+        </div>
+        <div id="admin-bug-logs-container">
+          <p style="font-size: 12px; color: var(--text-muted);">Memuat antrean bug dari cloud...</p>
+        </div>
+      </div>
+
+      <!-- PENGATURAN MUSIK GLOBAL -->
+      <div class="settings-card">
+        <h3 style="font-size: 14px; margin-bottom: 10px; color: var(--primary); font-family: 'Orbitron';"><i class="fa-solid fa-music"></i> Pengaturan Musik Global</h3>
+        <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 10px;">Unggah berkas audio (MP3/WAV) untuk disiarkan ke seluruh player aplikasi.</p>
+        <input type="file" id="upload-audio-file" class="file-input" accept="audio/*" onchange="handleAudioUpload(event)">
+        <label for="upload-audio-file" class="btn-upload"><i class="fa-solid fa-file-audio"></i> Pilih Berkas Audio dari HP</label>
+        <div style="display: flex; gap: 10px; margin-top: 10px;">
+          <button class="btn-upload" style="background: var(--success); flex: 1; margin-top:0;" onclick="toggleGlobalMusic()"><i class="fa-solid fa-play" id="audio-play-icon"></i> <span id="audio-play-text">Putar Musik</span></button>
+          <button class="btn-upload" style="background: var(--danger); flex: 1; margin-top:0;" onclick="resetGlobalMusic()"><i class="fa-solid fa-trash"></i> Hapus Musik</button>
+        </div>
+      </div>
+
+      <!-- BANNER FOTO BERANDA -->
+      <div class="settings-card">
+        <h3 style="font-size: 14px; margin-bottom: 10px; color: var(--primary); font-family: 'Orbitron';"><i class="fa-solid fa-image"></i> Banner Foto Beranda</h3>
+        <div style="margin-bottom: 10px;">
+          <img id="admin-banner-preview" src="https://images.unsplash.com/photo-1578632767115-351597cf2477?q=80&w=400&auto=format&fit=crop" style="width: 100%; height: 90px; border-radius: 10px; object-fit: cover; border: 2px solid var(--primary);">
+        </div>
+        <input type="file" id="upload-home-banner" class="file-input" accept="image/*" onchange="handleHomeBannerUpload(event)">
+        <label for="upload-home-banner" class="btn-upload"><i class="fa-solid fa-camera"></i> Ganti Foto Banner Beranda</label>
+      </div>
+
+      <!-- PROFIL OWNER -->
+      <div class="settings-card">
+        <h3 style="font-size: 14px; margin-bottom: 10px; color: var(--primary); font-family: 'Orbitron';"><i class="fa-solid fa-crown"></i> Profil Owner</h3>
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+          <img id="admin-owner-preview" src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=300&auto=format&fit=crop" style="width: 55px; height: 55px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary);">
+          <div style="flex: 1;">
+            <label style="font-size: 11px; font-weight: bold; color: var(--text-main);">Nama Owner</label>
+            <input type="text" id="admin-owner-name-input" class="admin-input-field" placeholder="Nama owner...">
+          </div>
+        </div>
+        <button class="btn-upload" style="background: var(--success); margin-bottom: 10px;" onclick="saveOwnerName()"><i class="fa-solid fa-floppy-disk"></i> Simpan Nama Owner</button>
+        <input type="file" id="upload-owner-photo" class="file-input" accept="image/*" onchange="handleOwnerPhotoUpload(event)">
+        <label for="upload-owner-photo" class="btn-upload"><i class="fa-solid fa-camera"></i> Ganti Foto Owner</label>
+      </div>
+
+      <!-- BACKGROUND LOGIN & VIDEO INTRO -->
+      <div class="settings-card">
+        <h3 style="font-size: 14px; margin-bottom: 10px; color: var(--text-main);">Background Login & Video Intro</h3>
+        <input type="file" id="upload-bg" class="file-input" accept="image/*" onchange="handleBgUpload(event)">
+        <label for="upload-bg" class="btn-upload"><i class="fa-solid fa-image"></i> Ganti Background Login (Foto)</label>
+        
+        <input type="file" id="upload-video" class="file-input" accept="video/*" onchange="handleVideoUpload(event)">
+        <label for="upload-video" class="btn-upload" style="margin-top: 12px;"><i class="fa-solid fa-video"></i> Ganti Video Intro (MP4)</label>
+      </div>
+
+      <h3 style="margin-bottom: 15px; font-size: 16px; color: var(--text-main);">Daftar Player (Sinkron Firebase)</h3>
+      <div id="player-list"></div>
+    </div>
+  </div>
+
+  <!-- HOME -->
+  <div id="home-screen" class="screen">
+    <div class="top-header">
+      <div class="clock-box"><span id="live-time">00:00</span><span id="live-sec">00</span></div>
+      <i class="fa-solid fa-moon theme-toggle" onclick="toggleTheme()"></i>
+    </div>
+    <div class="home-content">
+      
+      <!-- AUDIO WAVEFORM WIDGET -->
+      <div class="music-player-widget">
+        <div class="waveform-container" id="waveform-box">
+          <div class="wave-bar"></div>
+          <div class="wave-bar"></div>
+          <div class="wave-bar"></div>
+          <div class="wave-bar"></div>
+          <div class="wave-bar"></div>
+          <div class="wave-bar"></div>
+          <div class="wave-bar"></div>
+          <div class="wave-bar"></div>
+          <div class="wave-bar"></div>
+          <div class="wave-bar"></div>
+          <div class="wave-bar"></div>
+          <div class="wave-bar"></div>
+        </div>
+        <button class="music-control-btn" id="home-music-toggle-btn" onclick="toggleGlobalMusic()"><i class="fa-solid fa-play" id="home-music-icon"></i></button>
+      </div>
+
+      <!-- BANNER FOTO BERANDA -->
+      <div class="home-banner-card" id="home-banner-card">
+        <div class="home-banner-content">
+          <div class="home-banner-title">UCHIHA CRASHER</div>
+          <div class="home-banner-copyright">© 2026 · All Rights Reserved</div>
+        </div>
+      </div>
+
+      <div class="app-title">UCHIHA CRASHER</div>
+      <div class="app-subtitle">GACOR · TERUPDATE · STABIL</div>
+      
+      <!-- MENU 3 KE BAWAH DI BERANDA -->
+      <div class="home-menu-stack">
+        <div class="home-stack-btn" onclick="nav('menu-bug-screen', document.querySelectorAll('.nav-item')[1])">
+          <span><i class="fa-solid fa-bug" style="color: var(--primary); margin-right: 10px;"></i> Bug WA</span>
+          <i class="fa-solid fa-chevron-right"></i>
+        </div>
+        <div class="home-stack-btn" onclick="nav('group-screen', document.querySelectorAll('.nav-item')[2])">
+          <span><i class="fa-solid fa-users" style="color: var(--primary); margin-right: 10px;"></i> Bug Grup</span>
+          <i class="fa-solid fa-chevron-right"></i>
+        </div>
+        <div class="home-stack-btn" onclick="nav('tools-screen', document.querySelectorAll('.nav-item')[4])">
+          <span><i class="fa-solid fa-wrench" style="color: var(--primary); margin-right: 10px;"></i> Tools & Games</span>
+          <i class="fa-solid fa-chevron-right"></i>
+        </div>
+      </div>
+
+      <div class="btn-grid">
+        <button class="menu-btn" style="color: var(--primary);"><i class="fa-solid fa-key"></i> AKTIF</button>
+        <button class="menu-btn" onclick="openModal('price-modal')"><i class="fa-solid fa-cart-shopping"></i> BELI</button>
+      </div>
+
+      <!-- WIDGET JADWAL SHOLAT REAL-TIME -->
+      <div class="prayer-widget">
+        <div class="prayer-header">
+          <div class="prayer-loc">
+            <div class="prayer-icon"><i class="fa-solid fa-mosque"></i></div>
+            <div>
+              <h4>JADWAL SHOLAT</h4>
+              <p id="prayer-city-label">Surabaya</p>
+            </div>
+          </div>
+          <button class="btn-city" onclick="openModal('city-modal')"><i class="fa-solid fa-circle-check"></i> GANTI</button>
+        </div>
+
+        <div class="prayer-next">
+          <div><i class="fa-solid fa-circle-dot" style="color: var(--primary); margin-right: 6px;"></i>Menuju <span id="next-prayer-name">Dzuhur</span> : <span id="next-prayer-time">11:16</span></div>
+          <div style="background: var(--bg-card); padding: 3px 10px; border-radius: 20px; border: 1.5px solid var(--primary); font-family: 'Orbitron'; font-size: 9px;">REAL-TIME</div>
+        </div>
+
+        <div class="prayer-cards">
+          <div class="prayer-card bg-subuh">
+            <i class="fa-solid fa-moon"></i><p>SUBUH</p><h3 id="time-subuh">04:15</h3>
+          </div>
+          <div class="prayer-card bg-dzuhur">
+            <i class="fa-solid fa-sun"></i><p>DZUHUR</p><h3 id="time-dzuhur">11:45</h3>
+          </div>
+          <div class="prayer-card bg-ashar">
+            <i class="fa-solid fa-cloud-sun"></i><p>ASHAR</p><h3 id="time-ashar">15:05</h3>
+          </div>
+          <div class="prayer-card bg-maghrib">
+            <i class="fa-solid fa-cloud-moon"></i><p>MAGHRIB</p><h3 id="time-maghrib">18:00</h3>
+          </div>
+          <div class="prayer-card bg-isya">
+            <i class="fa-solid fa-star"></i><p>ISYA</p><h3 id="time-isya">19:12</h3>
+          </div>
+        </div>
+      </div>
+
+      <!-- WIDGET HADITH OF THE DAY -->
+      <div class="hadith-widget" onclick="openHadithModal()">
+        <div class="hadith-top">
+          <div class="hadith-icon-circle"><i class="fa-solid fa-book-open"></i></div>
+          <div class="hadith-title-wrap">
+            <h4>HADITH OF THE DAY</h4>
+            <span id="home-hadith-sub">Sahih Muslim · Tap card to read full</span>
+          </div>
+        </div>
+
+        <div class="hadith-arabic-box">
+          <p class="hadith-arabic-text" lang="ar" id="home-hadith-arabic">إِنَّمَا الْأَعْمَالُ بِالنِّيَّاتِ، وَإِنَّمَا لِكُلِّ امْرِئٍ مَا نَوَى</p>
+        </div>
+
+        <div class="hadith-meaning-box" id="home-hadith-meaning">
+          Sesungguhnya setiap amalan tergantung pada niatnya.
+        </div>
+
+        <div class="hadith-footer">
+          <div class="hadith-badge">
+            <i class="fa-solid fa-file-lines"></i>
+            <span id="home-hadith-ref">Muslim #1</span>
+          </div>
+          <div class="hadith-badge" style="color: var(--text-main);">
+            <i class="fa-solid fa-hand-pointer" style="color: #eab308;"></i>
+            <span>Tap card</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- MENU BUG WA & MANAGE SENDER -->
+  <div id="menu-bug-screen" class="screen">
+    <div class="top-header">
+      <h2 style="font-family: 'Orbitron'; color: var(--primary); font-size: 18px;">MENU BUG</h2>
+      <div class="clock-box" style="padding: 5px 12px; font-size: 13px;" id="menu-timer">00:00:00</div>
+    </div>
+
+    <div class="bug-page-container">
+      <div class="bug-banner"></div>
+
+      <!-- Kartu MANAGE SENDER (BOT WA DENGAN FORMAT KODE 8 DIGIT) -->
+      <div class="bug-section-card" style="border-color: var(--success); box-shadow: 0 5px 0 var(--success);">
+        <div class="bug-sec-header">
+          <div class="bug-sec-title">
+            <div class="bug-sec-icon" style="background: var(--success);"><i class="fa-solid fa-robot"></i></div>
+            <h3 style="color: var(--success);">MANAGE SENDER (BOT)</h3>
+          </div>
+        </div>
+        <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 10px;">Masukkan nomor WhatsApp Anda untuk dijadikan Bot Sender:</p>
+        <div class="bug-target-box" style="border-color: var(--success); margin-bottom: 10px;">
+          <i class="fa-solid fa-phone" style="color: var(--success);"></i>
+          <input type="tel" id="bot-sender-number" placeholder="628xxxxxxxxxx (Nomor Bot)" onkeypress="handleBotSenderEnter(event)">
+        </div>
+        <button class="btn-primary" style="background: var(--success); box-shadow: 0 4px 0 #15803d;" onclick="generateBotPairingCode()"><i class="fa-solid fa-qrcode"></i> GENERATE KODE TAUTAN</button>
+        
+        <div id="pairing-code-result" style="display: none; margin-top: 15px; padding: 15px; background: var(--bg-body); border-radius: 14px; text-align: center; border: 1.5px dashed var(--success);">
+          <p style="font-size: 11px; font-weight: bold; color: var(--text-muted); margin-bottom: 8px;">UNTUK MENDAPATKAN KODE ANDA:</p>
+          <p style="font-size: 11px; color: var(--text-main); margin-bottom: 12px;">Buka WhatsApp di web atau di perangkat lain, lalu klik <b>Tautkan dengan nomor telepon</b>.</p>
+          
+          <!-- Kotak 8 digit persis seperti screenshot -->
+          <div id="whatsapp-8digit-box" style="display: flex; justify-content: center; align-items: center; gap: 6px; font-family: 'Orbitron'; font-size: 18px; font-weight: 900; color: var(--success); margin: 10px 0; overflow-x: auto;">
+            <!-- Diisi lewat JS -->
+          </div>
+          
+          <p style="font-size: 10px; color: var(--text-muted); margin-top: 10px;">Jangan pernah memasukkan kode jika Anda tidak memintanya.</p>
+        </div>
+      </div>
+
+      <!-- Kartu PILIH BUG -->
+      <div class="bug-section-card">
+        <div class="bug-sec-header">
+          <div class="bug-sec-title">
+            <div class="bug-sec-icon"><i class="fa-solid fa-bug"></i></div>
+            <h3>PILIH BUG</h3>
+          </div>
+          <div class="bug-counter-badge" id="bug-counter-badge">1/10</div>
+        </div>
+
+        <div class="bug-carousel" id="bug-carousel"></div>
+
+        <div class="bug-target-box">
+          <i class="fa-solid fa-mobile-screen"></i>
+          <input type="tel" id="bug-target-number" placeholder="628xxxxxxxxxx (Target)">
+        </div>
+      </div>
+
+      <!-- Kartu PILIH SENDER -->
+      <div class="bug-section-card">
+        <div class="bug-sec-header">
+          <div class="bug-sec-title">
+            <div class="bug-sec-icon"><i class="fa-solid fa-arrow-right-arrow-left"></i></div>
+            <h3>PILIH SENDER</h3>
+          </div>
+          <div class="sender-header-right">
+            <button class="btn-refresh-sender" onclick="refreshSenderStatus()" title="Refresh Sender"><i class="fa-solid fa-rotate-right" id="sender-refresh-icon"></i></button>
+            <div class="badge-online" id="sender-online-count">120 online</div>
+          </div>
+        </div>
+
+        <div class="sender-grid">
+          <div class="sender-card active-sender" id="sender-pribadi" onclick="selectSender('pribadi')">
+            <div class="sender-status-badge" id="sender-check-pribadi"><i class="fa-solid fa-check"></i></div>
+            <i class="fa-solid fa-user main-ico"></i>
+            <h4>Pribadi</h4>
+            <p>Sender Utama</p>
+          </div>
+          <div class="sender-card" id="sender-global" onclick="selectSender('global')">
+            <i class="fa-solid fa-lock sender-lock-icon" id="sender-lock-global" style="display:none;"></i>
+            <i class="fa-solid fa-globe main-ico" style="color: var(--text-main);"></i>
+            <h4>Global (VIP)</h4>
+            <p style="color: var(--primary);">120 Nokos Aktif</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tombol KIRIM BUG -->
+      <button class="btn-primary" id="btn-send-bug" onclick="executeSendBug()">
+        <i class="fa-solid fa-bug"></i> KIRIM BUG KE CLOUD ADMIN
+      </button>
+
+      <!-- Panel Hitungan Waktu -->
+      <div class="bug-status-panel" id="bug-status-panel">
+        <div style="font-family: 'Orbitron'; font-size: 12px; font-weight: 700; color: var(--text-muted);" id="bug-status-label">MENGIRIM PAYLOAD...</div>
+        <div class="bug-count-number" id="bug-count-number">1 / 10</div>
+        <div class="bug-progress-track">
+          <div class="bug-progress-fill" id="bug-progress-fill"></div>
+        </div>
+        <div class="bug-status-msg" id="bug-status-msg">Sedang mengirim notifikasi target ke Cloud Admin...</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- INFO (OWNER PROFILE + REGULATIONS + TOMBOL LOGOUT AMAN) -->
+  <div id="info-screen" class="screen">
+    <div class="top-header">
+      <h2 style="font-family: 'Orbitron'; color: var(--primary); font-size: 18px;">INFO & RULES</h2>
+    </div>
+    <div style="padding: 20px;">
+      
+      <!-- TOMBOL LOGOUT -->
+      <div style="background: var(--bg-card); border: 3px solid var(--danger); border-radius: 18px; padding: 18px; margin-bottom: 20px; text-align: center; box-shadow: 0 5px 0 var(--danger);">
+        <h3 style="font-family: 'Orbitron'; font-size: 14px; color: var(--danger); margin-bottom: 8px;"><i class="fa-solid fa-right-from-bracket"></i> KELUAR AKUN</h3>
+        <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 12px;">Ingin keluar dari sesi ini? Akun Anda tetap aman dan dapat digunakan untuk login kembali kapan saja.</p>
+        <button class="btn-primary" style="background: var(--danger); box-shadow: 0 4px 0 #b91c1c;" onclick="userLogoutFromInfo()"><i class="fa-solid fa-arrow-right-from-bracket"></i> LOGOUT SEKARANG</button>
+      </div>
+
+      <div class="owner-profile-card">
+        <div class="owner-badge-top"><i class="fa-solid fa-crown"></i> OWNER UCHIHA CRASHER</div>
+        <div class="owner-avatar-wrap">
+          <img id="info-owner-photo" src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=300&auto=format&fit=crop" alt="Foto Owner">
+        </div>
+        <div class="owner-name-display">
+          <span id="info-owner-name">UCHIHA OWNER</span>
+          <i class="fa-solid fa-circle-check" style="color: var(--primary); font-size: 16px;"></i>
+        </div>
+        <div class="owner-role-sub">Founder & Developer • Official Admin</div>
+      </div>
+
+      <h3 style="font-family: 'Orbitron'; font-size: 14px; color: var(--primary); margin-bottom: 12px; letter-spacing: 1px;"><i class="fa-solid fa-shield-halved"></i> ATURAN PENGGUNAAN</h3>
+
+      <div style="background: var(--bg-card); border: 3px solid var(--primary); border-radius: 15px; padding: 15px; margin-bottom: 15px; box-shadow: 0 4px 0 var(--primary);">
+        <div style="font-size: 14px; font-weight: 700; color: var(--text-main);">1. Larangan Barter Akun</div>
+      </div>
+      <div style="background: var(--bg-card); border: 3px solid var(--primary); border-radius: 15px; padding: 15px; margin-bottom: 15px; box-shadow: 0 4px 0 var(--primary);">
+        <div style="font-size: 14px; font-weight: 700; color: var(--text-main);">2. Larangan Membagikan Akun</div>
+      </div>
+      <div style="background: var(--bg-card); border: 3px solid var(--primary); border-radius: 15px; padding: 15px; margin-bottom: 15px; box-shadow: 0 4px 0 var(--primary);">
+        <div style="font-size: 14px; font-weight: 700; color: var(--text-main);">3. Larangan Menjual Akun</div>
+      </div>
+      <div style="background: var(--bg-card); border: 3px solid var(--primary); border-radius: 15px; padding: 15px; margin-bottom: 15px; box-shadow: 0 4px 0 var(--primary);">
+        <div style="font-size: 14px; font-weight: 700; color: var(--text-main);">4. Larangan Jual Durasi Ilegal</div>
+      </div>
+      <div style="background: var(--bg-card); border: 3px solid var(--primary); border-radius: 15px; padding: 15px; margin-bottom: 15px; box-shadow: 0 4px 0 var(--primary);">
+        <div style="font-size: 14px; font-weight: 700; color: var(--text-main);">5. Larangan Banting Harga</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOOLS SCREEN -->
+  <div id="tools-screen" class="screen">
+    <div class="top-header">
+      <h2 style="font-family: 'Orbitron'; color: var(--primary); font-size: 18px;">TOOLS & GAMES</h2>
+    </div>
+    <div class="tools-container">
+      <div class="rat-panel" onclick="openTool('Remote Device Panel')">
+        <div style="font-size: 10px; background: rgba(255,255,255,0.2); display: inline-block; padding: 4px 10px; border-radius: 10px; margin-bottom: 10px;">RAT CONTROL</div>
+        <h3>Remote Device Panel</h3>
+        <p>Kelola semua device target dari sini.</p>
+      </div>
+
+      <!-- MENU MINI GAMES BERKUALITAS (UNO, CATUR, MEMORY MATCH) -->
+      <h3 style="font-family: 'Orbitron'; font-size: 16px; margin-bottom: 15px; color: var(--text-main);">UCHIHA ARCADE (REAL GAMES)</h3>
+      <div class="tools-grid" style="margin-bottom: 20px;">
+        <div class="tool-item" onclick="openGame('uno')"><div class="tool-icon" style="background:#ef4444; color:white;"><i class="fa-solid fa-clone"></i></div><div class="tool-name">Mini UNO</div></div>
+        <div class="tool-item" onclick="openGame('chess')"><div class="tool-icon" style="background:#1447e6; color:white;"><i class="fa-solid fa-chess"></i></div><div class="tool-name">Mini Catur</div></div>
+        <div class="tool-item" onclick="openGame('memory')"><div class="tool-icon" style="background:#16a34a; color:white;"><i class="fa-solid fa-brain"></i></div><div class="tool-name">Memory Match</div></div>
+      </div>
+
+      <!-- GAME 1: MINI UNO -->
+      <div class="game-container" id="game-uno">
+        <div style="display:flex; justify-content:space-between; align-items:center;"><h3 style="font-family:'Orbitron'; font-size:14px; color:#ef4444;">Mini UNO Card Game</h3><button onclick="closeGames()" style="background:none;border:none;font-size:16px;cursor:pointer;">✕</button></div>
+        <div class="game-box-inner">
+          <p id="uno-status" style="font-size:12px; color:var(--text-muted); margin-bottom:10px;">Cocokkan kartu warna atau angka yang sama dengan kartu buangan!</p>
+          <div style="font-size:13px; font-weight:bold; margin-bottom:5px;">Kartu Buangan Saat Ini:</div>
+          <div id="uno-discard-pile" style="display:flex; justify-content:center; margin-bottom:15px;"></div>
+          <div style="font-size:13px; font-weight:bold; margin-bottom:5px;">Kartu Di Tangan Anda: (Tap untuk keluar)</div>
+          <div class="uno-card-display" id="uno-player-hand"></div>
+          <button class="btn-primary" style="background:#ef4444; box-shadow:0 4px 0 #b91c1c; margin-top:10px;" onclick="drawUnoCard()"><i class="fa-solid fa-plus"></i> Ambil Kartu Baru</button>
+        </div>
+      </div>
+
+      <!-- GAME 2: MINI CHESS -->
+      <div class="game-container" id="game-chess">
+        <div style="display:flex; justify-content:space-between; align-items:center;"><h3 style="font-family:'Orbitron'; font-size:14px; color:var(--primary);">Mini Chess (Catur Interaktif)</h3><button onclick="closeGames()" style="background:none;border:none;font-size:16px;cursor:pointer;">✕</button></div>
+        <div class="game-box-inner">
+          <p id="chess-status" style="font-size:12px; color:var(--text-muted);">Giliran Anda (Putih). Pilih bidak lalu pilih petak tujuan.</p>
+          <div class="chess-board" id="chess-board-container"></div>
+          <button class="btn-primary" style="margin-top:10px; padding:10px;" onclick="resetChessGame()"><i class="fa-solid fa-rotate-right"></i> Reset Papan Catur</button>
+        </div>
+      </div>
+
+      <!-- GAME 3: MEMORY MATCH -->
+      <div class="game-container" id="game-memory">
+        <div style="display:flex; justify-content:space-between; align-items:center;"><h3 style="font-family:'Orbitron'; font-size:14px; color:#16a34a;">Memory Match (Asah Otak)</h3><button onclick="closeGames()" style="background:none;border:none;font-size:16px;cursor:pointer;">✕</button></div>
+        <div class="game-box-inner">
+          <p id="memory-status" style="font-size:12px; color:var(--text-muted);">Temukan 4 pasang ikon yang sama!</p>
+          <div class="memory-grid" id="memory-grid"></div>
+          <button class="btn-primary" style="background:#16a34a; box-shadow:0 4px 0 #15803d; margin-top:10px;" onclick="initMemoryGame()"><i class="fa-solid fa-rotate-right"></i> Acak Ulang</button>
+        </div>
+      </div>
+
+      <h3 style="font-family: 'Orbitron'; font-size: 16px; margin: 15px 0; color: var(--text-main);">DOWNLOADER TOOLS</h3>
+      <div class="tools-grid">
+        <div class="tool-item" onclick="openTool('Spam NGL')"><div class="tool-icon"><i class="fa-solid fa-calendar-xmark"></i></div><div class="tool-name">Spam NGL</div></div>
+        <div class="tool-item" onclick="openTool('Nik Detail')"><div class="tool-icon"><i class="fa-solid fa-id-card"></i></div><div class="tool-name">Nik Detail</div></div>
+        <div class="tool-item" onclick="openTool('Domain OSINT')"><div class="tool-icon"><i class="fa-solid fa-globe"></i></div><div class="tool-name">Domain OSINT</div></div>
+        <div class="tool-item" onclick="openTool('Phone Lookup')"><div class="tool-icon"><i class="fa-solid fa-phone"></i></div><div class="tool-name">Phone Lookup</div></div>
+        <div class="tool-item" onclick="openTool('Email OSINT')"><div class="tool-icon"><i class="fa-solid fa-at"></i></div><div class="tool-name">Email OSINT</div></div>
+        <div class="tool-item" onclick="openTool('TikTok DL')"><div class="tool-icon tt-style"><i class="fa-brands fa-tiktok"></i></div><div class="tool-name">TikTok DL</div></div>
+        <div class="tool-item" onclick="openTool('IG Downloader')"><div class="tool-icon ig-style"><i class="fa-brands fa-instagram"></i></div><div class="tool-name">IG Downloader</div></div>
+        <div class="tool-item" onclick="openTool('YouTube DL')"><div class="tool-icon yt-style"><i class="fa-brands fa-youtube"></i></div><div class="tool-name">YouTube DL</div></div>
+        <div class="tool-item" onclick="openTool('SnapVideo DL')"><div class="tool-icon"><i class="fa-solid fa-video"></i></div><div class="tool-name">SnapVideo DL</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOOL WORKSPACE -->
+  <div id="tool-workspace-screen" class="screen">
+    <div class="workspace-header">
+      <button class="btn-back" onclick="stopWorkspaceMedia(); nav('tools-screen');"><i class="fa-solid fa-arrow-left"></i></button>
+      <h2 id="workspace-title">Tool Name</h2>
+    </div>
+    <div class="workspace-content">
+      <div id="workspace-badge" class="tool-badge-platform" style="display: none;"></div>
+      <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 12px;" id="workspace-desc">Masukkan link atau data target di bawah ini.</p>
+      
+      <input type="url" id="tool-input" class="input-tool" placeholder="Paste link / masukkan data...">
+
+      <div class="tool-options-wrap" id="tool-options-wrap">
+        <div class="tool-opt-btn selected" id="opt-1" onclick="selectToolOpt(this)">Option 1</div>
+        <div class="tool-opt-btn" id="opt-2" onclick="selectToolOpt(this)">Option 2</div>
+      </div>
+      
+      <button class="btn-process" onclick="processTool()" id="btn-process"><i class="fa-solid fa-bolt"></i> PROSES SEKARANG</button>
+
+      <div class="loading-spinner" id="loading-spinner">
+        <i class="fa-solid fa-spinner fa-spin"></i>
+        <p id="loading-text">Mengambil video asli dari server...</p>
+      </div>
+
+      <div class="result-box" id="result-box">
+        <h3 style="color: var(--success); margin-bottom: 10px;" id="result-title">Video Asli Ditemukan!</h3>
+        <video id="result-video" class="result-video-player" controls playsinline></video>
+        <img id="result-img" alt="Preview Media">
+        <p style="font-size: 13px; font-weight: 600; color: var(--text-main); margin-bottom: 6px;" id="result-video-caption"></p>
+        <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 15px;" id="result-text"></p>
+        <a href="#" id="btn-download-real" target="_blank" download="media.mp4" style="display: block; background: var(--success); color: white; padding: 14px; border-radius: 12px; text-decoration: none; font-weight: bold; font-family: 'Orbitron'; font-size: 13px;">
+          <i class="fa-solid fa-download"></i> DOWNLOAD VIDEO ASLI
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- GROUP -->
+  <div id="group-screen" class="screen">
+    <div class="top-header">
+      <h2 style="font-family: 'Orbitron'; color: var(--primary); font-size: 18px;">BUG GROUPS</h2>
+    </div>
+    <div class="group-container">
+      <div class="group-card">
+        <label style="font-size: 14px; font-weight: 700; color: var(--primary); display: block; margin-bottom: 12px;"><i class="fa-solid fa-link"></i> Link Grup WhatsApp</label>
+        <input type="url" id="wa-group-link" class="group-input" placeholder="https://chat.whatsapp.com/XXXXX">
+        <button class="btn-primary" onclick="searchGroupWhatsApp()"><i class="fa-solid fa-magnifying-glass"></i> CARI GRUP</button>
+      </div>
+
+      <div class="group-status-alert" id="group-status-alert">
+        <i class="fa-solid fa-circle-check"></i> Grup Ditemukan! Silakan pilih menu serangan di bawah.
+      </div>
+
+      <div class="group-menu-wrap" id="group-menu-wrap">
+        <h3 style="font-family: 'Orbitron'; font-size: 15px; color: var(--text-main); margin-bottom: 10px;">PILIH MENU SERANGAN</h3>
+        <div class="group-menu-grid">
+          <div class="group-menu-item selected" id="gmenu-0" onclick="selectGroupMenu(0, 'Delay Grup')">
+            <h4>Delay Grup</h4>
+            <p>Free / VIP</p>
+          </div>
+          <div class="group-menu-item" id="gmenu-1" onclick="selectGroupMenu(1, 'Delay Cinta Grup')">
+            <h4>Delay Cinta</h4>
+            <p>Free / VIP</p>
+          </div>
+          <div class="group-menu-item" id="gmenu-2" onclick="selectGroupMenu(2, 'Lock Chat')">
+            <h4>Lock Chat</h4>
+            <p>Free / VIP</p>
+          </div>
+          <div class="group-menu-item" id="gmenu-3" onclick="selectGroupMenu(3, 'Spam Grup')">
+            <h4>Spam Grup</h4>
+            <p>Free / VIP</p>
+          </div>
+          <div class="group-menu-item" id="menu-item-ban-gb" onclick="selectGroupMenu(4, 'Ban GB')" style="grid-column: span 2; border-color: #f59e0b; background: rgba(245,158,11,0.08);">
+            <h4>BAN GB <span class="vip-badge-tag">VIP ONLY</span></h4>
+            <p>Menu Eksklusif Member VIP</p>
+          </div>
+        </div>
+
+        <button class="btn-primary" id="btn-send-group-bug" onclick="executeSendGroupBug()">
+          <i class="fa-solid fa-bug"></i> KIRIM BUG GRUP
+        </button>
+
+        <div class="bug-status-panel" id="group-bug-status-panel">
+          <div style="font-family: 'Orbitron'; font-size: 12px; font-weight: 700; color: var(--text-muted);" id="group-bug-status-label">MENGIRIM PAYLOAD GRUP...</div>
+          <div class="bug-count-number" id="group-bug-count-number">1 / 10</div>
+          <div class="bug-progress-track">
+            <div class="bug-progress-fill" id="group-bug-progress-fill"></div>
+          </div>
+          <div class="bug-status-msg" id="group-bug-status-msg">Sedang memproses pengiriman ke grup target...</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BOTTOM NAV -->
+  <div class="bottom-nav" id="main-nav" style="display: none;">
+    <a href="#" class="nav-item active" onclick="nav('home-screen', this)"><i class="fa-solid fa-house"></i>Home</a>
+    <a href="#" class="nav-item" onclick="nav('menu-bug-screen', this)"><i class="fa-solid fa-comment-dots"></i>Menu Bug</a>
+    <div class="nav-float" onclick="nav('group-screen', document.querySelectorAll('.nav-item')[2])">
+      <i class="fa-solid fa-users"></i>
+    </div>
+    <a href="#" class="nav-item" onclick="nav('info-screen', this)"><i class="fa-solid fa-circle-info"></i>Info</a>
+    <a href="#" class="nav-item" onclick="nav('tools-screen', this)"><i class="fa-solid fa-wrench"></i>Tools</a>
+  </div>
+
+  <!-- MODAL HADITH LENGKAP -->
+  <div class="modal" id="hadith-modal">
+    <div class="modal-content" style="text-align: left;">
+      <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1.5px solid rgba(20, 71, 230, 0.2); padding-bottom: 12px; margin-bottom: 15px;">
+        <div class="hadith-top" style="margin-bottom: 0;">
+          <div class="hadith-icon-circle"><i class="fa-solid fa-book-open"></i></div>
+          <div class="hadith-title-wrap">
+            <h4>HADITH LENGKAP</h4>
+            <span id="modal-hadith-narrator" style="color: var(--primary); font-weight: 600;">Sahih Muslim</span>
+          </div>
+        </div>
+        <button onclick="closeModal('hadith-modal')" style="width: 34px; height: 34px; border-radius: 50%; border: 1.5px solid #94a3b8; background: transparent; color: var(--text-main); cursor: pointer;"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <div class="hadith-arabic-box">
+        <p class="hadith-arabic-text" lang="ar" id="modal-hadith-arabic">إِنَّمَا الْأَعْمَالُ بِالنِّيَّاتِ، وَإِنَّمَا لِكُلِّ امْرِئٍ مَا نَوَى</p>
+      </div>
+
+      <div style="font-family: 'Orbitron'; font-size: 11px; font-weight: 700; color: var(--text-main); border-left: 4px solid var(--primary); padding-left: 8px; margin-bottom: 8px; letter-spacing: 1px;">ARTINYA:</div>
+      <div class="hadith-meaning-box" id="modal-hadith-meaning">
+        Sesungguhnya setiap amalan tergantung pada niatnya.
+      </div>
+
+      <div class="hadith-footer">
+        <div class="hadith-badge">
+          <i class="fa-solid fa-file-lines"></i>
+          <span id="modal-hadith-ref">Muslim #1</span>
+        </div>
+        <button onclick="nextHadith()" style="background: var(--primary); color: white; border: none; padding: 8px 14px; border-radius: 10px; font-size: 11px; font-weight: 700; cursor: pointer;"><i class="fa-solid fa-rotate"></i> Hadith Lain</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL HARGA -->
+  <div class="modal" id="price-modal">
+    <div class="modal-content">
+      <h2 style="color: var(--primary); margin-bottom: 12px; font-family: 'Orbitron'; font-size: 18px;">LIST HARGA AKUN VIP</h2>
+      <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 15px;">Pilih durasi role dan hubungi Admin via Telegram untuk aktivasi instan.</p>
+      
+      <div class="price-item"><span>2 Hari</span><span>Rp 2.000</span></div>
+      <div class="price-item"><span>1 Minggu</span><span>Rp 5.000</span></div>
+      <div class="price-item"><span>1 Bulan</span><span>Rp 15.000</span></div>
+      <div class="price-item"><span>Permanen</span><span>Rp 40.000</span></div>
+      <div class="price-item"><span>Reseller / VIP</span><span>Rp 50.000</span></div>
+
+      <a href="https://t.me/Lance383k" target="_blank" class="btn-telegram">
+        <i class="fa-brands fa-telegram fa-lg"></i> BELI VIA TELEGRAM
+      </a>
+
+      <button style="background: none; border: none; margin-top: 15px; color: #999; font-weight: bold; cursor: pointer;" onclick="closeModal('price-modal')">TUTUP</button>
+    </div>
+  </div>
+
+  <!-- MODAL CITY -->
+  <div class="modal" id="city-modal">
+    <div class="modal-content">
+      <h2 style="color: var(--primary); margin-bottom: 15px; font-family: 'Orbitron';">PILIH KOTA</h2>
+      <div class="price-item" onclick="setCity('Surabaya', '04:15', '11:45', '15:05', '18:00', '19:12')">Surabaya</div>
+      <div class="price-item" onclick="setCity('Jakarta', '04:35', '11:55', '15:15', '18:05', '19:18')">Jakarta</div>
+      <div class="price-item" onclick="setCity('Bandung', '04:28', '11:48', '15:08', '17:58', '19:11')">Bandung</div>
+      <div class="price-item" onclick="setCity('Medan', '05:02', '12:22', '15:42', '18:32', '19:45')">Medan</div>
+      <button style="background: none; border: none; margin-top: 15px; color: #999; font-weight: bold; cursor: pointer;" onclick="closeModal('city-modal')">TUTUP</button>
+    </div>
+  </div>
+
+  <!-- MODAL DAFTAR -->
+  <div class="modal" id="register-modal">
+    <div class="modal-content">
+      <h2 style="color: var(--primary); margin-bottom: 15px; font-family: 'Orbitron';">DAFTAR AKUN</h2>
+      <input type="text" id="reg-user" placeholder="Username Baru" style="width: 100%; padding: 12px; margin-bottom: 10px; border: 2px solid var(--primary); border-radius: 8px; background: var(--bg-body); color: var(--text-main);">
+      <input type="password" id="reg-pass" placeholder="Password" style="width: 100%; padding: 12px; margin-bottom: 20px; border: 2px solid var(--primary); border-radius: 8px; background: var(--bg-body); color: var(--text-main);">
+      <button class="btn-primary" onclick="doRegister()">DAFTAR SEKARANG</button>
+      <button style="background: none; border: none; margin-top: 15px; color: #999; cursor: pointer;" onclick="closeModal('register-modal')">Batal</button>
+    </div>
+  </div>
+
+  <!-- CHAT WIDGET -->
+  <div class="chat-btn" id="chat-btn" onclick="toggleChat()" style="display: none;"><i class="fa-solid fa-comments"></i></div>
+  <div class="chat-box" id="chat-box">
+    <div class="chat-header"><span>Global Chat</span><span style="cursor:pointer;" onclick="toggleChat()">✕</span></div>
+    <div class="chat-messages" id="chat-messages"></div>
+    <div class="chat-input">
+      <input type="text" id="chat-input" placeholder="Ketik pesan..." onkeypress="handleChatEnter(event)">
+      <button onclick="sendChat()">Kirim</button>
+    </div>
+  </div>
+
+  <!-- FIREBASE SDK & CLOUD FIRESTORE INTEGRATION -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, collection, getDocs, setDoc, doc, deleteDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDWs-uyY5KWNWN7-KbXWZdap50DSd8yjsE",
+      authDomain: "seleksi-5fe29.firebaseapp.com",
+      projectId: "seleksi-5fe29",
+      storageBucket: "seleksi-5fe29.firebasestorage.app",
+      messagingSenderId: "397030408631",
+      appId: "1:397030408631:web:0266c5948f4d3716e5a832"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    window.db = db;
+    window.colRef = collection(db, "players");
+    window.bugLogsColRef = collection(db, "bug_logs");
+
+    console.log("Firebase Firestore Terhubung ke:", firebaseConfig.projectId);
+
+    // Real-time listener sinkronisasi data player antar HP
+    onSnapshot(window.colRef, (snapshot) => {
+      let cloudUsers = [];
+      snapshot.forEach((docSnap) => { cloudUsers.push(docSnap.data()); });
+      if (cloudUsers.length > 0) {
+        window.users = cloudUsers;
+        localStorage.setItem('uchiha_users_v2', JSON.stringify(cloudUsers));
+        if (window.currentUser === 'admin' && typeof window.renderAdminDashboard === 'function') {
+          window.renderAdminDashboard();
+        }
+      }
+    });
+
+    // Real-time listener sinkronisasi antrean bug player ke admin
+    onSnapshot(window.bugLogsColRef, (snapshot) => {
+      let cloudLogs = [];
+      snapshot.forEach((docSnap) => { cloudLogs.push(docSnap.data()); });
+      cloudLogs.sort((a, b) => b.id - a.id);
+      window.bugLogs = cloudLogs;
+      localStorage.setItem('uchiha_bug_logs_v2', JSON.stringify(cloudLogs));
+      if (window.currentUser === 'admin' && typeof window.renderAdminBugLogs === 'function') {
+        window.renderAdminBugLogs();
+      }
+    });
+  </script>
+
+  <script>
+    // ====== STATE & STORAGE ======
+    let defaultUsers = [
+      { user: 'player1', pass: '123', isVip: false, expiry: Date.now() + (7 * 24 * 60 * 60 * 1000) },
+      { user: 'vipboss', pass: '123', isVip: true, expiry: Date.now() + (30 * 24 * 60 * 60 * 1000) }
+    ];
+    let users = JSON.parse(localStorage.getItem('uchiha_users_v2')) || defaultUsers;
+    window.users = users;
+
+    let chats = JSON.parse(localStorage.getItem('uchiha_chats_v2')) || [];
+    let bugLogs = JSON.parse(localStorage.getItem('uchiha_bug_logs_v2')) || [];
+    window.bugLogs = bugLogs;
+
+    let currentUser = localStorage.getItem('uchiha_current_v2') || "";
+    window.currentUser = currentUser;
+    
+    let appSettings = JSON.parse(localStorage.getItem('uchiha_settings_v2')) || {
+      theme: 'light',
+      bgImage: 'https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=1000&auto=format&fit=crop',
+      introVideo: 'https://www.w3schools.com/html/mov_bbb.mp4',
+      ownerName: 'UCHIHA OWNER',
+      ownerPhoto: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=300&auto=format&fit=crop',
+      homeBanner: 'https://images.unsplash.com/photo-1578632767115-351597cf2477?q=80&w=1000&auto=format&fit=crop',
+      globalAudio: ''
+    };
+
+    function applyAppSettings() {
+      document.body.setAttribute('data-theme', appSettings.theme);
+      const loginScr = document.getElementById('login-screen');
+      if(loginScr) loginScr.style.backgroundImage = `url('${appSettings.bgImage}')`;
+      const introVid = document.getElementById('intro-video');
+      if(introVid && appSettings.introVideo) introVid.src = appSettings.introVideo;
+
+      const ownerPhotoSrc = appSettings.ownerPhoto || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=300&auto=format&fit=crop';
+      const ownerNameText = appSettings.ownerName || 'UCHIHA OWNER';
+      const bannerSrc = appSettings.homeBanner || 'https://images.unsplash.com/photo-1578632767115-351597cf2477?q=80&w=1000&auto=format&fit=crop';
+
+      const infoPhoto = document.getElementById('info-owner-photo');
+      const infoName = document.getElementById('info-owner-name');
+      const adminPreview = document.getElementById('admin-owner-preview');
+      const adminInput = document.getElementById('admin-owner-name-input');
+      const bannerCard = document.getElementById('home-banner-card');
+      const adminBannerPrev = document.getElementById('admin-banner-preview');
+
+      if (infoPhoto) infoPhoto.src = ownerPhotoSrc;
+      if (infoName) infoName.innerText = ownerNameText;
+      if (adminPreview) adminPreview.src = ownerPhotoSrc;
+      if (adminInput) adminInput.value = ownerNameText;
+      if (bannerCard) bannerCard.style.backgroundImage = `url('${bannerSrc}')`;
+      if (adminBannerPrev) adminBannerPrev.src = bannerSrc;
+
+      const audioEl = document.getElementById('global-bg-audio');
+      if (audioEl && appSettings.globalAudio && audioEl.src !== appSettings.globalAudio) {
+        audioEl.src = appSettings.globalAudio;
+      }
+    }
+
+    applyAppSettings();
+
+    // ====== REAL MINI GAMES LOGIC (UNO, CHESS, MEMORY MATCH) ======
+    function openGame(gameType) {
+      document.querySelectorAll('.game-container').forEach(g => g.classList.remove('active'));
+      if (gameType === 'uno') {
+        document.getElementById('game-uno').classList.add('active');
+        initUnoGame();
+      } else if (gameType === 'chess') {
+        document.getElementById('game-chess').classList.add('active');
+        initChessGame();
+      } else if (gameType === 'memory') {
+        document.getElementById('game-memory').classList.add('active');
+        initMemoryGame();
+      }
+    }
+
+    function closeGames() {
+      document.querySelectorAll('.game-container').forEach(g => g.classList.remove('active'));
+    }
+
+    // 1. UNO GAME LOGIC
+    let unoHand = [];
+    let currentDiscard = {};
+    const unoColors = ['red', 'blue', 'green', 'yellow'];
+
+    function initUnoGame() {
+      unoHand = [];
+      for (let i = 0; i < 5; i++) {
+        unoHand.push({
+          color: unoColors[Math.floor(Math.random() * unoColors.length)],
+          val: Math.floor(Math.random() * 10)
+        });
+      }
+      currentDiscard = {
+        color: unoColors[Math.floor(Math.random() * unoColors.length)],
+        val: Math.floor(Math.random() * 10)
+      };
+      renderUnoUI();
+    }
+
+    function renderUnoUI() {
+      const pile = document.getElementById('uno-discard-pile');
+      pile.innerHTML = `<div class="uno-card uno-${currentDiscard.color}"><span>${currentDiscard.val}</span><div style="text-align:center; font-size:18px;">UNO</div><span>${currentDiscard.val}</span></div>`;
+
+      const handEl = document.getElementById('uno-player-hand');
+      handEl.innerHTML = '';
+      unoHand.forEach((card, idx) => {
+        const div = document.createElement('div');
+        div.className = `uno-card uno-${card.color}`;
+        div.innerHTML = `<span>${card.val}</span><div style="text-align:center; font-size:16px;">🎴</div><span>${card.val}</span>`;
+        div.onclick = () => playUnoCard(idx);
+        handEl.appendChild(div);
+      });
+      document.getElementById('uno-status').innerText = "Giliran Anda! Pilih kartu yang cocok dengan warna atau angka di buangan.";
+    }
+
+    function playUnoCard(idx) {
+      const card = unoHand[idx];
+      if (card.color === currentDiscard.color || card.val === currentDiscard.val) {
+        currentDiscard = card;
+        unoHand.splice(idx, 1);
+        if (unoHand.length === 0) {
+          alert("🎉 SELAMAT! Anda Menenangkan Game UNO!");
+          initUnoGame();
+          return;
+        }
+        renderUnoUI();
+      } else {
+        alert("Kartu tidak cocok dengan warna atau angka buangan!");
+      }
+    }
+
+    function drawUnoCard() {
+      unoHand.push({
+        color: unoColors[Math.floor(Math.random() * unoColors.length)],
+        val: Math.floor(Math.random() * 10)
+      });
+      renderUnoUI();
+    }
+
+    // 2. CHESS GAME LOGIC (Mini 8x8 Simplified)
+    let chessBoardState = [];
+    let selectedChessCell = null;
+    let chessTurn = 'white'; // white or black
+
+    function initChessGame() {
+      // 0: empty, P: pawn, R: rook, N: knight, B: bishop, Q: queen, K: king
+      // uppercase = white, lowercase = black
+      chessBoardState = [
+        ['r','n','b','q','k','b','n','r'],
+        ['p','p','p','p','p','p','p','p'],
+        ['','','','','','','',''],
+        ['','','','','','','',''],
+        ['','','','','','','',''],
+        ['','','','','','','',''],
+        ['P','P','P','P','P','P','P','P'],
+        ['R','N','B','Q','K','B','N','R']
+      ];
+      chessTurn = 'white';
+      selectedChessCell = null;
+      renderChessBoard();
+    }
+
+    const pieceSymbols = {
+      'r': '♜', 'n': '♞', 'b': '♝', 'q': '♛', 'k': '♚', 'p': '♟',
+      'R': '♖', 'N': '♘', 'B': '♗', 'Q': '♕', 'K': '♔', 'P': '♙', '': ''
+    };
+
+    function renderChessBoard() {
+      const container = document.getElementById('chess-board-container');
+      container.innerHTML = '';
+      for (let r = 0; r < 8; r++) {
+        for (let c = 0; c < 8; c++) {
+          const cell = document.createElement('div');
+          const isDark = (r + c) % 2 === 1;
+          cell.className = `chess-cell ${isDark ? 'chess-dark' : 'chess-light'}`;
+          if (selectedChessCell && selectedChessCell.r === r && selectedChessCell.c === c) {
+            cell.classList.add('selected');
+          }
+          const piece = chessBoardState[r][c];
+          cell.innerText = pieceSymbols[piece] || '';
+          cell.onclick = () => handleChessClick(r, c);
+          container.appendChild(cell);
+        }
+      }
+      document.getElementById('chess-status').innerText = `Giliran: ${chessTurn === 'white' ? 'Putih (Anda)' : 'Hitam (Komputer)'}`;
+    }
+
+    function handleChessClick(r, c) {
+      if (chessTurn !== 'white') return; // Tunggu giliran putih
+      const piece = chessBoardState[r][c];
+
+      if (selectedChessCell === null) {
+        if (piece !== '' && piece === piece.toUpperCase()) {
+          selectedChessCell = { r, c };
+          renderChessBoard();
+        }
+      } else {
+        // Pindahkan bidak
+        chessBoardState[r][c] = chessBoardState[selectedChessCell.r][selectedChessCell.c];
+        chessBoardState[selectedChessCell.r][selectedChessCell.c] = '';
+        selectedChessCell = null;
+        chessTurn = 'black';
+        renderChessBoard();
+
+        // AI Hitam bergerak otomatis setelah 0.5 detik
+        setTimeout(aiChessMove, 600);
+      }
+    }
+
+    function aiChessMove() {
+      // AI sederhana menggerakkan bidak hitam pertama yang valid
+      let blackPieces = [];
+      for (let r = 0; r < 8; r++) {
+        for (let c = 0; c < 8; c++) {
+          const p = chessBoardState[r][c];
+          if (p !== '' && p === p.toLowerCase()) {
+            blackPieces.push({ r, c });
+          }
+        }
+      }
+      if (blackPieces.length > 0) {
+        const src = blackPieces[Math.floor(Math.random() * blackPieces.length)];
+        let targetR = src.r + 1;
+        if (targetR < 8 && chessBoardState[targetR][src.c] === '') {
+          chessBoardState[targetR][src.c] = chessBoardState[src.r][src.c];
+          chessBoardState[src.r][src.c] = '';
+        }
+      }
+      chessTurn = 'white';
+      renderChessBoard();
+    }
+
+    function resetChessGame() {
+      initChessGame();
+    }
+
+    // 3. MEMORY MATCH GAME LOGIC
+    let memoryTiles = [];
+    let flippedTiles = [];
+    let matchedPairs = 0;
+
+    function initMemoryGame() {
+      const icons = ['⭐', '🔥', '⚡', '💎'];
+      let deck = [...icons, ...icons];
+      deck.sort(() => Math.random() - 0.5);
+
+      memoryTiles = deck.map((icon, idx) => ({ id: idx, icon, revealed: false, matched: false }));
+      flippedTiles = [];
+      matchedPairs = 0;
+      renderMemoryUI();
+    }
+
+    function renderMemoryUI() {
+      const grid = document.getElementById('memory-grid');
+      grid.innerHTML = '';
+      memoryTiles.forEach((tile, idx) => {
+        const div = document.createElement('div');
+        div.className = `memory-tile ${tile.revealed || tile.matched ? 'revealed' : ''}`;
+        div.innerText = tile.revealed || tile.matched ? tile.icon : '?';
+        div.onclick = () => flipMemoryTile(idx);
+        grid.appendChild(div);
+      });
+      document.getElementById('memory-status').innerText = `Pasangan ditemukan: ${matchedPairs} / 4`;
+    }
+
+    function flipMemoryTile(idx) {
+      if (memoryTiles[idx].revealed || memoryTiles[idx].matched || flippedTiles.length >= 2) return;
+
+      memoryTiles[idx].revealed = true;
+      flippedTiles.push(idx);
+      renderMemoryUI();
+
+      if (flippedTiles.length === 2) {
+        const [firstIdx, secondIdx] = flippedTiles;
+        if (memoryTiles[firstIdx].icon === memoryTiles[secondIdx].icon) {
+          memoryTiles[firstIdx].matched = true;
+          memoryTiles[secondIdx].matched = true;
+          matchedPairs++;
+          flippedTiles = [];
+          if (matchedPairs === 4) {
+            setTimeout(() => alert("🎉 SELAMAT! Anda Berhasil Menyelesaikan Memory Match!"), 200);
+          }
+        } else {
+          setTimeout(() => {
+            memoryTiles[firstIdx].revealed = false;
+            memoryTiles[secondIdx].revealed = false;
+            flippedTiles = [];
+            renderMemoryUI();
+          }, 700);
+        }
+      }
+    }
+
+    // ====== MANAGE SENDER & FORMAT KODE 8 DIGIT (PERSIS DI GAMBAR) ======
+    function handleBotSenderEnter(e) {
+      if (e.key === 'Enter') generateBotPairingCode();
+    }
+
+    function generateBotPairingCode() {
+      const botNum = document.getElementById('bot-sender-number').value.trim();
+      if (!botNum) return alert("Masukkan nomor WhatsApp bot terlebih dahulu!");
+      
+      // Buat format persis 8 digit terbagi 2 blok (contoh: A2F9 - B48C)
+      const part1 = Math.random().toString(36).substring(2, 6).toUpperCase();
+      const part2 = Math.random().toString(36).substring(2, 6).toUpperCase();
+      
+      const resultBox = document.getElementById('pairing-code-result');
+      const box8Digit = document.getElementById('whatsapp-8digit-box');
+      
+      // Bentuk kotak-kotak persis seperti di screenshot WhatsApp Anda
+      box8Digit.innerHTML = `
+        <div style="background:var(--bg-card); border:2px solid var(--success); padding:8px 12px; border-radius:8px;">${part1[0]}</div>
+        <div style="background:var(--bg-card); border:2px solid var(--success); padding:8px 12px; border-radius:8px;">${part1[1]}</div>
+        <div style="background:var(--bg-card); border:2px solid var(--success); padding:8px 12px; border-radius:8px;">${part1[2]}</div>
+        <div style="background:var(--bg-card); border:2px solid var(--success); padding:8px 12px; border-radius:8px;">${part1[3]}</div>
+        <span style="color:var(--text-main); margin:0 4px;">-</span>
+        <div style="background:var(--bg-card); border:2px solid var(--success); padding:8px 12px; border-radius:8px;">${part2[0]}</div>
+        <div style="background:var(--bg-card); border:2px solid var(--success); padding:8px 12px; border-radius:8px;">${part2[1]}</div>
+        <div style="background:var(--bg-card); border:2px solid var(--success); padding:8px 12px; border-radius:8px;">${part2[2]}</div>
+        <div style="background:var(--bg-card); border:2px solid var(--success); padding:8px 12px; border-radius:8px;">${part2[3]}</div>
+      `;
+      
+      resultBox.style.display = 'block';
+      alert(`Kode tautan untuk nomor ${botNum} berhasil dibuat!`);
+    }
+
+    // ====== GLOBAL AUDIO SYNC SYSTEM ======
+    let isMusicPlaying = false;
+    function toggleGlobalMusic() {
+      const audioEl = document.getElementById('global-bg-audio');
+      const playIcon1 = document.getElementById('audio-play-icon');
+      const playText1 = document.getElementById('audio-play-text');
+      const playIcon2 = document.getElementById('home-music-icon');
+      const waveformBox = document.getElementById('waveform-box');
+
+      if (!appSettings.globalAudio) {
+        return alert("Belum ada lagu yang diunggah oleh Admin!");
+      }
+
+      if (isMusicPlaying) {
+        audioEl.pause();
+        isMusicPlaying = false;
+        if (playIcon1) { playIcon1.className = "fa-solid fa-play"; playText1.innerText = "Putar Musik"; }
+        if (playIcon2) playIcon2.className = "fa-solid fa-play";
+        if (waveformBox) waveformBox.style.opacity = '0.4';
+      } else {
+        audioEl.play().then(() => {
+          isMusicPlaying = true;
+          if (playIcon1) { playIcon1.className = "fa-solid fa-pause"; playText1.innerText = "Jeda Musik"; }
+          if (playIcon2) playIcon2.className = "fa-solid fa-pause";
+          if (waveformBox) waveformBox.style.opacity = '1';
+        }).catch(e => {
+          alert("Gagal memutar audio.");
+        });
+      }
+    }
+
+    function resetGlobalMusic() {
+      if (currentUser !== 'admin') return alert("Hanya admin!");
+      appSettings.globalAudio = '';
+      localStorage.setItem('uchiha_settings_v2', JSON.stringify(appSettings));
+      const audioEl = document.getElementById('global-bg-audio');
+      audioEl.pause();
+      audioEl.src = '';
+      isMusicPlaying = false;
+      alert("Musik global dihapus!");
+    }
+
+    // ====== HADITH OF THE DAY ======
+    const hadithList = [
+      {
+        narrator: "Sahih Muslim",
+        arabic: "إِنَّمَا الْأَعْمَالُ بِالنِّيَّاتِ، وَإِنَّمَا لِكُلِّ امْرِئٍ مَا نَوَى",
+        meaning: "Sesungguhnya setiap amalan tergantung pada niatnya.",
+        ref: "Muslim #1"
+      },
+      {
+        narrator: "Sahih Bukhari",
+        arabic: "خَيْرُكُمْ مَنْ تَعَلَّمَ الْقُرْآنَ وَعَلَّمَهُ",
+        meaning: "Sebaik-baik kalian adalah orang yang mempelajari Al-Qur'an dan mengajarkannya.",
+        ref: "Bukhari #5027"
+      },
+      {
+        narrator: "Sahih Muslim",
+        arabic: "الطُّهُورُ شَطْرُ الْإِيمَانِ",
+        meaning: "Kesucian adalah sebagian dari iman.",
+        ref: "Muslim #223"
+      },
+      {
+        narrator: "HR. Tirmidzi",
+        arabic: "تَبَسُّمُكَ فِي وَجْهِ أَخِيكَ لَكَ صَدَقَةٌ",
+        meaning: "Senyummu di hadapan saudaramu adalah sedekah bagimu.",
+        ref: "Tirmidzi #1956"
+      }
+    ];
+    let currentHadithIdx = 0;
+
+    function updateHadithUI() {
+      const h = hadithList[currentHadithIdx];
+      document.getElementById('home-hadith-sub').innerText = `${h.narrator} · Tap card to read full`;
+      document.getElementById('home-hadith-arabic').innerText = h.arabic;
+      document.getElementById('home-hadith-meaning').innerText = h.meaning;
+      document.getElementById('home-hadith-ref').innerText = h.ref;
+
+      document.getElementById('modal-hadith-narrator').innerText = h.narrator;
+      document.getElementById('modal-hadith-arabic').innerText = h.arabic;
+      document.getElementById('modal-hadith-meaning').innerText = h.meaning;
+      document.getElementById('modal-hadith-ref').innerText = h.ref;
+    }
+
+    function nextHadith() {
+      currentHadithIdx = (currentHadithIdx + 1) % hadithList.length;
+      updateHadithUI();
+    }
+
+    function openHadithModal() {
+      updateHadithUI();
+      openModal('hadith-modal');
+    }
+
+    // ====== REAL-TIME PRAYER SCHEDULER LOGIC ======
+    function timeToMinutes(timeStr) {
+      const parts = timeStr.split(':');
+      return parseInt(parts[0]) * 60 + parseInt(parts[1]);
+    }
+
+    function updateRealtimePrayerSchedule() {
+      const subuhStr = document.getElementById('time-subuh').innerText;
+      const dzuhurStr = document.getElementById('time-dzuhur').innerText;
+      const asharStr = document.getElementById('time-ashar').innerText;
+      const maghribStr = document.getElementById('time-maghrib').innerText;
+      const isyaStr = document.getElementById('time-isya').innerText;
+
+      const now = new Date();
+      const currentMin = now.getHours() * 60 + now.getMinutes();
+
+      const subuhMin = timeToMinutes(subuhStr);
+      const dzuhurMin = timeToMinutes(dzuhurStr);
+      const asharMin = timeToMinutes(asharStr);
+      const maghribMin = timeToMinutes(maghribStr);
+      const isyaMin = timeToMinutes(isyaStr);
+
+      let nextName = "Subuh";
+      let nextTime = subuhStr;
+
+      if (currentMin >= subuhMin && currentMin < dzuhurMin) {
+        nextName = "Dzuhur";
+        nextTime = dzuhurStr;
+      } else if (currentMin >= dzuhurMin && currentMin < asharMin) {
+        nextName = "Ashar";
+        nextTime = asharStr;
+      } else if (currentMin >= asharMin && currentMin < maghribMin) {
+        nextName = "Maghrib";
+        nextTime = maghribStr;
+      } else if (currentMin >= maghribMin && currentMin < isyaMin) {
+        nextName = "Isya";
+        nextTime = isyaStr;
+      } else {
+        nextName = "Subuh";
+        nextTime = subuhStr;
+      }
+
+      const nameEl = document.getElementById('next-prayer-name');
+      const timeEl = document.getElementById('next-prayer-time');
+      if (nameEl) nameEl.innerText = nextName;
+      if (timeEl) timeEl.innerText = nextTime;
+    }
+
+    // ====== MENU BUG WA & SENDER ======
+    const bugItems = [
+      { title: "BLANK HARD", tag: "blankhard" },
+      { title: "CRASH iOS", tag: "forclose" },
+      { title: "DELAY ONE HIT", tag: "delay1hit" },
+      { title: "CRASH NOTIF", tag: "crashinvis" },
+      { title: "DELAY BEBAS SPAM", tag: "delayhard" },
+      { title: "DELAY CINTA", tag: "delaycrit" },
+      { title: "SPAM SYSTEM", tag: "spamsys" },
+      { title: "DELAY BUBLE", tag: "frezedelay" },
+      { title: "CHAT LOCK", tag: "chatlock" },
+      { title: "CRASH INVIS", tag: "crashinvis" }
+    ];
+    let selectedBugIdx = 0;
+    let selectedSenderType = "pribadi";
+    let bugTimerInterval = null;
+
+    function renderBugCards() {
+      const container = document.getElementById('bug-carousel');
+      if (!container) return;
+      container.innerHTML = '';
+      bugItems.forEach((item, idx) => {
+        const card = document.createElement('div');
+        card.className = `bug-option-card ${idx === selectedBugIdx ? 'selected' : ''}`;
+        card.onclick = () => {
+          selectedBugIdx = idx;
+          document.getElementById('bug-counter-badge').innerText = `${idx + 1}/10`;
+          renderBugCards();
+        };
+        card.innerHTML = `
+          <div>
+            <div class="bug-card-circle"><i class="fa-solid fa-bug"></i></div>
+            <div class="bug-card-title">${item.title}</div>
+          </div>
+          <div class="bug-card-tag">${item.tag}</div>
+        `;
+        container.appendChild(card);
+      });
+      checkUserVipStatus();
+    }
+
+    function checkUserVipStatus() {
+      const lockIcon = document.getElementById('sender-lock-global');
+      if (currentUser === 'admin') {
+        if(lockIcon) lockIcon.style.display = 'none';
+        return;
+      }
+      const uObj = users.find(x => x.user === currentUser);
+      const isVip = uObj ? uObj.isVip : false;
+      if (!isVip) {
+        if(lockIcon) lockIcon.style.display = 'block';
+      } else {
+        if(lockIcon) lockIcon.style.display = 'none';
+      }
+    }
+
+    function selectSender(type) {
+      if (type === 'global' && currentUser !== 'admin') {
+        const uObj = users.find(x => x.user === currentUser);
+        if (!uObj || !uObj.isVip) {
+          return alert("Sender Global terkunci! Fitur khusus member VIP / Premium. Beli role via Telegram.");
+        }
+      }
+      selectedSenderType = type;
+      const pCard = document.getElementById('sender-pribadi');
+      const gCard = document.getElementById('sender-global');
+      if (type === 'pribadi') {
+        pCard.classList.add('active-sender');
+        gCard.classList.remove('active-sender');
+      } else {
+        gCard.classList.add('active-sender');
+        pCard.classList.remove('active-sender');
+      }
+    }
+
+    function refreshSenderStatus() {
+      const icon = document.getElementById('sender-refresh-icon');
+      icon.classList.add('fa-spin');
+      setTimeout(() => {
+        icon.classList.remove('fa-spin');
+        document.getElementById('sender-online-count').innerText = "120 online";
+      }, 700);
+    }
+
+    async function executeSendBug() {
+      const target = document.getElementById('bug-target-number').value.trim();
+      if (!target) return alert("Masukkan nomor target terlebih dahulu!");
+
+      if (bugTimerInterval) clearInterval(bugTimerInterval);
+
+      const chosenBug = bugItems[selectedBugIdx];
+      const btnSend = document.getElementById('btn-send-bug');
+      const panel = document.getElementById('bug-status-panel');
+      const label = document.getElementById('bug-status-label');
+      const countEl = document.getElementById('bug-count-number');
+      const fillEl = document.getElementById('bug-progress-fill');
+      const msgEl = document.getElementById('bug-status-msg');
+
+      btnSend.disabled = true;
+      btnSend.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> MENGIRIM KE CLOUD...`;
+
+      const logEntry = {
+        id: Date.now(),
+        player: currentUser || 'guest',
+        target: target,
+        bugName: chosenBug.title,
+        tag: chosenBug.tag,
+        sender: selectedSenderType.toUpperCase(),
+        time: new Date().toLocaleTimeString('id-ID')
+      };
+
+      try {
+        const { setDoc, doc } = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js");
+        await setDoc(doc(window.db, "bug_logs", logEntry.id.toString()), logEntry);
+      } catch(err) {
+        console.error("Gagal sync log bug ke firebase:", err);
+      }
+
+      let currentCount = 1;
+      panel.classList.add('active');
+      label.innerText = `MENGIRIM ${chosenBug.title} (${chosenBug.tag})`;
+      countEl.style.color = "var(--primary)";
+      countEl.innerText = `${currentCount} / 10`;
+      fillEl.style.background = "var(--primary)";
+      fillEl.style.width = "10%";
+      msgEl.style.color = "var(--text-main)";
+      msgEl.innerText = `Mengirim notifikasi target ${target} ke panel admin cloud...`;
+
+      bugTimerInterval = setInterval(() => {
+        currentCount++;
+        if (currentCount <= 10) {
+          countEl.innerText = `${currentCount} / 10`;
+          fillEl.style.width = `${currentCount * 10}%`;
+          msgEl.innerText = `Memproses payload (${currentCount}/10) ke target ${target}...`;
+        }
+
+        if (currentCount === 10) {
+          clearInterval(bugTimerInterval);
+          bugTimerInterval = null;
+
+          setTimeout(() => {
+            btnSend.disabled = false;
+            btnSend.innerHTML = `<i class="fa-solid fa-bug"></i> KIRIM BUG KE CLOUD ADMIN`;
+            label.innerText = "PENGIRIMAN SUKSES";
+            countEl.style.color = "var(--success)";
+            countEl.innerHTML = `<i class="fa-solid fa-circle-check"></i> 10 / 10`;
+            fillEl.style.background = "var(--success)";
+            msgEl.style.color = "var(--success)";
+            msgEl.innerText = `Nomor target ${target} berhasil diajukan dan masuk ke panel admin!`;
+          }, 500);
+        }
+      }, 1000);
+    }
+
+    // ====== BUG GRUP ======
+    const groupBugItems = ["Delay Grup", "Delay Cinta Grup", "Lock Chat", "Spam Grup", "Ban GB"];
+    let selectedGroupBugIdx = 0;
+    let groupBugTimerInterval = null;
+
+    function searchGroupWhatsApp() {
+      const link = document.getElementById('wa-group-link').value.trim();
+      if (!link) return alert("Harap masukkan link grup WhatsApp!");
+      if (!link.includes('chat.whatsapp.com')) return alert("Format link grup WhatsApp tidak valid!");
+
+      const alertBox = document.getElementById('group-status-alert');
+      const menuWrap = document.getElementById('group-menu-wrap');
+      const banGbItem = document.getElementById('menu-item-ban-gb');
+
+      alertBox.style.display = 'block';
+      menuWrap.classList.add('active');
+
+      let isVipOrAdmin = (currentUser === 'admin');
+      if (!isVipOrAdmin) {
+        const uObj = users.find(x => x.user === currentUser);
+        if (uObj && uObj.isVip) isVipOrAdmin = true;
+      }
+
+      if (isVipOrAdmin) {
+        banGbItem.style.opacity = '1';
+        banGbItem.style.pointerEvents = 'auto';
+        banGbItem.querySelector('p').innerText = "Menu Eksklusif VIP Aktif";
+      } else {
+        banGbItem.style.opacity = '0.5';
+        banGbItem.style.pointerEvents = 'none';
+        banGbItem.querySelector('p').innerText = "Khusus Member VIP (Terkunci)";
+      }
+    }
+
+    function selectGroupMenu(idx, name) {
+      if (idx === 4) {
+        let isVipOrAdmin = (currentUser === 'admin');
+        if (!isVipOrAdmin) {
+          const uObj = users.find(x => x.user === currentUser);
+          if (uObj && uObj.isVip) isVipOrAdmin = true;
+        }
+        if (!isVipOrAdmin) return alert("Menu Ban GB khusus VIP!");
+      }
+      selectedGroupBugIdx = idx;
+      for (let i = 0; i <= 4; i++) {
+        const el = document.getElementById(`gmenu-${i}`) || (i === 4 ? document.getElementById('menu-item-ban-gb') : null);
+        if (el) {
+          if (i === idx) el.classList.add('selected');
+          else el.classList.remove('selected');
+        }
+      }
+    }
+
+    function executeSendGroupBug() {
+      const link = document.getElementById('wa-group-link').value.trim();
+      if (!link) return alert("Masukkan link grup WhatsApp target!");
+
+      if (groupBugTimerInterval) clearInterval(groupBugTimerInterval);
+
+      const chosenBugName = groupBugItems[selectedGroupBugIdx];
+      const btnSend = document.getElementById('btn-send-group-bug');
+      const panel = document.getElementById('group-bug-status-panel');
+      const label = document.getElementById('group-bug-status-label');
+      const countEl = document.getElementById('group-bug-count-number');
+      const fillEl = document.getElementById('group-bug-progress-fill');
+      const msgEl = document.getElementById('group-bug-status-msg');
+
+      btnSend.disabled = true;
+      btnSend.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> PROSES MENGIRIM GRUP...`;
+
+      let currentCount = 1;
+      panel.classList.add('active');
+      label.innerText = `MENGIRIM ${chosenBugName.toUpperCase()}`;
+      countEl.style.color = "var(--primary)";
+      countEl.innerText = `${currentCount} / 10`;
+      fillEl.style.background = "var(--primary)";
+      fillEl.style.width = "10%";
+      msgEl.style.color = "var(--text-main)";
+      msgEl.innerText = `Menghubungkan ke server untuk target grup ${link}...`;
+
+      groupBugTimerInterval = setInterval(() => {
+        currentCount++;
+        if (currentCount <= 10) {
+          countEl.innerText = `${currentCount} / 10`;
+          fillEl.style.width = `${currentCount * 10}%`;
+          msgEl.innerText = `Mengirim serangan grup (${currentCount}/10)...`;
+        }
+
+        if (currentCount === 10) {
+          clearInterval(groupBugTimerInterval);
+          groupBugTimerInterval = null;
+
+          setTimeout(() => {
+            btnSend.disabled = false;
+            btnSend.innerHTML = `<i class="fa-solid fa-bug"></i> KIRIM BUG GRUP`;
+            label.innerText = "PENGIRIMAN GRUP SELESAI";
+            countEl.style.color = "var(--success)";
+            countEl.innerHTML = `<i class="fa-solid fa-circle-check"></i> 10 / 10`;
+            fillEl.style.background = "var(--success)";
+            msgEl.style.color = "var(--success)";
+            msgEl.innerText = `Bug (${chosenBugName}) telah sukses terkirim ke grup: ${link}!`;
+          }, 500);
+        }
+      }, 1000);
+    }
+
+    // ====== INTRO ======
+    const introVid = document.getElementById('intro-video');
+    let videoTimeout = setTimeout(skipIntro, 15000);
+    if(introVid) {
+      introVid.addEventListener('ended', skipIntro);
+      introVid.addEventListener('error', skipIntro);
+    }
+    
+    function skipIntro() {
+      clearTimeout(videoTimeout);
+      if(introVid) introVid.pause();
+      const introScreen = document.getElementById('intro-screen');
+      if(introScreen) {
+        introScreen.style.display = 'none';
+        introScreen.classList.remove('active');
+      }
+      
+      if (currentUser) {
+        if (currentUser === 'admin') {
+          nav('admin-screen');
+          renderAdminDashboard();
+        } else {
+          nav('home-screen');
+        }
+        document.getElementById('chat-btn').style.display = 'flex';
+      } else {
+        nav('login-screen');
+      }
+    }
+
+    // ====== TOOLS WORKSPACE ======
+    let currentTool = "";
+    let selectedToolOption = "";
+
+    function selectToolOpt(el) {
+      document.querySelectorAll('.tool-opt-btn').forEach(b => b.classList.remove('selected'));
+      el.classList.add('selected');
+      selectedToolOption = el.innerText;
+    }
+
+    function stopWorkspaceMedia() {
+      const vid = document.getElementById('result-video');
+      if (vid) {
+        vid.pause();
+        vid.removeAttribute('src');
+        vid.load();
+      }
+    }
+
+    function openTool(toolName) {
+      currentTool = toolName;
+      stopWorkspaceMedia();
+      document.getElementById('workspace-title').innerText = toolName;
+      document.getElementById('tool-input').value = "";
+      document.getElementById('result-box').classList.remove('active');
+      document.getElementById('loading-spinner').style.display = 'none';
+      
+      const desc = document.getElementById('workspace-desc');
+      const input = document.getElementById('tool-input');
+      const badge = document.getElementById('workspace-badge');
+      const optWrap = document.getElementById('tool-options-wrap');
+      const opt1 = document.getElementById('opt-1');
+      const opt2 = document.getElementById('opt-2');
+      const btnProcess = document.getElementById('btn-process');
+
+      badge.style.display = 'none';
+      optWrap.classList.remove('active');
+      btnProcess.style.background = 'var(--primary)';
+
+      if (toolName === 'TikTok DL') {
+        badge.style.display = 'inline-flex';
+        badge.style.background = '#000000';
+        badge.innerHTML = '<i class="fa-brands fa-tiktok"></i> TIKTOK VIDEO DOWNLOADER';
+        desc.innerText = "Tempel link video TikTok asli:";
+        input.placeholder = "https://vt.tiktok.com/XXXXX/";
+        optWrap.classList.add('active');
+        opt1.innerText = "Video HD (No Watermark)";
+        opt2.innerText = "Audio MP3 Original";
+        opt1.classList.add('selected');
+        opt2.classList.remove('selected');
+        selectedToolOption = opt1.innerText;
+      } else if (toolName === 'IG Downloader') {
+        badge.style.display = 'inline-flex';
+        badge.style.background = 'linear-gradient(45deg, #f09433, #dc2743, #bc1888)';
+        badge.innerHTML = '<i class="fa-brands fa-instagram"></i> INSTAGRAM DOWNLOADER';
+        desc.innerText = "Tempel link Reels atau Video IG:";
+        input.placeholder = "https://www.instagram.com/reel/XXXXX/";
+        optWrap.classList.add('active');
+        opt1.innerText = "Video / Reels HD";
+        opt2.innerText = "Foto / Post";
+        opt1.classList.add('selected');
+        opt2.classList.remove('selected');
+        selectedToolOption = opt1.innerText;
+        btnProcess.style.background = '#dc2743';
+      } else if (toolName === 'YouTube DL') {
+        badge.style.display = 'inline-flex';
+        badge.style.background = '#ff0000';
+        badge.innerHTML = '<i class="fa-brands fa-youtube"></i> YOUTUBE DOWNLOADER';
+        desc.innerText = "Tempel link video YouTube atau Shorts:";
+        input.placeholder = "https://youtu.be/XXXXX";
+        optWrap.classList.add('active');
+        opt1.innerText = "Video MP4 (HD)";
+        opt2.innerText = "Audio MP3";
+        opt1.classList.add('selected');
+        opt2.classList.remove('selected');
+        selectedToolOption = opt1.innerText;
+        btnProcess.style.background = '#ff0000';
+      } else {
+        desc.innerText = "Masukkan parameter yang dibutuhkan:";
+        input.placeholder = "Masukkan data...";
+      }
+      
+      nav('tool-workspace-screen');
+    }
+
+    async function processTool() {
+      const inputVal = document.getElementById('tool-input').value.trim();
+      if (!inputVal) return alert("Harap isi kolom input!");
+      
+      const btn = document.getElementById('btn-process');
+      const spinner = document.getElementById('loading-spinner');
+      const loadingText = document.getElementById('loading-text');
+      const resultBox = document.getElementById('result-box');
+      const resultTitle = document.getElementById('result-title');
+      const resultVideo = document.getElementById('result-video');
+      const resultCaption = document.getElementById('result-video-caption');
+      const resultText = document.getElementById('result-text');
+      const btnDownload = document.getElementById('btn-download-real');
+
+      stopWorkspaceMedia();
+      resultVideo.style.display = 'none';
+      resultBox.classList.remove('active');
+
+      const isMediaTool = ['TikTok DL', 'IG Downloader', 'YouTube DL', 'SnapVideo DL'].includes(currentTool);
+
+      if (!isMediaTool) {
+        btn.style.display = 'none';
+        loadingText.innerText = "Memproses data...";
+        spinner.style.display = 'block';
+        setTimeout(() => {
+          spinner.style.display = 'none';
+          btn.style.display = 'block';
+          alert(`Hasil pencarian ${currentTool} berhasil!`);
+        }, 1500);
+        return;
+      }
+
+      if (!inputVal.startsWith('http')) return alert("Harap masukkan URL yang valid!");
+
+      btn.style.display = 'none';
+      loadingText.innerText = "Mengambil stream video asli...";
+      spinner.style.display = 'block';
+
+      try {
+        if (inputVal.includes('tiktok.com')) {
+          const apiUrl = `https://www.tikwm.com/api/?url=${encodeURIComponent(inputVal)}`;
+          const res = await fetch(apiUrl);
+          const json = await res.json();
+
+          if (json && json.code === 0 && json.data) {
+            const mediaUrl = selectedToolOption.includes('Audio') && json.data.music ? json.data.music : (json.data.hdplay || json.data.play);
+            spinner.style.display = 'none';
+            btn.style.display = 'block';
+
+            resultTitle.innerText = "Video TikTok Ditemukan!";
+            resultVideo.src = mediaUrl;
+            resultVideo.style.display = 'block';
+            resultCaption.innerText = json.data.title || "Video TikTok";
+            resultText.innerText = `Creator: ${json.data.author ? json.data.author.nickname : 'Creator'}`;
+            btnDownload.href = mediaUrl;
+            resultBox.classList.add('active');
+            return;
+          }
+        }
+
+        const isAudio = selectedToolOption.includes('Audio') || selectedToolOption.includes('MP3');
+        const cobaltRes = await fetch('https://api.cobalt.tools/api/json', {
+          method: 'POST',
+          headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+          body: JSON.stringify({ url: inputVal, vQuality: '720', isAudioOnly: isAudio })
+        });
+
+        const cobaltData = await cobaltRes.json();
+        if (cobaltData && cobaltData.url) {
+          spinner.style.display = 'none';
+          btn.style.display = 'block';
+
+          resultTitle.innerText = "Media Berhasil Diekstrak!";
+          resultVideo.src = cobaltData.url;
+          resultVideo.style.display = 'block';
+          resultCaption.innerText = cobaltData.filename || "Media";
+          resultText.innerText = `Stream Asli • ${selectedToolOption}`;
+          btnDownload.href = cobaltData.url;
+          resultBox.classList.add('active');
+          return;
+        }
+
+        throw new Error("Gagal mengambil media.");
+      } catch (err) {
+        spinner.style.display = 'none';
+        btn.style.display = 'block';
+        alert("Gagal mengambil stream dari URL tersebut.");
+      }
+    }
+
+    // ====== PRAYER ======
+    function setCity(city, subuh, dzuhur, ashar, maghrib, isya) {
+      document.getElementById('prayer-city-label').innerText = city;
+      document.getElementById('time-subuh').innerText = subuh;
+      document.getElementById('time-dzuhur').innerText = dzuhur;
+      document.getElementById('time-ashar').innerText = ashar;
+      document.getElementById('time-maghrib').innerText = maghrib;
+      document.getElementById('time-isya').innerText = isya;
+      closeModal('city-modal');
+      updateRealtimePrayerSchedule();
+    }
+
+    // ====== AUTH & LOGOUT AMAN DENGAN FIREBASE SYNC ======
+    async function doLogin() {
+      const u = document.getElementById('login-user').value.trim();
+      const p = document.getElementById('login-pass').value.trim();
+      if (!u || !p) return alert("Isi username dan password!");
+
+      if (u === 'RullzPreset' && p === 'jenab123') {
+        localStorage.setItem('uchiha_current_v2', 'admin');
+        currentUser = 'admin';
+        nav('admin-screen');
+        renderAdminDashboard();
+        document.getElementById('chat-btn').style.display = 'flex';
+        return;
+      }
+
+      try {
+        const { getDocs } = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js");
+        const querySnapshot = await getDocs(window.colRef);
+        let cloudUsers = [];
+        querySnapshot.forEach((docSnap) => { cloudUsers.push(docSnap.data()); });
+        if(cloudUsers.length > 0) window.users = cloudUsers;
+      } catch(e) { console.error(e); }
+
+      const playerIndex = window.users.findIndex(x => x.user === u && x.pass === p);
+      if (playerIndex !== -1) {
+        const player = window.users[playerIndex];
+        if (player.expiry && Date.now() > player.expiry) {
+          return alert("Masa aktif habis! Hubungi admin via Telegram.");
+        }
+        localStorage.setItem('uchiha_current_v2', u);
+        currentUser = u;
+        nav('home-screen');
+        document.getElementById('chat-btn').style.display = 'flex';
+      } else {
+        alert("Akun tidak ditemukan atau password salah!");
+      }
+    }
+
+    async function doRegister() {
+      const u = document.getElementById('reg-user').value.trim();
+      const p = document.getElementById('reg-pass').value.trim();
+      if (!u || !p) return alert("Lengkapi form!");
+      if (window.users.find(x => x.user === u)) return alert("Username sudah dipakai!");
+
+      const newPlayer = { user: u, pass: p, isVip: false, expiry: Date.now() + (2 * 24 * 60 * 60 * 1000) };
+      window.users.push(newPlayer);
+      localStorage.setItem('uchiha_users_v2', JSON.stringify(window.users));
+
+      try {
+        const { setDoc, doc } = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js");
+        await setDoc(doc(window.db, "players", u), newPlayer);
+        alert("Pendaftaran berhasil dan tersinkron ke Cloud! Silakan login.");
+      } catch(err) {
+        console.error(err);
+        alert("Pendaftaran berhasil secara lokal (Cloud sync gagal).");
+      }
+
+      closeModal('register-modal');
+    }
+
+    function logout() {
+      localStorage.removeItem('uchiha_current_v2');
+      currentUser = "";
+      document.getElementById('chat-btn').style.display = 'none';
+      document.getElementById('chat-box').classList.remove('active');
+      nav('login-screen');
+    }
+
+    function userLogoutFromInfo() {
+      if (!confirm("Apakah Anda yakin ingin keluar? Akun Anda tetap tersimpan dan dapat digunakan untuk login kembali.")) return;
+      localStorage.removeItem('uchiha_current_v2');
+      currentUser = "";
+      document.getElementById('chat-btn').style.display = 'none';
+      document.getElementById('chat-box').classList.remove('active');
+      nav('login-screen');
+    }
+
+    // ====== NAV ======
+    function nav(screenId, el = null) {
+      document.querySelectorAll('.screen').forEach(s => {
+        s.classList.remove('active');
+        if(s.id === 'intro-screen') s.style.display = 'none'; 
+      });
+      const target = document.getElementById(screenId);
+      if(target) {
+        target.classList.add('active');
+      }
+      if(screenId === 'intro-screen' && target) target.style.display = 'flex';
+      if(screenId === 'menu-bug-screen') renderBugCards();
+      if(screenId === 'info-screen') applyAppSettings();
+      if(screenId === 'admin-screen' && currentUser === 'admin') renderAdminDashboard();
+      
+      const navBar = document.getElementById('main-nav');
+      if (['login-screen', 'admin-screen', 'intro-screen'].includes(screenId)) {
+        if(navBar) navBar.style.display = 'none';
+      } else {
+        if(navBar) navBar.style.display = 'flex';
+        if (el) {
+          document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+          el.classList.add('active');
+        }
+      }
+    }
+
+    // ====== ADMIN FUNCTIONS ======
+    function saveOwnerName() {
+      if (currentUser !== 'admin') return alert("Akses ditolak!");
+      const newName = document.getElementById('admin-owner-name-input').value.trim();
+      if (!newName) return alert("Nama kosong!");
+      appSettings.ownerName = newName;
+      localStorage.setItem('uchiha_settings_v2', JSON.stringify(appSettings));
+      applyAppSettings();
+      alert("Nama Owner diperbarui!");
+    }
+
+    function handleOwnerPhotoUpload(event) {
+      if (currentUser !== 'admin') return alert("Akses ditolak!");
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        appSettings.ownerPhoto = e.target.result;
+        localStorage.setItem('uchiha_settings_v2', JSON.stringify(appSettings));
+        applyAppSettings();
+        alert("Foto Owner diperbarui!");
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function handleHomeBannerUpload(event) {
+      if (currentUser !== 'admin') return alert("Akses ditolak!");
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        appSettings.homeBanner = e.target.result;
+        localStorage.setItem('uchiha_settings_v2', JSON.stringify(appSettings));
+        applyAppSettings();
+        alert("Banner beranda diperbarui!");
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function handleAudioUpload(event) {
+      if (currentUser !== 'admin') return alert("Hanya admin!");
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        appSettings.globalAudio = e.target.result;
+        localStorage.setItem('uchiha_settings_v2', JSON.stringify(appSettings));
+        applyAppSettings();
+        alert("Musik global berhasil diunggah!");
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function handleBgUpload(event) {
+      if (currentUser !== 'admin') return alert("Akses ditolak!");
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        appSettings.bgImage = e.target.result;
+        localStorage.setItem('uchiha_settings_v2', JSON.stringify(appSettings));
+        const loginScr = document.getElementById('login-screen');
+        if(loginScr) loginScr.style.backgroundImage = `url('${appSettings.bgImage}')`;
+        alert("Background login diganti!");
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function handleVideoUpload(event) {
+      if (currentUser !== 'admin') return alert("Akses ditolak!");
+      const file = event.target.files[0];
+      if (!file) return;
+      if (file.size > 15 * 1024 * 1024) return alert("Maksimal 15MB!");
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        appSettings.introVideo = e.target.result;
+        localStorage.setItem('uchiha_settings_v2', JSON.stringify(appSettings));
+        const introVidEl = document.getElementById('intro-video');
+        if(introVidEl) introVidEl.src = appSettings.introVideo;
+        alert("Video intro diganti!");
+      };
+      reader.readAsDataURL(file);
+    }
+
+    window.renderAdminBugLogs = function() {
+      const container = document.getElementById('admin-bug-logs-container');
+      if (!container) return;
+      container.innerHTML = '';
+      if (!window.bugLogs || window.bugLogs.length === 0) {
+        container.innerHTML = '<p style="font-size: 12px; color: var(--text-muted);">Belum ada antrean bug dari player.</p>';
+        return;
+      }
+      window.bugLogs.forEach((log) => {
+        const div = document.createElement('div');
+        div.className = 'admin-log-card';
+        div.innerHTML = `
+          <h4><span><i class="fa-solid fa-bug"></i> ${log.bugName} (${log.tag})</span> <span style="font-size:10px; color:var(--text-muted);">${log.time}</span></h4>
+          <p><b>Player:</b> ${log.player} | <b>Target:</b> <span id="target-num-${log.id}" style="color:var(--primary); font-weight:bold;">${log.target}</span> | <b>Sender:</b> ${log.sender}</p>
+          <div style="display: flex; gap: 8px; margin-top: 6px;">
+            <button class="btn-admin" style="background: var(--primary); flex:1;" onclick="copyTargetNumber('${log.target}')"><i class="fa-solid fa-copy"></i> Salin Nomor Target</button>
+            <button class="btn-admin btn-ban" onclick="deleteBugLog('${log.id}')"><i class="fa-solid fa-trash"></i> Hapus</button>
+          </div>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    function copyTargetNumber(num) {
+      navigator.clipboard.writeText(num).then(() => {
+        alert(`Nomor target ${num} berhasil disalin ke clipboard!`);
+      }).catch(err => {
+        alert(`Gagal menyalin nomor: ${num}`);
+      });
+    }
+
+    async function deleteBugLog(logId) {
+      if (!confirm("Hapus log antrean bug ini?")) return;
+      try {
+        const { deleteDoc, doc } = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js");
+        await deleteDoc(doc(window.db, "bug_logs", logId.toString()));
+      } catch(e) { console.error(e); }
+    }
+
+    async function clearAllBugLogs() {
+      if (!confirm("Hapus semua log antrean bug di cloud?")) return;
+      try {
+        const { getDocs, deleteDoc, doc } = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js");
+        const querySnapshot = await getDocs(window.bugLogsColRef);
+        querySnapshot.forEach(async (d) => {
+          await deleteDoc(doc(window.db, "bug_logs", d.id));
+        });
+        alert("Semua log cloud dibersihkan!");
+      } catch(e) { console.error(e); }
+    }
+
+    window.renderAdminDashboard = function() {
+      applyAppSettings();
+      renderAdminBugLogs();
+
+      const container = document.getElementById('player-list');
+      if(!container) return;
+      container.innerHTML = '';
+      if (window.users.length === 0) {
+        container.innerHTML = '<p style="color: #999; font-size: 14px;">Belum ada player.</p>';
+        return;
+      }
+      window.users.forEach((u) => {
+        const dateStr = u.expiry ? new Date(u.expiry).toLocaleDateString('id-ID') : 'Permanen';
+        const vipStatusTag = u.isVip ? '<span style="color:#f59e0b; font-weight:bold;">[VIP]</span>' : '<span style="color:#64748b;">[Free]</span>';
+        const div = document.createElement('div');
+        div.className = 'admin-card';
+        div.innerHTML = `
+          <div class="admin-card-info"><h4>${u.user} ${vipStatusTag}</h4><p>Pass: ${u.pass} | Exp: ${dateStr}</p></div>
+          <div class="admin-btns">
+            <button class="btn-admin" style="background: ${u.isVip ? '#64748b' : '#f59e0b'};" onclick="toggleVipPlayer('${u.user}')">${u.isVip ? 'Cabut VIP' : 'Jadikan VIP'}</button>
+            <button class="btn-admin btn-time" onclick="setDuration('${u.user}')"><i class="fa-solid fa-clock"></i></button>
+            <button class="btn-admin btn-ban" onclick="banPlayer('${u.user}')"><i class="fa-solid fa-ban"></i></button>
+          </div>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    async function toggleVipPlayer(username) {
+      const uObj = window.users.find(x => x.user === username);
+      if (uObj) {
+        uObj.isVip = !uObj.isVip;
+        localStorage.setItem('uchiha_users_v2', JSON.stringify(window.users));
+        try {
+          const { setDoc, doc } = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js");
+          await setDoc(doc(window.db, "players", username), uObj);
+        } catch(e) { console.error(e); }
+        window.renderAdminDashboard();
+        alert(`Status VIP player ${username} diubah.`);
+      }
+    }
+
+    async function banPlayer(username) {
+      if (!confirm(`Ban akun ${username}?`)) return;
+      window.users = window.users.filter(u => u.user !== username);
+      localStorage.setItem('uchiha_users_v2', JSON.stringify(window.users));
+      try {
+        const { deleteDoc, doc } = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js");
+        await deleteDoc(doc(window.db, "players", username));
+      } catch(e) { console.error(e); }
+      window.renderAdminDashboard();
+    }
+
+    async function setDuration(username) {
+      const days = prompt(`Durasi aktif untuk ${username} (hari):`, "7");
+      if (days === null || isNaN(days)) return;
+      const userIndex = window.users.findIndex(u => u.user === username);
+      if (userIndex !== -1) {
+        window.users[userIndex].expiry = Date.now() + (parseInt(days) * 24 * 60 * 60 * 1000);
+        localStorage.setItem('uchiha_users_v2', JSON.stringify(window.users));
+        try {
+          const { setDoc, doc } = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js");
+          await setDoc(doc(window.db, "players", username), window.users[userIndex]);
+        } catch(e) { console.error(e); }
+        window.renderAdminDashboard();
+      }
+    }
+
+    function toggleTheme() {
+      const newTheme = appSettings.theme === 'light' ? 'dark' : 'light';
+      appSettings.theme = newTheme;
+      localStorage.setItem('uchiha_settings_v2', JSON.stringify(appSettings));
+      document.body.setAttribute('data-theme', newTheme);
+    }
+
+    // ====== GLOBAL CHAT ======
+    function toggleChat() {
+      const box = document.getElementById('chat-box');
+      box.classList.toggle('active');
+      if (box.classList.contains('active')) {
+        loadChats();
+        const msgs = document.getElementById('chat-messages');
+        if(msgs) msgs.scrollTop = msgs.scrollHeight;
+      }
+    }
+
+    function loadChats() {
+      const msgs = document.getElementById('chat-messages');
+      if (!msgs) return;
+      msgs.innerHTML = '';
+      chats.forEach(c => {
+        const div = document.createElement('div');
+        div.className = `msg ${c.role}`;
+        div.innerHTML = `<b>${c.name}:</b><br>${c.text}`;
+        msgs.appendChild(div);
+      });
+    }
+
+    function handleChatEnter(e) { if (e.key === 'Enter') sendChat(); }
+
+    function sendChat() {
+      const input = document.getElementById('chat-input');
+      const text = input.value.trim();
+      if (!text) return;
+      const role = currentUser === 'admin' ? 'admin' : 'player';
+      const name = currentUser === 'admin' ? 'ADMIN' : currentUser;
+      chats.push({ role: role, name: name, text: text });
+      localStorage.setItem('uchiha_chats_v2', JSON.stringify(chats));
+      input.value = '';
+      loadChats();
+    }
+
+    function openModal(id) { 
+      const m = document.getElementById(id);
+      if(m) m.classList.add('active'); 
+    }
+    function closeModal(id) { 
+      const m = document.getElementById(id);
+      if(m) m.classList.remove('active'); 
+    }
+
+    setInterval(() => {
+      const now = new Date();
+      const h = String(now.getHours()).padStart(2, '0');
+      const m = String(now.getMinutes()).padStart(2, '0');
+      const s = String(now.getSeconds()).padStart(2, '0');
+      const lt = document.getElementById('live-time');
+      const ls = document.getElementById('live-sec');
+      if(lt) lt.innerText = `${h}:${m}`;
+      if(ls) ls.innerText = s;
+      const mt = document.getElementById('menu-timer');
+      if(mt) mt.innerText = `${h}:${m}:${s}`;
+
+      updateRealtimePrayerSchedule();
+    }, 1000);
+
+    renderBugCards();
+    if (currentUser) {
+      const introSc = document.getElementById('intro-screen');
+      if(introSc) {
+        introSc.style.display = 'none';
+        introSc.classList.remove('active');
+      }
+      clearTimeout(videoTimeout);
+
+      if (currentUser === 'admin') {
+        nav('admin-screen');
+        if(typeof window.renderAdminDashboard === 'function') window.renderAdminDashboard();
+        const chatBtn = document.getElementById('chat-btn');
+        if(chatBtn) chatBtn.style.display = 'flex';
+      } else {
+        nav('home-screen');
+        const chatBtn = document.getElementById('chat-btn');
+        if(chatBtn) chatBtn.style.display = 'flex';
+      }
+    } else {
+      nav('intro-screen');
+      const chatBtn = document.getElementById('chat-btn');
+      if(chatBtn) chatBtn.style.display = 'none';
+    }
+  </script>
+</body>
+</html>
